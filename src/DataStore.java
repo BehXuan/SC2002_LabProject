@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 // remember to refractor all user to the correct class
 // change the required parameters
+// change the init to copy the data from csv or smt
 
 public class DataStore {
     private ArrayList<User> studentList;
