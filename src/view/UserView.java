@@ -1,11 +1,11 @@
 package src.view;
-import src.entity.User;
+// import src.entity.User;
 import src.controller.UserController;
 import java.util.Scanner;
 
 public class UserView {
     private UserController userController;
-    private Scanner sc = new Scanner(System.in)
+    private Scanner sc = new Scanner(System.in);
 
     public UserView(UserController userController){
         this.userController = userController;
@@ -20,7 +20,7 @@ public class UserView {
         return new String[] {userId, password};
     }
 
-    public int displayUserMenu(){};
+    public int displayUserMenu(){return 0;}
     public String[] displayChangePassword(){
         System.out.println("Change Password");
         System.out.print("Enter Old Password: ");
