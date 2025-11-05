@@ -1,16 +1,17 @@
 package src;
-import src.entity.User;
+import src.entity.Student;
+import src.entity.CareerCenterStaff;
+import src.entity.CompanyRepresentative;
 import java.util.ArrayList;
 
 
-// remember to refractor all user to the correct class
 // change the required parameters
 // change the init to copy the data from csv or smt
 
 public class DataStore {
-    private ArrayList<User> studentList;
-    private ArrayList<User> companyRepresentativeList;
-    private ArrayList<User> careerCenterStaffList;
+    private ArrayList<Student> studentList;
+    private ArrayList<CompanyRepresentative> companyRepresentativeList;
+    private ArrayList<CareerCenterStaff> careerCenterStaffList;
 
     public DataStore(){
         // Initialize empty ArrayLists
@@ -19,27 +20,27 @@ public class DataStore {
         this.careerCenterStaffList = new ArrayList<>();
     }
     
-    public ArrayList<User> getStudentList() {
+    public ArrayList<Student> getStudentList() {
         return this.studentList;
     }
 
-    public ArrayList<User> getCompanyRepresentativeList() {
+    public ArrayList<CompanyRepresentative> getCompanyRepresentativeList() {
         return this.companyRepresentativeList;
     }
 
-    public ArrayList<User> getCareerCenterStaffList() {
+    public ArrayList<CareerCenterStaff> getCareerCenterStaffList() {
         return this.careerCenterStaffList;
     }
     
     public void studentAdd(String name) {
-        this.studentList.add(new User(null, null, name));
+        this.studentList.add(new Student());
     }
 
     public void CompanyRepresentativeAdd(String name) {
-        this.companyRepresentativeList.add(new User(null, null, name));
+        this.companyRepresentativeList.add(new CompanyRepresentative());
     }
 
     public void CareerCenterStaffAdd(String name) {
-        this.careerCenterStaffList.add(new User(null, null, name));
+        this.careerCenterStaffList.add(new CareerCenterStaff());
     }
 }
