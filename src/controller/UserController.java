@@ -47,6 +47,10 @@ public class UserController {
     }
 
     public boolean updatePassword(String oldPW, String newPW) {
+        if (getCurrentUser() == null) {
+            return false;
+        }
+
         if (getCurrentUser().getPassword().equals(oldPW)) {
             getCurrentUser().setUserId(newPW);
             return true;

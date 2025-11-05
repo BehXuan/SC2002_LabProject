@@ -12,7 +12,7 @@ public class ProjectApp {
         // testing user login
         UserController uc = new UserController();
         UserView uw = new UserView(uc);
-        uw.login();
+        uw.runMenuLoop();
 
     }
 }
