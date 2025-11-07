@@ -8,7 +8,7 @@ public class UserController {
     private DataStore dataStore;
 
     public UserController() {
-        this.dataStore = new DataStore();
+        this.dataStore = new DataStore();  // im thinking if i should pass datastore from outside
     }
 
     public void setCurrentUser(User u) {
