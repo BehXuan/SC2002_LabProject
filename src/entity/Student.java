@@ -12,8 +12,8 @@ public class Student extends User {
 
     public Student(){}
 
-    public Student(String userid, String pw, String name, int yearOfStudy, String major) {
-        super(userid, pw, name);
+    public Student(String userid, String pw, String name, String email, int yearOfStudy, String major) {
+        super(userid, pw, name, email);
         this.yearOfStudy = yearOfStudy;
         this.major = major;
         this.internshipApplied = new ArrayList<>();

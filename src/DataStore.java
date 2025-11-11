@@ -7,8 +7,11 @@ import src.entity.Internship;
 import src.entity.InternshipApplication;
 import java.util.ArrayList;
 
-// change the required parameters
-// change the init to copy the data from csv or smt
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
+
 
 public class DataStore {
     private static DataStore instance;
@@ -25,6 +28,8 @@ public class DataStore {
         this.careerCenterStaffList = new ArrayList<>();
         this.internshipList = new ArrayList<>();
         this.internshipApplicationsList = new ArrayList<>();
+
+        loadInitialData();
     }
 
     public static DataStore getInstance() {
@@ -33,6 +38,119 @@ public class DataStore {
         }
         return instance;
     }
+
+    private void loadInitialData() {
+        loadStudentsFromCSV("src\\csvFiles\\sample_student_list.csv");
+        // loadStaffFromCSV("sample_staff_list.csv");
+        // loadCompanyRepsFromCSV("sample_company_representative_list.csv");
+        
+        System.out.println("DataStore initialized with:");
+        System.out.println("- " + studentList.size() + " students");
+        System.out.println("- " + careerCenterStaffList.size() + " staff members");
+        System.out.println("- " + companyRepresentativeList.size() + " company representatives");
+    }
+
+    private void loadStudentsFromCSV(String filename) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            boolean isFirstLine = true;
+            
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue; // Skip header
+                }
+                
+                String[] data = line.split(",");
+                if (data.length >= 5) {
+                    String studentId = data[0].trim();
+                    String name = data[1].trim();
+                    String major = data[2].trim();
+                    int yearOfStudy = Integer.parseInt(data[3].trim());
+                    String email = data[4].trim();
+                    
+                    // Default password is "password" as per requirements
+                    Student student = new Student(studentId, "password", name, email, yearOfStudy, major);
+                    studentList.add(student);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Warning: Could not load student data from " + filename);
+            System.out.println("Error: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            System.out.println("Warning: Invalid year format in student data");
+        }
+    }
+
+    // private void loadStaffFromCSV(String filename) {
+    //     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+    //         String line;
+    //         boolean isFirstLine = true;
+            
+    //         while ((line = br.readLine()) != null) {
+    //             if (isFirstLine) {
+    //                 isFirstLine = false;
+    //                 continue; // Skip header
+    //             }
+                
+    //             String[] data = line.split(",");
+    //             if (data.length >= 5) {
+    //                 String staffId = data[0].trim();
+    //                 String name = data[1].trim();
+    //                 String role = data[2].trim();
+    //                 String department = data[3].trim();
+    //                 String email = data[4].trim();
+                    
+    //                 // Default password is "password" as per requirements
+    //                 CareerCenterStaff staff = new CareerCenterStaff(staffId, "password", name, department);
+    //                 careerCenterStaffList.add(staff);
+    //             }
+    //         }
+    //     } catch (IOException e) {
+    //         System.out.println("Warning: Could not load staff data from " + filename);
+    //         System.out.println("Error: " + e.getMessage());
+    //     }
+    // }
+
+    // private void loadCompanyRepsFromCSV(String filename) {
+    //     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+    //         String line;
+    //         boolean isFirstLine = true;
+            
+    //         while ((line = br.readLine()) != null) {
+    //             if (isFirstLine) {
+    //                 isFirstLine = false;
+    //                 continue; // Skip header
+    //             }
+                
+    //             String[] data = line.split(",");
+    //             if (data.length >= 7) {
+    //                 String repId = data[0].trim();
+    //                 String name = data[1].trim();
+    //                 String companyName = data[2].trim();
+    //                 String department = data[3].trim();
+    //                 String position = data[4].trim();
+    //                 String email = data[5].trim();
+    //                 String status = data[6].trim();
+                    
+    //                 // Default password is "password" as per requirements
+    //                 CompanyRepresentative rep = new CompanyRepresentative(repId, "password", name, companyName, department, position);
+                    
+    //                 // Set approval status based on CSV
+    //                 if ("APPROVED".equalsIgnoreCase(status)) {
+    //                     rep.setApproved(true);
+    //                 } else {
+    //                     rep.setApproved(false);
+    //                 }
+                    
+    //                 companyRepresentativeList.add(rep);
+    //             }
+    //         }
+    //     } catch (IOException e) {
+    //         System.out.println("Warning: Could not load company representative data from " + filename);
+    //         System.out.println("Error: " + e.getMessage());
+    //     }
+    // }
     // GETTERS
 
     public ArrayList<Student> getStudentList() {
