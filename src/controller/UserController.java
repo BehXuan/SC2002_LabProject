@@ -5,7 +5,7 @@ import src.entity.User;
 
 public class UserController {
     private User currentUser;
-    private DataStore dataStore;
+    protected DataStore dataStore;
 
     public UserController() {
         this.dataStore = new DataStore();
@@ -18,17 +18,17 @@ public class UserController {
     public User getCurrentUser() {
         return currentUser;
     }
-
+    // I think login should be implemented within child classes?
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (User u : dataStore.getStudentList()) {
-            if (u.getName() == userName && u.getPassword() == pw) {
+            if (u.getName().equals(userName) && u.getPassword().equals(pw)) {
                 setCurrentUser(u);
                 return true;
             }
         }
         for (User u : dataStore.getCareerCenterStaffList()) {
-            if (u.getName() == userName && u.getPassword() == pw) {
+            if (u.getName().equals(userName) && u.getPassword().equals(pw)) {
                 setCurrentUser(u);
                 return true;
             }
@@ -52,7 +52,7 @@ public class UserController {
         }
 
         if (getCurrentUser().getPassword().equals(oldPW)) {
-            getCurrentUser().setUserId(newPW);
+            getCurrentUser().setPassword(newPW);
             return true;
         }
         return false;

@@ -3,6 +3,7 @@ package src.entity;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
+import src.enums.InternshipStatus;
 
 public class Internship {
     private int internshipId;
@@ -12,7 +13,7 @@ public class Internship {
     private String major;
     private LocalDate openDate;
     private LocalDate closeDate;
-    private String status;
+    private InternshipStatus internshipStatus;
     private String companyName;
     private String companyRepIC;
     private int vacancy;
@@ -20,7 +21,7 @@ public class Internship {
 
     private List<Student> applicants;
 
-    public Internship(int internshipId, String title, String description, String level, String major, LocalDate openDate, LocalDate closeDate, String status, String companyName, String companyRepIC, int vacancy){
+    public Internship(int internshipId, String title, String description, String level, String major, LocalDate openDate, LocalDate closeDate, String companyName, String companyRepIC, int vacancy){
         this.internshipId = internshipId;
         this.title = title;
         this.description = description;
@@ -28,12 +29,13 @@ public class Internship {
         this.major = major;
         this.openDate = openDate;
         this.closeDate = closeDate;
-        this.status = status;
+        this.internshipStatus = InternshipStatus.PENDING;
         this.companyName = companyName;
         this.companyRepIC = companyRepIC;
         this.vacancy = vacancy;
         this.visibility = true;
         this.applicants = new ArrayList<>();
+        
     }
 
     public int getInternshipId(){
@@ -88,12 +90,12 @@ public class Internship {
         this.closeDate = closeDate;
     }
 
-    public String getStatus(){
-        return this.status;
+    public InternshipStatus getStatus(){
+        return this.internshipStatus;
     }
 
-    public void setStatus(String status){
-        this.status = status;
+    public void setStatus(InternshipStatus internshipStatus){
+        this.internshipStatus = internshipStatus;
     }
 
     public String getCompanyName(){

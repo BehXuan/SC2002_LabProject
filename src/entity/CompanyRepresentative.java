@@ -1,10 +1,11 @@
 package src.entity;
 import java.util.ArrayList;
 import java.util.List;
+import src.enums.CompanyApprovalStatus;
 
 public class CompanyRepresentative extends User{
     private String companyName;
-    private String approved;
+    private CompanyApprovalStatus companyApprovalStatus;
     private List<Internship> internships; // "pending", "approved","rejected" 
     private int internshipCount; // max 5
 
@@ -13,7 +14,7 @@ public class CompanyRepresentative extends User{
     public CompanyRepresentative(String id, String pw, String name,String companyName){
         super(id,pw,name);
         this.companyName = companyName;
-        this.approved = "Pending";
+        this.companyApprovalStatus = CompanyApprovalStatus.PENDING;
         this.internshipCount = 0;
         this.internships = new ArrayList<>();
 
@@ -24,8 +25,8 @@ public class CompanyRepresentative extends User{
         return companyName;
     }
 
-    public String getApproval(){
-        return approved;
+    public CompanyApprovalStatus getApproval(){
+        return companyApprovalStatus;
     }
 
     public int getInternshipCount(){
@@ -41,8 +42,8 @@ public class CompanyRepresentative extends User{
         this.companyName = companyName;
     }
 
-    public void setApproval(String approval){
-        this.approved = approval;
+    public void setApproval(CompanyApprovalStatus approval){
+        this.companyApprovalStatus = approval;
     }
 
     public void setInternshipCount(int count){

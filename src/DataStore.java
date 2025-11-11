@@ -2,6 +2,7 @@ package src;
 import src.entity.Student;
 import src.entity.CareerCenterStaff;
 import src.entity.CompanyRepresentative;
+import src.entity.Internship;
 import java.util.ArrayList;
 
 
@@ -12,6 +13,7 @@ public class DataStore {
     private ArrayList<Student> studentList;
     private ArrayList<CompanyRepresentative> companyRepresentativeList;
     private ArrayList<CareerCenterStaff> careerCenterStaffList;
+    private ArrayList<Internship> internshipList = new ArrayList<>();
 
     public DataStore(){
         // Initialize empty ArrayLists
@@ -19,7 +21,8 @@ public class DataStore {
         this.companyRepresentativeList = new ArrayList<>();
         this.careerCenterStaffList = new ArrayList<>();
     }
-    
+    //GETTERS
+
     public ArrayList<Student> getStudentList() {
         return this.studentList;
     }
@@ -31,7 +34,12 @@ public class DataStore {
     public ArrayList<CareerCenterStaff> getCareerCenterStaffList() {
         return this.careerCenterStaffList;
     }
-    
+
+    public ArrayList<Internship> getInternshipList() {
+    return internshipList;
+    }
+
+    //SETTERS
     public void studentAdd(String name) {
         this.studentList.add(new Student());
     }
@@ -43,4 +51,42 @@ public class DataStore {
     public void CareerCenterStaffAdd(String name) {
         this.careerCenterStaffList.add(new CareerCenterStaff());
     }
+
+    public void addInternship(Internship internship) {
+    internshipList.add(internship);
+    }
+
+
+    //FINDERS: USED TO FIND WHETHER USERID EXISTs WITHIN RESP DATASTORE
+
+    public CompanyRepresentative findCompanyRep(String repId) {
+    for (CompanyRepresentative rep : companyRepresentativeList) {
+        if (rep.getUserId().equals(repId)) {
+            return rep;
+        }
+    }
+    return null;
+    }
+
+
+
+    public Student findStudent(String studentId) {
+    for (Student s : studentList) {
+        if (s.getUserId().equals(studentId)) {
+            return s;
+        }
+    }
+    return null;
+    }
+
+    public Internship findInternship(int internshipId) {
+    for (Internship i : internshipList) {
+        if (i.getInternshipId() == internshipId) {
+            return i;
+        }
+    }
+    return null;
+    }
+
+
 }
