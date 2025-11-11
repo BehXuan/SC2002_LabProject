@@ -8,22 +8,22 @@ public class User {
    public User() {
    }
 
-   public User(String var1, String var2, String var3) {
-      this.userID = var1;
-      this.password = var2;
-      this.name = var3;
+   public User(String userid, String pw, String name) {
+      this.userID = userid;
+      this.password = pw;
+      this.name = name;
    }
 
-   public void setUserId(String var1) {
-      this.userID = var1;
+   public void setUserId(String userid) {
+      this.userID = userid;
    }
 
-   public void setPassword(String var1) {
-      this.password = var1;
+   public void setPassword(String pw) {
+      this.password = pw;
    }
 
-   public void setName(String var1) {
-      this.name = var1;
+   public void setName(String name) {
+      this.name = name;
    }
 
    public String getUserId() {

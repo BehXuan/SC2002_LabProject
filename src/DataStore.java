@@ -3,6 +3,7 @@ import src.entity.Student;
 import src.entity.CareerCenterStaff;
 import src.entity.CompanyRepresentative;
 import src.entity.Internship;
+import src.entity.InternshipApplication;
 import java.util.ArrayList;
 
 
@@ -13,6 +14,8 @@ public class DataStore {
     private ArrayList<Student> studentList;
     private ArrayList<CompanyRepresentative> companyRepresentativeList;
     private ArrayList<CareerCenterStaff> careerCenterStaffList;
+    private ArrayList<Internship> internshipList;
+    private ArrayList<InternshipApplication> internshipApplicationsList;
     private ArrayList<Internship> internshipList = new ArrayList<>();
 
     public DataStore(){
@@ -20,6 +23,8 @@ public class DataStore {
         this.studentList = new ArrayList<>();
         this.companyRepresentativeList = new ArrayList<>();
         this.careerCenterStaffList = new ArrayList<>();
+        this.internshipList = new ArrayList<>();
+        this.internshipApplicationsList = new ArrayList<>();
     }
     //GETTERS
 
@@ -36,6 +41,13 @@ public class DataStore {
     }
 
     public ArrayList<Internship> getInternshipList() {
+        return this.internshipList;
+    }
+
+    public ArrayList<InternshipApplication> getInternshipApplicationsList() {
+        return this.internshipApplicationsList;
+    }
+    
     return internshipList;
     }
 
@@ -52,6 +64,13 @@ public class DataStore {
         this.careerCenterStaffList.add(new CareerCenterStaff());
     }
 
+    public void InternshipAdd() {
+        this.internshipList.add(new Internship());
+    }
+
+    public void InternshipApplicationAdd() {
+        this.internshipApplicationsList.add(new InternshipApplication());
+    }
     public void addInternship(Internship internship) {
     internshipList.add(internship);
     }
