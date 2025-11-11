@@ -1,11 +1,13 @@
 package src.entity;
 
+import src.enums.InternshipStatus;
+
 public class InternshipApplication {
     private CompanyRepresentative companyRep;
     private Student student;
     private Internship internship;
-    private String studentAccept; // e.g., "Pending", "Accepted", "Rejected"
-    private String companyAccept; // e.g., "Pending", "Accepted", "Rejected"
+    private InternshipStatus studentAccept; // e.g., "Pending", "Accepted", "Rejected"
+    private InternshipStatus companyAccept; // e.g., "Pending", "Accepted", "Rejected"
     private int applicationId;
     
     public InternshipApplication() {
@@ -16,8 +18,8 @@ public class InternshipApplication {
         this.companyRep = companyRep;
         this.student = student;
         this.internship = internship;
-        this.studentAccept = "Pending"; // Default status
-        this.companyAccept = "Pending"; // Default status
+        this.studentAccept = InternshipStatus.PENDING; // Default status
+        this.companyAccept = InternshipStatus.PENDING; // Default status
     }
 
     public CompanyRepresentative getCompanyRep() {
@@ -38,10 +40,10 @@ public class InternshipApplication {
     public void setInternship(Internship internship) {
         this.internship = internship;
     }
-    public String getStudentAccept() {
+    public InternshipStatus getStudentAccept() {
         return studentAccept;
     }
-    public void setStudentAccept(String applicationStatus) {
+    public void setStudentAccept(InternshipStatus applicationStatus) {
         this.studentAccept = applicationStatus;
     }
     public int getApplicationId() {
@@ -50,10 +52,10 @@ public class InternshipApplication {
     public void setApplicationId(int applicationId) {
         this.applicationId = applicationId;
     }
-    public String getCompanyAccept() {
+    public InternshipStatus getCompanyAccept() {
         return companyAccept;
     }
-    public void setCompanyAccept(String companyAccept) {
+    public void setCompanyAccept(InternshipStatus companyAccept) {
         this.companyAccept = companyAccept;
     }
 }

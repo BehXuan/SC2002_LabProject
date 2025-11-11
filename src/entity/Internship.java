@@ -101,7 +101,7 @@ public class Internship {
         return this.closeDate;
     }
 
-    public void setLocalDate(LocalDate closeDate) {
+    public void setCloseDate(LocalDate closeDate) {
         this.closeDate = closeDate;
     }
 

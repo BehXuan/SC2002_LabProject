@@ -11,19 +11,27 @@ import java.util.ArrayList;
 // change the init to copy the data from csv or smt
 
 public class DataStore {
+    private static DataStore instance;
     private ArrayList<Student> studentList;
     private ArrayList<CompanyRepresentative> companyRepresentativeList;
     private ArrayList<CareerCenterStaff> careerCenterStaffList;
     private ArrayList<Internship> internshipList;
     private ArrayList<InternshipApplication> internshipApplicationsList;
 
-    public DataStore() {
+    private DataStore() {
         // Initialize empty ArrayLists
         this.studentList = new ArrayList<>();
         this.companyRepresentativeList = new ArrayList<>();
         this.careerCenterStaffList = new ArrayList<>();
         this.internshipList = new ArrayList<>();
         this.internshipApplicationsList = new ArrayList<>();
+    }
+
+    public static DataStore getInstance() {
+        if (instance == null) {
+            instance = new DataStore();
+        }
+        return instance;
     }
     // GETTERS
 

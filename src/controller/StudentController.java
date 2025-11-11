@@ -6,13 +6,15 @@ import src.DataStore;
 import src.entity.Student;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
+import src.enums.InternshipStatus;
+
 
 public class StudentController {
     private Student currentStudent;
     private DataStore dataStore;
 
     public StudentController() {
-        this.dataStore = new DataStore();  // im thinking if i should pass datastore from outside
+        this.dataStore = DataStore.getInstance();
     }
 
     public void setCurrentStudent(Student s) {
@@ -26,7 +28,7 @@ public class StudentController {
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (Student s : dataStore.getStudentList()) {
-            if (s.getName() == userName && s.getPassword() == pw) {
+            if (s.getName().equals(userName) && s.getPassword().equals(pw)) {
                 setCurrentStudent(s);
                 return true;
             }
@@ -44,7 +46,7 @@ public class StudentController {
         }
 
         if (getCurrentStudent().getPassword().equals(oldPW)) {
-            getCurrentStudent().setUserId(newPW);
+            getCurrentStudent().setPassword(newPW);
             return true;
         }
         return false;
@@ -55,7 +57,7 @@ public class StudentController {
 
         ArrayList<Internship> visibleInternships = new ArrayList<Internship>();
         for (Internship i : allInternships) {
-            if (i.getVisibility()) {
+            if (i.getVisibility() && i.getStatus() == InternshipStatus.APPROVED && i.isAvailable()) {
                 visibleInternships.add(i);
             }
         }
@@ -63,34 +65,57 @@ public class StudentController {
         if (getCurrentStudent().getYearOfStudy() >= 3){
             return visibleInternships;
         }
-        ArrayList<Internship> availableInternships = new ArrayList<Internship>();
+        ArrayList<Internship> basicInternships = new ArrayList<Internship>();
         for (Internship i : visibleInternships) {
-            if (i.getLevel() == "Basic") { //remember to check with internship class
-                availableInternships.add(i);
+            if (i.getLevel().equals("Basic")) { //should change to enum?
+                basicInternships.add(i);
             }
         }
-        return availableInternships;
+        return basicInternships;
     }
 
-    public void applyForInternship(Internship internship) {
+    public boolean applyForInternship(Internship internship) {
         if (internship == null || getCurrentStudent() == null) {
-            return;
+            return false;
         }
-        if (getCurrentStudent().getInternshipApplied().size() > 3) {
-            return; // only can apply for 3 internships
+        if (getCurrentStudent().getInternshipApplied().size() >= 3) {
+            return false; // only can apply for 3 internships
         }
-        InternshipApplication newApplication = new InternshipApplication(dataStore.getInternshipApplicationsList().size(), internship.getCompanyRep(), getCurrentStudent(), internship);
+
+        for (InternshipApplication app : getCurrentStudent().getInternshipApplied()) {
+            if (app.getInternship() == internship) {
+                return false; // Already applied
+            }
+        }
+
+        // Check major compatibility
+        if (!internship.getMajor().equals(getCurrentStudent().getMajor())) {
+            return false;
+        }
+
+
+        InternshipApplication newApplication = new InternshipApplication(dataStore.getInternshipApplicationsList().size() + 1, internship.getCompanyRep(), getCurrentStudent(), internship);
         getCurrentStudent().applyInternship(newApplication);
         dataStore.getInternshipApplicationsList().add(newApplication);
+        return true;
     }
 
     public ArrayList<InternshipApplication> getMyApplications() {
         return getCurrentStudent().getInternshipApplied();
     }
 
-    public void acceptInternshipOffer(InternshipApplication application) {
+    public boolean acceptInternshipOffer(InternshipApplication application) {
         if (application == null || getCurrentStudent() == null) {
-            return;
+            return false;
+        }
+
+        // Check if this application belongs to the current student
+        if (!getCurrentStudent().getInternshipApplied().contains(application)) {
+            return false;
+        }
+        // Check if the company has approved the application
+        if (application.getCompanyAccept() != InternshipStatus.APPROVED) {
+            return false;
         }
         // application.setStudentAccept("Accepted");
         getCurrentStudent().setInternshipAccepted(application.getInternship());
@@ -98,6 +123,7 @@ public class StudentController {
             app.setApplicationId(-1); // mark other applications as void
         }
         getCurrentStudent().reset();
+        return true;
 
     }
 }

@@ -4,67 +4,58 @@ import java.util.ArrayList;
 // import src.enums.InternshipWithdrawalStatus;
 
 public class Student extends User {
-    private int YearOfStudy;
-    private String Major;
-    private int applicationCount;
-    private Internship InternshipAccepted;
-    private ArrayList<InternshipApplication> InternshipApplied;
+    private int yearOfStudy;
+    private String major;
+    private Internship internshipAccepted;
+    private ArrayList<InternshipApplication> internshipApplied;
     // private InternshipWithdrawalStatus internshipWithdrawalStatus;
 
     public Student(){}
 
-    public Student(String userid, String pw, String name, int YearOfStudy, String Major) {
+    public Student(String userid, String pw, String name, int yearOfStudy, String major) {
         super(userid, pw, name);
-        this.YearOfStudy = YearOfStudy;
-        this.Major = Major;
-        this.applicationCount = 0;  // do i really need this or can i just get size of arraylist
-        this.InternshipApplied = new ArrayList<>();
-        this.InternshipAccepted = null;
+        this.yearOfStudy = yearOfStudy;
+        this.major = major;
+        this.internshipApplied = new ArrayList<>();
+        this.internshipAccepted = null;
     }
-    public void setYearOfStudy(int YearOfStudy) {
-        this.YearOfStudy = YearOfStudy;
+    public void setYearOfStudy(int yearOfStudy) {
+        this.yearOfStudy = yearOfStudy;
     }
 
-    public void setMajor(String Major) {
-        this.Major = Major;
+    public void setMajor(String major) {
+        this.major = major;
     }
 
     public int getYearOfStudy() {
-        return this.YearOfStudy;
+        return this.yearOfStudy;
     }
 
     public String getMajor() {
-        return this.Major;
-    }
-
-    public int getApplicationCount() {
-        return this.applicationCount;
+        return this.major;
     }
 
     public ArrayList<InternshipApplication> getInternshipApplied() {
-        return this.InternshipApplied;
+        return this.internshipApplied;
     }
 
     public void applyInternship(InternshipApplication internship) {
-        this.InternshipApplied.add(internship);
-        this.applicationCount++;
+        this.internshipApplied.add(internship);
     }
 
     public void removeInternship(InternshipApplication internship) {
-        this.InternshipApplied.remove(internship);
-        this.applicationCount--;
+        this.internshipApplied.remove(internship);
     }
 
     public void reset() {
-        this.applicationCount = 0;
-        this.InternshipApplied.clear();
+        this.internshipApplied.clear();
     }
 
     public Internship getInternshipAccepted() {
-        return this.InternshipAccepted;
+        return this.internshipAccepted;
     }
 
     public void setInternshipAccepted(Internship internshipAccepted) {
-        this.InternshipAccepted = internshipAccepted;
+        this.internshipAccepted = internshipAccepted;
     }
 }
