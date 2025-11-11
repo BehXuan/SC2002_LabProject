@@ -16,6 +16,7 @@ public class DataStore {
     private ArrayList<CareerCenterStaff> careerCenterStaffList;
     private ArrayList<Internship> internshipList;
     private ArrayList<InternshipApplication> internshipApplicationsList;
+    private ArrayList<Internship> internshipList = new ArrayList<>();
 
     public DataStore(){
         // Initialize empty ArrayLists
@@ -25,7 +26,8 @@ public class DataStore {
         this.internshipList = new ArrayList<>();
         this.internshipApplicationsList = new ArrayList<>();
     }
-    
+    //GETTERS
+
     public ArrayList<Student> getStudentList() {
         return this.studentList;
     }
@@ -46,6 +48,10 @@ public class DataStore {
         return this.internshipApplicationsList;
     }
     
+    return internshipList;
+    }
+
+    //SETTERS
     public void studentAdd(String name) {
         this.studentList.add(new Student());
     }
@@ -65,4 +71,41 @@ public class DataStore {
     public void InternshipApplicationAdd() {
         this.internshipApplicationsList.add(new InternshipApplication());
     }
+    public void addInternship(Internship internship) {
+    internshipList.add(internship);
+    }
+
+
+    //FINDERS: USED TO FIND WHETHER USERID EXISTs WITHIN RESP DATASTORE
+
+    public CompanyRepresentative findCompanyRep(String repId) {
+    for (CompanyRepresentative rep : companyRepresentativeList) {
+        if (rep.getUserId().equals(repId)) {
+            return rep;
+        }
+    }
+    return null;
+    }
+
+
+
+    public Student findStudent(String studentId) {
+    for (Student s : studentList) {
+        if (s.getUserId().equals(studentId)) {
+            return s;
+        }
+    }
+    return null;
+    }
+
+    public Internship findInternship(int internshipId) {
+    for (Internship i : internshipList) {
+        if (i.getInternshipId() == internshipId) {
+            return i;
+        }
+    }
+    return null;
+    }
+
+
 }
