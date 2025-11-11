@@ -1,7 +1,11 @@
 package src.controller;
 
+import java.util.ArrayList;
+
 import src.DataStore;
 import src.entity.Student;
+import src.entity.Internship;
+import src.entity.InternshipApplication;
 
 public class StudentController {
     private Student currentStudent;
@@ -44,5 +48,56 @@ public class StudentController {
             return true;
         }
         return false;
+    }
+
+    public ArrayList<Internship> getInternshipsOpportunities() {
+        ArrayList<Internship> allInternships = dataStore.getInternshipList();
+
+        ArrayList<Internship> visibleInternships = new ArrayList<Internship>();
+        for (Internship i : allInternships) {
+            if (i.getVisibility()) {
+                visibleInternships.add(i);
+            }
+        }
+        
+        if (getCurrentStudent().getYearOfStudy() >= 3){
+            return visibleInternships;
+        }
+        ArrayList<Internship> availableInternships = new ArrayList<Internship>();
+        for (Internship i : visibleInternships) {
+            if (i.getLevel() == "Basic") { //remember to check with internship class
+                availableInternships.add(i);
+            }
+        }
+        return availableInternships;
+    }
+
+    public void applyForInternship(Internship internship) {
+        if (internship == null || getCurrentStudent() == null) {
+            return;
+        }
+        if (getCurrentStudent().getInternshipApplied().size() > 3) {
+            return; // only can apply for 3 internships
+        }
+        InternshipApplication newApplication = new InternshipApplication(dataStore.getInternshipApplicationsList().size(), internship.getCompanyRep(), getCurrentStudent(), internship);
+        getCurrentStudent().applyInternship(newApplication);
+        dataStore.getInternshipApplicationsList().add(newApplication);
+    }
+
+    public ArrayList<InternshipApplication> getMyApplications() {
+        return getCurrentStudent().getInternshipApplied();
+    }
+
+    public void acceptInternshipOffer(InternshipApplication application) {
+        if (application == null || getCurrentStudent() == null) {
+            return;
+        }
+        // application.setStudentAccept("Accepted");
+        getCurrentStudent().setInternshipAccepted(application.getInternship());
+        for (InternshipApplication app : getCurrentStudent().getInternshipApplied()) {
+            app.setApplicationId(-1); // mark other applications as void
+        }
+        getCurrentStudent().reset();
+
     }
 }
