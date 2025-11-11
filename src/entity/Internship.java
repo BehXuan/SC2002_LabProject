@@ -18,10 +18,13 @@ public class Internship {
     private String companyRepIC;
     private int vacancy;
     private boolean visibility;
+    private CompanyRepresentative companyRep;
 
     private List<Student> applicants;
 
-    public Internship(int internshipId, String title, String description, String level, String major, LocalDate openDate, LocalDate closeDate, String companyName, String companyRepIC, int vacancy){
+    public Internship(int internshipId, String title, String description, String level, String major,
+            LocalDate openDate, LocalDate closeDate, String companyName, String companyRepIC, int vacancy,
+            CompanyRepresentative companyRep) {
         this.internshipId = internshipId;
         this.title = title;
         this.description = description;
@@ -32,123 +35,132 @@ public class Internship {
         this.internshipStatus = InternshipStatus.PENDING;
         this.companyName = companyName;
         this.companyRepIC = companyRepIC;
+        this.companyRep = companyRep;
         this.vacancy = vacancy;
         this.visibility = true;
         this.applicants = new ArrayList<>();
-        
+
     }
 
-    public int getInternshipId(){
+    public CompanyRepresentative getCompanyRep() {
+        return this.companyRep;
+    }
+
+    public void setCompanyRep(CompanyRepresentative companyRep) {
+        this.companyRep = companyRep;
+    }
+
+    public int getInternshipId() {
         return this.internshipId;
     }
 
-    public String getTitle(){
+    public String getTitle() {
         return this.title;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getDescription(){
+    public String getDescription() {
         return this.description;
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public String getLevel(){
+    public String getLevel() {
         return this.level;
     }
 
-    public void setLevel(String level){
-        this.level= level;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
-    public String getMajor(){
+    public String getMajor() {
         return this.major;
     }
 
-    public void setMajor(String major){
+    public void setMajor(String major) {
         this.major = major;
     }
 
-    public LocalDate getOpenDate(){
+    public LocalDate getOpenDate() {
         return this.openDate;
     }
 
-    public void setOpenDate(LocalDate openDate){
+    public void setOpenDate(LocalDate openDate) {
         this.openDate = openDate;
     }
 
-    public LocalDate getCloseDate(){
+    public LocalDate getCloseDate() {
         return this.closeDate;
     }
 
-    public void setLocalDate(LocalDate closeDate){
+    public void setLocalDate(LocalDate closeDate) {
         this.closeDate = closeDate;
     }
 
-    public InternshipStatus getStatus(){
+    public InternshipStatus getStatus() {
         return this.internshipStatus;
     }
 
-    public void setStatus(InternshipStatus internshipStatus){
+    public void setStatus(InternshipStatus internshipStatus) {
         this.internshipStatus = internshipStatus;
     }
 
-    public String getCompanyName(){
+    public String getCompanyName() {
         return this.companyName;
     }
 
-    public void setCompanyName(String companyName){
+    public void setCompanyName(String companyName) {
         this.companyName = companyName;
     }
 
-    public String getCompanyRepIC(){
+    public String getCompanyRepIC() {
         return this.companyRepIC;
     }
 
-    public void setCompanyRepIC(String companyRepIC){
+    public void setCompanyRepIC(String companyRepIC) {
         this.companyRepIC = companyRepIC;
     }
 
-    public int getVacancy(){
+    public int getVacancy() {
         return this.vacancy;
     }
 
-    public void setVacancy(int vacancy){
+    public void setVacancy(int vacancy) {
         this.vacancy = vacancy;
     }
 
-    public boolean getVisibility(){
+    public boolean getVisibility() {
         return this.visibility;
     }
 
-    public void setVisibility(boolean visibility){
+    public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
 
-    public boolean isAvailable(){
-        if(LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate) && vacancy > 0){
+    public boolean isAvailable() {
+        if (LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate) && vacancy > 0) {
             return true;
         }
 
         return false;
     }
 
-    public List<Student> getApplicants(){
+    public List<Student> getApplicants() {
         return applicants;
     }
-    
-    public void addApplicant(Student student){
+
+    public void addApplicant(Student student) {
         applicants.add(student);
-        this.vacancy --;
+        this.vacancy--;
     }
 
-    public void removeApplicant(Student student){
+    public void removeApplicant(Student student) {
         applicants.remove(student);
-        this.vacancy ++;
+        this.vacancy++;
     }
 }

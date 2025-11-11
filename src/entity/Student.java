@@ -1,7 +1,7 @@
 package src.entity;
 
 import java.util.ArrayList;
-import src.enums.InternshipWithdrawalStatus;
+// import src.enums.InternshipWithdrawalStatus;
 
 public class Student extends User {
     private int YearOfStudy;
@@ -9,8 +9,7 @@ public class Student extends User {
     private int applicationCount;
     private Internship InternshipAccepted;
     private ArrayList<InternshipApplication> InternshipApplied;
-    private ArrayList<Internship> InternshipApplied;
-    private InternshipWithdrawalStatus internshipWithdrawalStatus;
+    // private InternshipWithdrawalStatus internshipWithdrawalStatus;
 
     public Student(){}
 
@@ -68,8 +67,4 @@ public class Student extends User {
     public void setInternshipAccepted(Internship internshipAccepted) {
         this.InternshipAccepted = internshipAccepted;
     }
-        this.internshipWithdrawalStatus = InternshipWithdrawalStatus.NONE;
-    }
-
-
 }
