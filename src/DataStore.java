@@ -1,11 +1,11 @@
 package src;
+
 import src.entity.Student;
 import src.entity.CareerCenterStaff;
 import src.entity.CompanyRepresentative;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import java.util.ArrayList;
-
 
 // change the required parameters
 // change the init to copy the data from csv or smt
@@ -16,9 +16,8 @@ public class DataStore {
     private ArrayList<CareerCenterStaff> careerCenterStaffList;
     private ArrayList<Internship> internshipList;
     private ArrayList<InternshipApplication> internshipApplicationsList;
-    private ArrayList<Internship> internshipList = new ArrayList<>();
 
-    public DataStore(){
+    public DataStore() {
         // Initialize empty ArrayLists
         this.studentList = new ArrayList<>();
         this.companyRepresentativeList = new ArrayList<>();
@@ -26,7 +25,7 @@ public class DataStore {
         this.internshipList = new ArrayList<>();
         this.internshipApplicationsList = new ArrayList<>();
     }
-    //GETTERS
+    // GETTERS
 
     public ArrayList<Student> getStudentList() {
         return this.studentList;
@@ -47,11 +46,8 @@ public class DataStore {
     public ArrayList<InternshipApplication> getInternshipApplicationsList() {
         return this.internshipApplicationsList;
     }
-    
-    return internshipList;
-    }
 
-    //SETTERS
+    // SETTERS
     public void studentAdd(String name) {
         this.studentList.add(new Student());
     }
@@ -71,41 +67,38 @@ public class DataStore {
     public void InternshipApplicationAdd() {
         this.internshipApplicationsList.add(new InternshipApplication());
     }
+
     public void addInternship(Internship internship) {
-    internshipList.add(internship);
+        internshipList.add(internship);
     }
 
-
-    //FINDERS: USED TO FIND WHETHER USERID EXISTs WITHIN RESP DATASTORE
+    // FINDERS: USED TO FIND WHETHER USERID EXISTs WITHIN RESP DATASTORE
 
     public CompanyRepresentative findCompanyRep(String repId) {
-    for (CompanyRepresentative rep : companyRepresentativeList) {
-        if (rep.getUserId().equals(repId)) {
-            return rep;
+        for (CompanyRepresentative rep : companyRepresentativeList) {
+            if (rep.getUserId().equals(repId)) {
+                return rep;
+            }
         }
+        return null;
     }
-    return null;
-    }
-
-
 
     public Student findStudent(String studentId) {
-    for (Student s : studentList) {
-        if (s.getUserId().equals(studentId)) {
-            return s;
+        for (Student s : studentList) {
+            if (s.getUserId().equals(studentId)) {
+                return s;
+            }
         }
-    }
-    return null;
+        return null;
     }
 
     public Internship findInternship(int internshipId) {
-    for (Internship i : internshipList) {
-        if (i.getInternshipId() == internshipId) {
-            return i;
+        for (Internship i : internshipList) {
+            if (i.getInternshipId() == internshipId) {
+                return i;
+            }
         }
+        return null;
     }
-    return null;
-    }
-
 
 }

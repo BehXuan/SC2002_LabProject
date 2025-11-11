@@ -22,6 +22,9 @@ public class Internship {
 
     private List<Student> applicants;
 
+    public Internship() {
+    }
+
     public Internship(int internshipId, String title, String description, String level, String major,
             LocalDate openDate, LocalDate closeDate, String companyName, String companyRepIC, int vacancy,
             CompanyRepresentative companyRep) {
