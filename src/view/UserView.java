@@ -8,7 +8,7 @@ public class UserView {
     private Scanner sc = new Scanner(System.in);
 
     public UserView(UserController userController) {
-        setUserController(userController);
+        this.userController = userController;
     }
 
     public UserController getUserController() {
