@@ -1,9 +1,11 @@
 package src.view;
 
 import src.controller.StudentController;
-import src.controller.UserController; // Inherit basic view functionality
+import src.controller.AuthController; // Inherit basic view functionality
 import src.entity.Internship;
 import src.entity.InternshipApplication;
+import src.entity.Student;
+
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,11 +15,45 @@ public class StudentView extends UserView {
     private StudentController studentController;
     private Scanner sc = new Scanner(System.in);
 
+
     // Constructor chains up to UserView
-    public StudentView(StudentController studentController, UserController userController) {
+    public StudentView(StudentController studentController) {
         // Pass the generic controller up to UserView
-        super(userController); 
+        super(studentController); 
         this.studentController = studentController;
+    }
+     @Override
+    public void start() {
+        // Start login flow first
+        loginMenu();   
+    }
+
+    private void loginMenu() {
+    while (true) {
+        System.out.println("----- Student Login -----");
+        System.out.println("Enter 0 at any time to return to the main menu.");
+        System.out.print("Username: ");
+        String username = sc.nextLine();
+        if (username.equals("0")) {
+            System.out.println("Returning to main menu...");
+            return;
+        }
+        System.out.print("Password: ");
+        String password = sc.nextLine();
+        if (password.equals("0")) {
+            System.out.println("Returning to main menu...");
+            return;
+        }
+
+        // Authenticate via AuthController
+        if (studentController.login(username, password)) {
+            System.out.println("Login successful! Welcome " + studentController.getCurrentStudent().getName());
+            runStudentMenuLoop(); // Enter student menu
+            return; // exit login menu after student menu ends
+        } else {
+            System.out.println("Invalid username or password. Try again or enter 0 to go back.");
+            }
+        }
     }
 
     // Helper to display the main student menu options
@@ -58,16 +94,18 @@ public class StudentView extends UserView {
                     break;
                 case 3:
                     // Inherited from UserView
-                    ChangePassword(); 
+                    changePassword(); 
                     break; 
                 case 4:
                     // Inherited from UserController/UserView
-                    getUserController().logout(); 
+                    logout(); 
                     displayMessage("Logged out successfully.");
                     return; // Exit the student loop back to the main login prompt
                 case 5:
                     displayMessage("Exiting application.");
                     System.exit(0); // Terminate the application
+                default:
+                    displayMessage("Invalid Choice, please try again!");
             }
         }
     }
@@ -83,7 +121,7 @@ public class StudentView extends UserView {
         for (int i = 0; i < opportunities.size(); i++) {
             Internship opp = opportunities.get(i);
             displayMessage(String.format("%d. ID: %d | Title: %s | Company: %s | Level: %s | Slots: %d", 
-                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyName(), opp.getLevel(), opp.getVacancy()));
+                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyName(), opp.getLevel(), opp.getNumberOfSlotsLeft()));
         }
 
         displayMessage("\nEnter the number of the internship to view details and apply, or 0 to return:");
@@ -116,7 +154,7 @@ public class StudentView extends UserView {
         displayMessage("Level: " + internship.getLevel());
         displayMessage("Preferred Major: " + internship.getMajor());
         displayMessage("Application Close Date: " + internship.getCloseDate());
-        displayMessage("Available Slots: " + internship.getVacancy());
+        displayMessage("Available Slots: " + internship.getNumberOfSlotsLeft());
         displayMessage("---");
     }
 
@@ -205,4 +243,7 @@ public class StudentView extends UserView {
             }
         }
     }
+
 }
+
+

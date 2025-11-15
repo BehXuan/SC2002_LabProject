@@ -8,7 +8,7 @@ public class Student extends User {
     private String major;
     private Internship internshipAccepted;
     private ArrayList<InternshipApplication> internshipApplied;
-    // private InternshipWithdrawalStatus internshipWithdrawalStatus;
+    
 
     public Student(){}
 

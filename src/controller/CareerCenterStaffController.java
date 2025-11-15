@@ -28,8 +28,11 @@ public class CareerCenterStaffController implements AuthController {
     @Override
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
+        System.out.println("DEBUG: Trying login with ID='" + userName + "' PW='" + pw + "'");
         for (CareerCenterStaff c : dataStore.getCareerCenterStaffList()) {
-            if (c.getName().equals(userName) && c.getPassword().equals(pw)) {
+            System.out.println("DEBUG: staffId='" + c.getUserId() + "' PW='" + c.getPassword() + "'");
+        
+            if (c.getUserId().equals(userName) && c.getPassword().equals(pw)) {
                 setCurrentStaff(c);
                 return true;
             }

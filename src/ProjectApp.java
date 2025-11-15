@@ -1,5 +1,7 @@
 package src;
 
+import java.util.Scanner;
+
 // import src.entity.*;
 import src.controller.*;
 import src.view.*;
@@ -12,6 +14,62 @@ public class ProjectApp {
         DataStore dataStore = DataStore.getInstance();
         System.out.println("DataStore instance obtained in ProjectApp.");
         System.out.println(dataStore.getStudentList());
+        System.out.println(dataStore.getCareerCenterStaffList());
 
+        //Take inputs
+        Scanner sc = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("========== MAIN MENU ==========");
+            System.out.println("Select user type:");
+            System.out.println("1. Student");
+            System.out.println("2. Company Representative");
+            System.out.println("3. Career Center Staff");
+            System.out.println("0. Exit");
+            System.out.print("Enter choice: ");
+
+            int choice = sc.nextInt();
+            sc.nextLine();
+
+            if (choice == 0) {
+                System.out.println("Exiting system... Goodbye!");
+                break;
+            }
+
+            AuthController controller = null;
+            switch (choice) {
+                case 1:
+                    controller = new StudentController();
+                    break;
+                case 2: 
+                    controller = new CompanyRepresentativeController();
+                    break;
+                case 3:
+                    controller = new CareerCenterStaffController();
+                    break;
+                default:
+                    System.out.println("Invalid option.\n");
+                    controller = null;
+            };
+
+            if (controller == null) continue;
+
+            // Route to correct view
+            if (controller instanceof StudentController) {
+                StudentController ctrl = (StudentController) controller;
+                new StudentView(ctrl).start();
+            } //else if (controller instanceof CompanyRepresentativeController) {
+                //CompanyRepresentativeController ctrl = (CompanyRepresentativeController) controller;
+                //new CompanyRepresentativeView(ctrl).start();}
+             else if (controller instanceof CareerCenterStaffController) {
+                CareerCenterStaffController ctrl = (CareerCenterStaffController) controller;
+                new CareerCenterStaffView(ctrl).start();
+            }
+
+            System.out.println("\nReturning to main menu...\n");
+        }
+
+        sc.close();
     }
 }
+

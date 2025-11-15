@@ -24,7 +24,7 @@ public class CompanyRepresentativeController implements AuthController{
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (CompanyRepresentative c : dataStore.getCompanyRepresentativeList()) {
-            if (c.getName().equals(userName) && c.getPassword().equals(pw)) {
+            if (c.getUserId().equals(userName) && c.getPassword().equals(pw)) {
                 setCurrentCompanyRepresentative(c);
                 return true;
             }

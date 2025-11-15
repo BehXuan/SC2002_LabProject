@@ -11,8 +11,8 @@ public class CompanyRepresentative extends User{
 
     public CompanyRepresentative(){}
 
-    public CompanyRepresentative(String id, String pw, String name,String companyName){
-        super(id,pw,name);
+    public CompanyRepresentative(String id, String pw, String name,String email, String companyName){
+        super(id,pw,name, email);
         this.companyName = companyName;
         this.companyApprovalStatus = CompanyApprovalStatus.PENDING;
         this.internshipCount = 0;

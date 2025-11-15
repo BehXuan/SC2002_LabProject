@@ -41,14 +41,21 @@ public class DataStore {
 
     private void loadInitialData() {
         loadStudentsFromCSV("src\\csvFiles\\sample_student_list.csv");
-        // loadStaffFromCSV("sample_staff_list.csv");
+        loadStaffFromCSV("src\\csvFiles\\sample_staff_list.csv");
         // loadCompanyRepsFromCSV("sample_company_representative_list.csv");
         
         System.out.println("DataStore initialized with:");
         System.out.println("- " + studentList.size() + " students");
         System.out.println("- " + careerCenterStaffList.size() + " staff members");
         System.out.println("- " + companyRepresentativeList.size() + " company representatives");
+
+        System.out.println("Loaded staff:");
+        for (CareerCenterStaff c : careerCenterStaffList) {
+        System.out.println(c.getUserId() + " | " + c.getName() + " | " + c.getPassword());
+}
+
     }
+
 
     private void loadStudentsFromCSV(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -82,35 +89,35 @@ public class DataStore {
         }
     }
 
-    // private void loadStaffFromCSV(String filename) {
-    //     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-    //         String line;
-    //         boolean isFirstLine = true;
+    private void loadStaffFromCSV(String filename) {
+         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+             String line;
+             boolean isFirstLine = true;
             
-    //         while ((line = br.readLine()) != null) {
-    //             if (isFirstLine) {
-    //                 isFirstLine = false;
-    //                 continue; // Skip header
-    //             }
+             while ((line = br.readLine()) != null) {
+                 if (isFirstLine) {
+                     isFirstLine = false;
+                     continue; // Skip header
+                 }
                 
-    //             String[] data = line.split(",");
-    //             if (data.length >= 5) {
-    //                 String staffId = data[0].trim();
-    //                 String name = data[1].trim();
-    //                 String role = data[2].trim();
-    //                 String department = data[3].trim();
-    //                 String email = data[4].trim();
+                 String[] data = line.split(",");
+                 if (data.length >= 5) {
+                     String staffId = data[0].trim();
+                    String name = data[1].trim();
+                     String role = data[2].trim();
+                     String department = data[3].trim();
+                     String email = data[4].trim();
                     
-    //                 // Default password is "password" as per requirements
-    //                 CareerCenterStaff staff = new CareerCenterStaff(staffId, "password", name, department);
-    //                 careerCenterStaffList.add(staff);
-    //             }
-    //         }
-    //     } catch (IOException e) {
-    //         System.out.println("Warning: Could not load staff data from " + filename);
-    //         System.out.println("Error: " + e.getMessage());
-    //     }
-    // }
+                     // Default password is "password" as per requirements
+                     CareerCenterStaff staff = new CareerCenterStaff(staffId, "password", name, email,role,department);
+                     careerCenterStaffList.add(staff);
+                 }
+             }
+         } catch (IOException e) {
+             System.out.println("Warning: Could not load staff data from " + filename);
+             System.out.println("Error: " + e.getMessage());
+         }
+     }
 
     // private void loadCompanyRepsFromCSV(String filename) {
     //     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {

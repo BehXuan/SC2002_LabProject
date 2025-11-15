@@ -1,25 +1,61 @@
 package src.view;
 
 import src.controller.CareerCenterStaffController;
+import src.controller.AuthController;
 import src.entity.*;
 import src.enums.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CareerCenterStaffView {
-    private CareerCenterStaffController controller;
-    private Scanner sc;
+public class CareerCenterStaffView extends UserView{
+    private CareerCenterStaffController staffController;
+    private Scanner sc = new Scanner(System.in);
 
-    public CareerCenterStaffView(CareerCenterStaffController controller) {
-        this.controller = controller;
-        this.sc = new Scanner(System.in);
+    public CareerCenterStaffView(CareerCenterStaffController staffController) {
+        super(staffController); // AuthController
+        this.staffController = staffController;
     }
 
-    public void displayMenu() {
+    @Override
+    public void start() {
+        loginMenu();
+    }
+
+    private void loginMenu() {
+        while (true) {
+            System.out.println("----- Career Center Staff Login -----");
+            System.out.println("Enter 0 at any time to return to main menu.");
+            System.out.print("Username: ");
+            String username = sc.nextLine();
+            if (username.equals("0")) {
+                System.out.println("Returning to main menu...");
+                return;
+            }
+
+            System.out.print("Password: ");
+            String password = sc.nextLine();
+            if (password.equals("0")) {
+                System.out.println("Returning to main menu...");
+                return;
+            }
+
+            if (staffController.login(username, password)) {
+                System.out.println("Login successful! Welcome " + staffController.getCurrentStaff().getName());
+                runMenuLoop();
+                return; // exit login after menu
+            } else {
+                System.out.println("Invalid username or password. Try again or enter 0 to go back.");
+            }
+        }
+    }
+
+    private void runMenuLoop() {
         int choice;
-        do {
-            System.out.println("\n===== Career Center Staff Menu =====");
+        while (true) {
+            System.out.println("\n===== Career Center Staff Menu (Logged in as: " +
+                    staffController.getCurrentStaff().getName() + ") =====");
             System.out.println("1. Change Password");
             System.out.println("2. View Pending Company Representatives");
             System.out.println("3. Authorize Company");
@@ -31,13 +67,20 @@ public class CareerCenterStaffView {
             System.out.println("9. Approve Withdrawal");
             System.out.println("10. Reject Withdrawal");
             System.out.println("11. Generate Report");
-            System.out.println("12. Exit");
+            System.out.println("12. Logout / Return to Main Menu");
+
             System.out.print("Enter choice: ");
-            choice = sc.nextInt();
-            sc.nextLine(); // consume newline
+            if (sc.hasNextInt()) {
+                choice = sc.nextInt();
+                sc.nextLine(); // consume newline
+            } else {
+                sc.nextLine();
+                System.out.println("Invalid input.");
+                continue;
+            }
 
             switch (choice) {
-                case 1 -> changePassword();
+                case 1 -> changePassword(); // from UserView
                 case 2 -> viewPendingCompanyReps();
                 case 3 -> authorizeCompany();
                 case 4 -> rejectCompany();
@@ -47,30 +90,20 @@ public class CareerCenterStaffView {
                 case 8 -> viewPendingWithdrawals();
                 case 9 -> approveWithdrawal();
                 case 10 -> rejectWithdrawal();
-                case 11 -> generateReport();
-                case 12 -> System.out.println("Exiting...");
-                default -> System.out.println("Invalid choice.");
+                //case 11 -> generateReport();
+                case 12 -> {
+                    logout(); // from UserView
+                    System.out.println("Logged out. Returning to main menu...");
+                    return; // exit menu loop
+                }
+                default -> System.out.println("Invalid choice. Please try again.");
             }
-        } while (choice != 12);
-    }
-
-    // ---- Password ----
-    private void changePassword() {
-        System.out.print("Enter old password: ");
-        String oldPW = sc.nextLine();
-        System.out.print("Enter new password: ");
-        String newPW = sc.nextLine();
-
-        if (controller.changePassword((CareerCenterStaff)controller.getCurrentUser(), oldPW, newPW)) {
-            System.out.println("Password changed successfully!");
-        } else {
-            System.out.println("Old password incorrect.");
         }
     }
 
     // ---- Companies ----
     private void viewPendingCompanyReps() {
-        List<CompanyRepresentative> pending = controller.getPendingCompanies();
+        List<CompanyRepresentative> pending = staffController.getPendingCompanies();
         System.out.println("\n===== Pending Company Representatives =====");
         if (pending.isEmpty()) System.out.println("No pending companies.");
         else
@@ -82,20 +115,20 @@ public class CareerCenterStaffView {
     private void authorizeCompany() {
         System.out.print("Enter Company Rep ID to authorize: ");
         String id = sc.nextLine();
-        if (controller.authorizeCompany(id)) System.out.println("Company authorized.");
+        if (staffController.authorizeCompany(id)) System.out.println("Company authorized.");
         else System.out.println("Company not found.");
     }
 
     private void rejectCompany() {
         System.out.print("Enter Company Rep ID to reject: ");
         String id = sc.nextLine();
-        if (controller.rejectCompany(id)) System.out.println("Company rejected.");
+        if (staffController.rejectCompany(id)) System.out.println("Company rejected.");
         else System.out.println("Company not found.");
     }
 
     // ---- Internships ----
     private void viewPendingInternships() {
-        List<Internship> pending = controller.getPendingInternships();
+        List<Internship> pending = staffController.getPendingInternships();
         System.out.println("\n===== Pending Internships =====");
         if (pending.isEmpty()) System.out.println("No pending internships.");
         else
@@ -108,7 +141,7 @@ public class CareerCenterStaffView {
         System.out.print("Enter Internship ID to approve: ");
         int id = sc.nextInt();
         sc.nextLine();
-        if (controller.approveInternship(id)) System.out.println("Internship approved.");
+        if (staffController.approveInternship(id)) System.out.println("Internship approved.");
         else System.out.println("Internship not found.");
     }
 
@@ -116,39 +149,90 @@ public class CareerCenterStaffView {
         System.out.print("Enter Internship ID to reject: ");
         int id = sc.nextInt();
         sc.nextLine();
-        if (controller.rejectInternship(id)) System.out.println("Internship rejected.");
+        if (staffController.rejectInternship(id)) System.out.println("Internship rejected.");
         else System.out.println("Internship not found.");
     }
 
     // ---- Student Withdrawals ----
-    private void viewPendingWithdrawals() {
-        List<Student> pending = controller.getPendingWithdrawals();
-        System.out.println("\n===== Students with Pending Withdrawals =====");
-        if (pending.isEmpty()) System.out.println("No pending withdrawals.");
-        else
-            for (Student s : pending) {
-                System.out.println("ID: " + s.getUserId() + ", Name: " + s.getName());
-            }
+    private List<InternshipApplication> viewPendingWithdrawals() {
+    List<InternshipApplication> pending = staffController.getPendingWithdrawals();
+
+    System.out.println("\n===== Pending Withdrawals =====");
+    if (pending.isEmpty()) {
+        System.out.println("No pending withdrawals.");
+        return pending;
     }
+    for (int i = 0; i < pending.size(); i++) {
+        InternshipApplication app = pending.get(i);
+        Student s = app.getStudent();
+        System.out.println((i + 1) + ". Student ID: " + s.getUserId() + ", Name: " + s.getName() +
+                           ", Internship: " + app.getInternship().getTitle());
+    }
+
+    return pending;
+}
+
 
     private void approveWithdrawal() {
-        System.out.print("Enter Student ID to approve withdrawal: ");
-        String id = sc.nextLine();
-        if (controller.approveWithdrawal(id)) System.out.println("Withdrawal approved.");
-        else System.out.println("Student not found or no pending request.");
+    List<InternshipApplication> pending = viewPendingWithdrawals();
+    if (pending.isEmpty()) return;
+
+    System.out.print("Enter the number of the withdrawal to approve, or 0 to cancel: ");
+    int choice = -1;
+    while (true) {
+        if (sc.hasNextInt()) {
+            choice = sc.nextInt();
+            sc.nextLine();
+            if (choice >= 0 && choice <= pending.size()) break;
+        } else {
+            sc.nextLine();
+        }
+        System.out.print("Invalid input. Try again: ");
     }
+
+    if (choice == 0) return;
+
+    InternshipApplication selectedApp = pending.get(choice - 1);
+    if (staffController.approveWithdrawal(selectedApp)) {
+        System.out.println("Withdrawal approved.");
+    } else {
+        System.out.println("Failed to approve withdrawal.");
+    }
+}
+
 
     private void rejectWithdrawal() {
-        System.out.print("Enter Student ID to reject withdrawal: ");
-        String id = sc.nextLine();
-        if (controller.rejectWithdrawal(id)) System.out.println("Withdrawal rejected.");
-        else System.out.println("Student not found or no pending request.");
+    List<InternshipApplication> pending = viewPendingWithdrawals();
+    if (pending.isEmpty()) return;
+
+    System.out.print("Enter the number of the withdrawal to reject, or 0 to cancel: ");
+    int choice = -1;
+    while (true) {
+        if (sc.hasNextInt()) {
+            choice = sc.nextInt();
+            sc.nextLine();
+            if (choice >= 0 && choice <= pending.size()) break;
+        } else {
+            sc.nextLine();
+        }
+        System.out.print("Invalid input. Try again: ");
     }
 
-    // ---- Reports ----
-    private void generateReport() {
-        System.out.println("Generating report... (Functionality TBD)");
-        controller.generateReports("", "", "", "", "", "", "");
-        System.out.println("Report generated.");
+    if (choice == 0) return;
+
+    InternshipApplication selectedApp = pending.get(choice - 1);
+    if (staffController.rejectWithdrawal(selectedApp)) {
+        System.out.println("Withdrawal rejected.");
+    } else {
+        System.out.println("Failed to reject withdrawal.");
     }
+}
+
+
+    // ---- Reports ----
+    /**private void generateReport() {
+        System.out.println("Generating report... (Functionality TBD)");
+        staffController.generateReports("", "", "", "", "", "", "");
+        System.out.println("Report generated.");
+    }**/
 }

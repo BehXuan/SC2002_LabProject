@@ -1,6 +1,7 @@
 package src.entity;
 
 import src.enums.InternshipStatus;
+import src.enums.InternshipWithdrawalStatus;
 
 public class InternshipApplication {
     private CompanyRepresentative companyRep;
@@ -8,6 +9,7 @@ public class InternshipApplication {
     private Internship internship;
     private InternshipStatus studentAccept; // e.g., "Pending", "Accepted", "Rejected"
     private InternshipStatus companyAccept; // e.g., "Pending", "Accepted", "Rejected"
+    private InternshipWithdrawalStatus studentWithdraw;
     private int applicationId;
     
     public InternshipApplication() {
@@ -20,6 +22,7 @@ public class InternshipApplication {
         this.internship = internship;
         this.studentAccept = InternshipStatus.PENDING; // Default status
         this.companyAccept = InternshipStatus.PENDING; // Default status
+        this.studentWithdraw = InternshipWithdrawalStatus.NONE;
     }
 
     public CompanyRepresentative getCompanyRep() {
@@ -57,5 +60,13 @@ public class InternshipApplication {
     }
     public void setCompanyAccept(InternshipStatus companyAccept) {
         this.companyAccept = companyAccept;
+    }
+
+    public void setInternshipWithdrawalStatus(InternshipWithdrawalStatus studentWithdraw){
+        this.studentWithdraw = studentWithdraw;
+    }
+
+    public InternshipWithdrawalStatus getInternshipWithdrawalStatus(){
+        return this.studentWithdraw;
     }
 }

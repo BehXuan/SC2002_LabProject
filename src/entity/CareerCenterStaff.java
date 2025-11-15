@@ -3,12 +3,13 @@ package src.entity;
 public class CareerCenterStaff extends User{
     
     private String staffDepartment;
-
+    private String role;
     public CareerCenterStaff(){}
 
-    public CareerCenterStaff(String userId, String password, String staffDepartment) {
-        super(userId, password, null);
+    public CareerCenterStaff(String userId, String password, String name, String email, String role, String staffDepartment) {
+        super(userId, password, name, email);
         this.staffDepartment = staffDepartment;
+        this.role = role;
     }
     // Getters
 
@@ -20,5 +21,13 @@ public class CareerCenterStaff extends User{
 
     public void setStaffDepartment(String staffDepartment) {
         this.staffDepartment = staffDepartment;
+    }
+
+    public String getStaffRole(){
+        return this.role;
+    }
+
+    public void setStaffRole(String role){
+        this.role = role;
     }
 }

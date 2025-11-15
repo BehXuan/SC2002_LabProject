@@ -29,7 +29,7 @@ public class StudentController implements AuthController{
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (Student s : dataStore.getStudentList()) {
-            if (s.getName().equals(userName) && s.getPassword().equals(pw)) {
+            if (s.getUserId().equals(userName) && s.getPassword().equals(pw)) {
                 setCurrentStudent(s);
                 return true;
             }
@@ -41,7 +41,7 @@ public class StudentController implements AuthController{
     public void logout() {
         setCurrentStudent(null);
     }
-    
+
     @Override
     public boolean updatePassword(String oldPW, String newPW) {
         if (getCurrentStudent() == null) {
