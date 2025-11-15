@@ -7,29 +7,48 @@ import java.util.List;
 import src.enums.*;
 import src.DataStore;
 
-public class CareerCenterStaffController extends UserController {
+public class CareerCenterStaffController implements AuthController {
+    private CareerCenterStaff currentStaff;
+    private DataStore dataStore;
+
 
     public CareerCenterStaffController() {
-        super();
+        this.dataStore = DataStore.getInstance();
     }
 
+    public void setCurrentStaff(CareerCenterStaff c){
+        this.currentStaff = c;
+    }
+
+    public CareerCenterStaff getCurrentStaff(){
+        return this.currentStaff;
+    }
+
+
     @Override
-    public boolean login(String userId, String pw) {
-        for (CareerCenterStaff staff : dataStore.getCareerCenterStaffList()) {
-            if (staff.getUserId().equals(userId) && staff.getPassword().equals(pw)) {
-                setCurrentUser(staff);
+    public boolean login(String userName, String pw) {
+        // check the userName and pw against dataStore
+        for (CareerCenterStaff c : dataStore.getCareerCenterStaffList()) {
+            if (c.getName().equals(userName) && c.getPassword().equals(pw)) {
+                setCurrentStaff(c);
                 return true;
             }
         }
         return false;
     }
 
-    public boolean changePassword(CareerCenterStaff staff, String oldPW, String newPW) {
-        if (staff.getPassword().equals(oldPW)) {
-            staff.setPassword(newPW);
+    @Override
+    public boolean updatePassword(String oldPW, String newPW) {
+        if (currentStaff.getPassword().equals(oldPW)) {
+            currentStaff.setPassword(newPW);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void logout(){
+        setCurrentStaff(null);
     }
 
     //List of all pending companies
@@ -93,34 +112,38 @@ public class CareerCenterStaffController extends UserController {
     }
 
     //STUDENT WITHDRAWALS LIST
-    public List<Student> getPendingWithdrawals() {
-    List<Student> pending = new ArrayList<>();
+  
+    public List<InternshipApplication> getPendingWithdrawals() {
+        List<InternshipApplication> pending = new ArrayList<>();
 
-    for (Student s : dataStore.getStudentList()) {
-        if ((s.getWithdrawalStatus) == InternshipWithdrawalStatus.PENDING) {   // false = pending
-            pending.add(s);
+        for (Student s : dataStore.getStudentList()) {
+            // check all applied internships for pending withdrawal
+            for (InternshipApplication app : s.getInternshipApplied()) {
+                if (app.getInternshipWithdrawalStatus() == InternshipWithdrawalStatus.PENDING) {
+                    pending.add(app);
+                    
+            }
         }
     }
-    return pending;
+        return pending;
+    
+}
+
+
+    public boolean approveWithdrawal(InternshipApplication app) {
+    if (app.getInternshipWithdrawalStatus() == InternshipWithdrawalStatus.PENDING) {
+        app.setInternshipWithdrawalStatus(InternshipWithdrawalStatus.APPROVED);
+        return true;
+    }
+    return false;
     }
 
-    //STUDENT WITHDRAWAL APPROVE/REJECT
-    public boolean approveWithdrawal(String studentId) {
-        Student student = dataStore.findStudent(studentId);
-        if (student != null) {
-            student.setWithdrawalApproved(true);
-            return true;
-        }
-        return false;
+    public boolean rejectWithdrawal(InternshipApplication app) {
+    if (app.getInternshipWithdrawalStatus() == InternshipWithdrawalStatus.PENDING) {
+        app.setInternshipWithdrawalStatus(InternshipWithdrawalStatus.REJECTED);
+        return true;
     }
-
-    public boolean rejectWithdrawal(String studentId) {
-        Student student = dataStore.findStudent(studentId);
-        if (student != null) {
-            student.setWithdrawalApproved(false);
-            return true;
-        }
-        return false;
+    return false;
     }
 
     //LIST GENERATION
@@ -129,13 +152,13 @@ public class CareerCenterStaffController extends UserController {
 
 
 
-    public Report generateReports(String status, String level, String major, String openDate,
+    /**public Report generateReports(String status, String level, String major, String openDate,
                                   String closeDate, String companyName, String vacancy) {
         // TODO: Implement report generation logic
         return new Report(); 
                 
                 
-    }
+    }**/
             
             
 }

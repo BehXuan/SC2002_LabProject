@@ -15,8 +15,8 @@ public class Internship {
     private LocalDate closeDate;
     private InternshipStatus internshipStatus;
     private String companyName;
-    private String companyRepIC;
-    private int vacancy;
+    private String companyRepID;
+    private int numberOfSlotsLeft;
     private boolean visibility;
     private CompanyRepresentative companyRep;
 
@@ -26,7 +26,7 @@ public class Internship {
     }
 
     public Internship(int internshipId, String title, String description, String level, String major,
-            LocalDate openDate, LocalDate closeDate, String companyName, String companyRepIC, int vacancy,
+            LocalDate openDate, LocalDate closeDate, String companyName, String companyRepID, int numberOfSlotsLeft,
             CompanyRepresentative companyRep) {
         this.internshipId = internshipId;
         this.title = title;
@@ -37,9 +37,9 @@ public class Internship {
         this.closeDate = closeDate;
         this.internshipStatus = InternshipStatus.PENDING;
         this.companyName = companyName;
-        this.companyRepIC = companyRepIC;
+        this.companyRepID = companyRepID;
         this.companyRep = companyRep;
-        this.vacancy = vacancy;
+        this.numberOfSlotsLeft = numberOfSlotsLeft;
         this.visibility = true;
         this.applicants = new ArrayList<>();
 
@@ -121,20 +121,20 @@ public class Internship {
         this.companyName = companyName;
     }
 
-    public String getCompanyRepIC() {
-        return this.companyRepIC;
+    public String getCompanyRepID() {
+        return this.companyRepID;
     }
 
-    public void setCompanyRepIC(String companyRepIC) {
-        this.companyRepIC = companyRepIC;
+    public void setCompanyRepID(String companyRepID) {
+        this.companyRepID = companyRepID;
     }
 
-    public int getVacancy() {
-        return this.vacancy;
+    public int getNumberOfSlotsLeft() {
+        return this.numberOfSlotsLeft;
     }
 
-    public void setVacancy(int vacancy) {
-        this.vacancy = vacancy;
+    public void setNumberOfSlotsLeft(int numberOfSlotsLeft) {
+        this.numberOfSlotsLeft = numberOfSlotsLeft;
     }
 
     public boolean getVisibility() {
@@ -146,7 +146,7 @@ public class Internship {
     }
 
     public boolean isAvailable() {
-        if (LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate) && vacancy > 0) {
+        if (LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate) && numberOfSlotsLeft > 0) {
             return true;
         }
 
@@ -159,11 +159,11 @@ public class Internship {
 
     public void addApplicant(Student student) {
         applicants.add(student);
-        this.vacancy--;
+        this.numberOfSlotsLeft--;
     }
 
     public void removeApplicant(Student student) {
         applicants.remove(student);
-        this.vacancy++;
+        this.numberOfSlotsLeft++;
     }
 }

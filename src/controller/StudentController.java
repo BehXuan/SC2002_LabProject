@@ -9,7 +9,7 @@ import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
 
 
-public class StudentController {
+public class StudentController implements AuthController{
     private Student currentStudent;
     private DataStore dataStore;
 
@@ -25,6 +25,7 @@ public class StudentController {
         return currentStudent;
     }
 
+    @Override
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (Student s : dataStore.getStudentList()) {
@@ -36,10 +37,12 @@ public class StudentController {
         return false;
     }
 
+    @Override
     public void logout() {
         setCurrentStudent(null);
     }
-
+    
+    @Override
     public boolean updatePassword(String oldPW, String newPW) {
         if (getCurrentStudent() == null) {
             return false;
