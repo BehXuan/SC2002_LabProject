@@ -14,19 +14,16 @@ public class Internship {
     private LocalDate openDate;
     private LocalDate closeDate;
     private InternshipStatus internshipStatus;
-    private String companyName;
-    private String companyRepID;
     private int numberOfSlotsLeft;
     private boolean visibility;
     private CompanyRepresentative companyRep;
-
-    private List<Student> applicants;
+    private ArrayList<Student> applicants;
 
     public Internship() {
     }
 
     public Internship(int internshipId, String title, String description, String level, String major,
-            LocalDate openDate, LocalDate closeDate, String companyName, String companyRepID, int numberOfSlotsLeft,
+            LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft,
             CompanyRepresentative companyRep) {
         this.internshipId = internshipId;
         this.title = title;
@@ -36,8 +33,6 @@ public class Internship {
         this.openDate = openDate;
         this.closeDate = closeDate;
         this.internshipStatus = InternshipStatus.PENDING;
-        this.companyName = companyName;
-        this.companyRepID = companyRepID;
         this.companyRep = companyRep;
         this.numberOfSlotsLeft = numberOfSlotsLeft;
         this.visibility = true;
@@ -111,22 +106,6 @@ public class Internship {
 
     public void setStatus(InternshipStatus internshipStatus) {
         this.internshipStatus = internshipStatus;
-    }
-
-    public String getCompanyName() {
-        return this.companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getCompanyRepID() {
-        return this.companyRepID;
-    }
-
-    public void setCompanyRepID(String companyRepID) {
-        this.companyRepID = companyRepID;
     }
 
     public int getNumberOfSlotsLeft() {

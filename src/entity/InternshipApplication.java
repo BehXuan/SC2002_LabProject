@@ -16,7 +16,7 @@ public class InternshipApplication {
     }
 
     public InternshipApplication(int applicationId, CompanyRepresentative companyRep, Student student, Internship internship) {
-        this.applicationId = applicationId;
+        // this.applicationId = applicationId;
         this.companyRep = companyRep;
         this.student = student;
         this.internship = internship;

@@ -2,6 +2,11 @@
 package src.controller;
 
 import src.entity.*;
+import src.enums.InternshipStatus;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import src.DataStore;
 
 public class CompanyRepresentativeController implements AuthController{
@@ -49,4 +54,64 @@ public class CompanyRepresentativeController implements AuthController{
         }
         return false;
     }
+
+    public ArrayList<InternshipApplication> getApplications() {
+        if (getCurrentCompayRepresentative() == null) {
+            return null;
+        }
+
+        ArrayList<InternshipApplication> applications = new ArrayList<InternshipApplication>();
+        for (InternshipApplication app : dataStore.getInternshipApplicationsList()) {
+            if (app.getCompanyRep() == getCurrentCompayRepresentative()) {
+                applications.add(app);
+            }
+        }
+        return applications;
+    }
+
+    public ArrayList<Internship> getInternships() {
+        if (getCurrentCompayRepresentative() == null) {
+            return null;
+        }
+
+        ArrayList<Internship> internships = new ArrayList<Internship>();
+        for (Internship internship : dataStore.getInternshipList()) {
+            if (internship.getCompanyRep() == getCurrentCompayRepresentative()) {
+                internships.add(internship);
+            }
+        }
+        return internships;
+    }
+
+    public boolean createInternship(int internshipId, String title, String description, String level, String major,
+            LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft) {
+        if (getCurrentCompayRepresentative() == null) {
+            return false;
+        }
+            
+        Internship newInternship = new Internship(0, title, description, level, major,
+            openDate, closeDate, numberOfSlotsLeft, getCurrentCompayRepresentative());
+        newInternship.setCompanyRep(getCurrentCompayRepresentative());
+        dataStore.addInternship(newInternship);
+        return true;
+    }
+
+    public boolean approveInternshipApplication(InternshipApplication app) {
+        if (getCurrentCompayRepresentative() == null) {
+            return false;
+        }
+
+        app.setCompanyAccept(InternshipStatus.APPROVED);
+        return true;
+    }
+
+    public boolean rejectInternshipApplication(InternshipApplication app) {  // do i need to show students they got rejected or just delete applicaiton from list
+        if (getCurrentCompayRepresentative() == null) {
+            return false;
+        }
+
+        app.setCompanyAccept(InternshipStatus.REJECTED);
+        return true;
+    }
+
 }

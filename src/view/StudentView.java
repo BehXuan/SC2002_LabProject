@@ -1,10 +1,10 @@
 package src.view;
 
 import src.controller.StudentController;
-import src.controller.AuthController; // Inherit basic view functionality
+// import src.controller.AuthController; // Inherit basic view functionality
 import src.entity.Internship;
 import src.entity.InternshipApplication;
-import src.entity.Student;
+// import src.entity.Student;
 
 
 import java.util.ArrayList;
@@ -121,7 +121,7 @@ public class StudentView extends UserView {
         for (int i = 0; i < opportunities.size(); i++) {
             Internship opp = opportunities.get(i);
             displayMessage(String.format("%d. ID: %d | Title: %s | Company: %s | Level: %s | Slots: %d", 
-                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyName(), opp.getLevel(), opp.getNumberOfSlotsLeft()));
+                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyRep().getCompanyName(), opp.getLevel(), opp.getNumberOfSlotsLeft()));
         }
 
         displayMessage("\nEnter the number of the internship to view details and apply, or 0 to return:");
@@ -149,7 +149,7 @@ public class StudentView extends UserView {
     private void displayInternshipDetails(Internship internship) {
         displayMessage("\n--- Internship Details ---");
         displayMessage("Title: " + internship.getTitle());
-        displayMessage("Company: " + internship.getCompanyName());
+        displayMessage("Company: " + internship.getCompanyRep().getCompanyName());
         displayMessage("Description: " + internship.getDescription());
         displayMessage("Level: " + internship.getLevel());
         displayMessage("Preferred Major: " + internship.getMajor());
@@ -189,7 +189,7 @@ public class StudentView extends UserView {
             }
             
             displayMessage(String.format("%d. Internship: %s | Company: %s | Status: %s", 
-                i + 1, app.getInternship().getTitle(), app.getInternship().getCompanyName(), status));
+                i + 1, app.getInternship().getTitle(), app.getInternship().getCompanyRep().getCompanyName(), status));
         }
 
         promptToAcceptOrWithdraw(applications);
