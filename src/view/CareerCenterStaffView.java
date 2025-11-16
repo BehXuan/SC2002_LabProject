@@ -1,7 +1,7 @@
 package src.view;
 
 import src.controller.CareerCenterStaffController;
-import src.controller.AuthController;
+import src.interface.AuthController;
 import src.entity.*;
 import src.enums.*;
 

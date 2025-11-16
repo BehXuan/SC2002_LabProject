@@ -1,4 +1,4 @@
-package src.controller;
+package src.interface;
 
 public interface AuthController{
     boolean login(String userName, String pw);
