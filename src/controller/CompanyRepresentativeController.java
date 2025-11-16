@@ -25,6 +25,12 @@ public class CompanyRepresentativeController implements AuthController{
         return currentRep;
     }
 
+    public boolean createCompanyRepresentative(String userId, String password, String name, String email, String companyName) {
+        CompanyRepresentative newRep = new CompanyRepresentative(userId, password, name, email,  companyName);
+        dataStore.CompanyRepresentativeAdd(newRep);
+        return true;
+    }
+
     @Override
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore

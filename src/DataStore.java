@@ -181,12 +181,12 @@ public class DataStore {
     }
 
     // SETTERS
-    public void studentAdd(String name) {
+    public void studentAdd(String name) {  // might need redo
         this.studentList.add(new Student());
     }
 
-    public void CompanyRepresentativeAdd(String name) {
-        this.companyRepresentativeList.add(new CompanyRepresentative());
+    public void CompanyRepresentativeAdd(CompanyRepresentative rep) {
+        this.companyRepresentativeList.add(rep);
     }
 
     public void CareerCenterStaffAdd(String name) {

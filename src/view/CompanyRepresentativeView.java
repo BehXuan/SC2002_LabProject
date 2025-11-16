@@ -20,6 +20,30 @@ public class CompanyRepresentativeView extends UserView {
 
     @Override
     public void start() {
+        System.out.println("1. Login as Company Representative\n2. Register as Company Representative");
+        int choice = Integer.parseInt(sc.nextLine());
+        if (choice == 2) {
+            System.out.print("Enter Username: ");
+            String username = sc.nextLine();
+            System.out.print("Enter Password: ");
+            String password = sc.nextLine();
+            System.out.print("Enter Name: ");
+            String name = sc.nextLine();
+            System.out.print("Enter Email: ");
+            String email = sc.nextLine();
+            System.out.print("Enter Company Name: ");
+            String companyName = sc.nextLine();
+
+            boolean registered = repController.createCompanyRepresentative(username, password, name, email, companyName);
+            if (registered) {
+                System.out.println("Registration successful! You can now log in.");
+            } else {
+                System.out.println("Registration failed. Please try again.");
+            }
+        }
+        else if (choice != 1) {
+            System.out.println("Invalid choice. Returning to main menu.");
+        }
         loginMenu();
     }
 
