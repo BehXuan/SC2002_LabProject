@@ -8,15 +8,19 @@ public class CompanyRepresentative extends User{
     private CompanyApprovalStatus companyApprovalStatus;
     private List<Internship> internships; // "pending", "approved","rejected" 
     private int internshipCount; // max 5
+    private String position;
+    private String department;
 
     public CompanyRepresentative(){}
 
-    public CompanyRepresentative(String id, String pw, String name,String email, String companyName){
+    public CompanyRepresentative(String id, String pw, String name,String email, String companyName,String department,String position){
         super(id,pw,name, email);
         this.companyName = companyName;
         this.companyApprovalStatus = CompanyApprovalStatus.PENDING;
         this.internshipCount = 0;
         this.internships = new ArrayList<>();
+        this.position = position;
+        this.department = department;
 
     }
 
@@ -37,6 +41,14 @@ public class CompanyRepresentative extends User{
         return internships;
     }
 
+    public String getDepartment(){
+        return this.department;
+    }
+
+    public String getPosition(){
+        return this.position;
+    }
+
     //Setter functions
     public void setCompanyName(String companyName){
         this.companyName = companyName;
@@ -54,4 +66,11 @@ public class CompanyRepresentative extends User{
         this.internships = internships;
     }
 
+    public void setDepartment(String department){
+        this.department = department;
+    }
+
+    public void setPosition(String position){
+        this.position = position;
+    }
 }
