@@ -5,6 +5,8 @@ import src.entity.*;
 import java.util.ArrayList;
 import java.util.List;
 import src.enums.*;
+import src.report.ReportCriteria;
+import src.report.ReportGenerator;
 import src.DataStore;
 
 public class CareerCenterStaffController implements AuthController {
@@ -28,10 +30,7 @@ public class CareerCenterStaffController implements AuthController {
     @Override
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
-        System.out.println("DEBUG: Trying login with ID='" + userName + "' PW='" + pw + "'");
         for (CareerCenterStaff c : dataStore.getCareerCenterStaffList()) {
-            System.out.println("DEBUG: staffId='" + c.getUserId() + "' PW='" + c.getPassword() + "'");
-        
             if (c.getUserId().equals(userName) && c.getPassword().equals(pw)) {
                 setCurrentStaff(c);
                 return true;
@@ -155,13 +154,10 @@ public class CareerCenterStaffController implements AuthController {
 
 
 
-    /**public Report generateReports(String status, String level, String major, String openDate,
-                                  String closeDate, String companyName, String vacancy) {
-        // TODO: Implement report generation logic
-        return new Report(); 
-                
-                
-    }**/
+    public List<Internship> generateReport(ReportCriteria criteria) {
+    ReportGenerator generator = new ReportGenerator();
+    return generator.generateReport(dataStore.getInternshipList(), criteria);
+}
             
             
 }

@@ -33,10 +33,13 @@ public class CompanyRepresentativeView extends UserView {
             String email = sc.nextLine();
             System.out.print("Enter Company Name: ");
             String companyName = sc.nextLine();
-
-            boolean registered = repController.createCompanyRepresentative(username, password, name, email, companyName);
+            System.out.print("Enter Department: ");
+            String department = sc.nextLine();
+            System.out.print("Enter Position: ");
+            String position = sc.nextLine();
+            boolean registered = repController.createCompanyRepresentative(username, password, name, email, companyName, department, position);
             if (registered) {
-                System.out.println("Registration successful! You can now log in.");
+                System.out.println("Registration successful! Please wait for Career Staff approval before logging in.");
             } else {
                 System.out.println("Registration failed. Please try again.");
             }
@@ -70,7 +73,7 @@ public class CompanyRepresentativeView extends UserView {
                 runMenuLoop();
                 return; // exit login after menu
             } else {
-                System.out.println("Invalid username or password. Try again or enter 0 to go back.");
+                System.out.println("Invalid username or password or not approved yet. Try again or enter 0 to go back.");
             }
         }
     }
@@ -207,6 +210,11 @@ public class CompanyRepresentativeView extends UserView {
                         System.out.println("Application ID not found.");
                     }
                     break;
+                
+                case 7:
+                    logout();
+                    System.out.println("Logged out. Returning to main menu...");
+                    return;
                 
                 
                     default:

@@ -6,6 +6,7 @@ import src.entity.CompanyRepresentative;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import java.util.ArrayList;
+import src.enums.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -42,17 +43,13 @@ public class DataStore {
     private void loadInitialData() {
         loadStudentsFromCSV("src\\csvFiles\\sample_student_list.csv");
         loadStaffFromCSV("src\\csvFiles\\sample_staff_list.csv");
-        // loadCompanyRepsFromCSV("sample_company_representative_list.csv");
+        loadCompanyRepsFromCSV("src\\csvFiles\\sample_company_representative_list.csv");
         
         System.out.println("DataStore initialized with:");
         System.out.println("- " + studentList.size() + " students");
         System.out.println("- " + careerCenterStaffList.size() + " staff members");
         System.out.println("- " + companyRepresentativeList.size() + " company representatives");
 
-        System.out.println("Loaded staff:");
-        for (CareerCenterStaff c : careerCenterStaffList) {
-        System.out.println(c.getUserId() + " | " + c.getName() + " | " + c.getPassword());
-}
 
     }
 
@@ -119,45 +116,47 @@ public class DataStore {
          }
      }
 
-    // private void loadCompanyRepsFromCSV(String filename) {
-    //     try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-    //         String line;
-    //         boolean isFirstLine = true;
+    private void loadCompanyRepsFromCSV(String filename) {
+         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+             String line;
+             boolean isFirstLine = true;
             
-    //         while ((line = br.readLine()) != null) {
-    //             if (isFirstLine) {
-    //                 isFirstLine = false;
-    //                 continue; // Skip header
-    //             }
+             while ((line = br.readLine()) != null) {
+                 if (isFirstLine) {
+                     isFirstLine = false;
+                     continue; // Skip header
+                 }
                 
-    //             String[] data = line.split(",");
-    //             if (data.length >= 7) {
-    //                 String repId = data[0].trim();
-    //                 String name = data[1].trim();
-    //                 String companyName = data[2].trim();
-    //                 String department = data[3].trim();
-    //                 String position = data[4].trim();
-    //                 String email = data[5].trim();
-    //                 String status = data[6].trim();
+                 String[] data = line.split(",");
+                 if (data.length >= 7) {
+                     String repId = data[0].trim();
+                     String name = data[1].trim();
+                     String companyName = data[2].trim();
+                     String department = data[3].trim();
+                     String position = data[4].trim();
+                     String email = data[5].trim();
+                     String status = data[6].trim();
                     
-    //                 // Default password is "password" as per requirements
-    //                 CompanyRepresentative rep = new CompanyRepresentative(repId, "password", name, companyName, department, position);
+                     // Default password is "password" as per requirements
+                     CompanyRepresentative rep = new CompanyRepresentative(repId, "password", name, email, companyName, department, position);
                     
     //                 // Set approval status based on CSV
-    //                 if ("APPROVED".equalsIgnoreCase(status)) {
-    //                     rep.setApproved(true);
-    //                 } else {
-    //                     rep.setApproved(false);
-    //                 }
+                     if ("APPROVED".equalsIgnoreCase(status) || status == null) {
+                         rep.setApproval(CompanyApprovalStatus.APPROVED);
+                     } else if ("REJECTED".equalsIgnoreCase(status)){
+                         rep.setApproval(CompanyApprovalStatus.REJECTED);
+                     }else{
+                        rep.setApproval(CompanyApprovalStatus.PENDING);
+                     }
                     
-    //                 companyRepresentativeList.add(rep);
-    //             }
-    //         }
-    //     } catch (IOException e) {
-    //         System.out.println("Warning: Could not load company representative data from " + filename);
-    //         System.out.println("Error: " + e.getMessage());
-    //     }
-    // }
+                     companyRepresentativeList.add(rep);
+                 }
+             }
+         } catch (IOException e) {
+             System.out.println("Warning: Could not load company representative data from " + filename);
+             System.out.println("Error: " + e.getMessage());
+         }
+     }
     // GETTERS
 
     public ArrayList<Student> getStudentList() {

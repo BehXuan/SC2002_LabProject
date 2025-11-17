@@ -1,9 +1,11 @@
 package src.view;
 
 import src.controller.CareerCenterStaffController;
+//import src.controller.AuthController;
 import src.entity.*;
+//import src.enums.*;
 
-// import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -153,7 +155,7 @@ public class CareerCenterStaffView extends UserView{
 
     // ---- Student Withdrawals ----
     private List<InternshipApplication> viewPendingWithdrawals() {
-     List<InternshipApplication> pending = staffController.getPendingWithdrawals();
+    List<InternshipApplication> pending = staffController.getPendingWithdrawals();
 
     System.out.println("\n===== Pending Withdrawals =====");
     if (pending.isEmpty()) {

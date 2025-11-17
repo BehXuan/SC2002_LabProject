@@ -2,6 +2,7 @@
 package src.controller;
 
 import src.entity.*;
+import src.enums.CompanyApprovalStatus;
 import src.enums.InternshipStatus;
 
 import java.time.LocalDate;
@@ -25,8 +26,8 @@ public class CompanyRepresentativeController implements AuthController{
         return currentRep;
     }
 
-    public boolean createCompanyRepresentative(String userId, String password, String name, String email, String companyName) {
-        CompanyRepresentative newRep = new CompanyRepresentative(userId, password, name, email,  companyName);
+    public boolean createCompanyRepresentative(String userId, String password, String name, String email, String companyName, String department, String position) {
+        CompanyRepresentative newRep = new CompanyRepresentative(userId, password, name, email,  companyName, department, position);
         dataStore.CompanyRepresentativeAdd(newRep);
         return true;
     }
@@ -35,7 +36,7 @@ public class CompanyRepresentativeController implements AuthController{
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (CompanyRepresentative c : dataStore.getCompanyRepresentativeList()) {
-            if (c.getUserId().equals(userName) && c.getPassword().equals(pw)) {
+            if (c.getUserId().equals(userName) && c.getPassword().equals(pw) && c.getApproval().equals(CompanyApprovalStatus.APPROVED)) {
                 setCurrentCompanyRepresentative(c);
                 return true;
             }

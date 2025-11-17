@@ -63,7 +63,7 @@ public class StudentView extends UserView {
         displayMessage("2. View My Applications");
         displayMessage("3. Change Password");
         displayMessage("4. Logout");
-        displayMessage("5. Exit Application");
+       
         
         int choice = -1;
         while (true) {
@@ -71,7 +71,7 @@ public class StudentView extends UserView {
             if (sc.hasNextInt()) {
                 choice = sc.nextInt();
                 sc.nextLine(); // Clear the newline
-                if (choice >= 1 && choice <= 5) {
+                if (choice >= 1 && choice <= 4) {
                     break;
                 }
             } else {
@@ -101,9 +101,7 @@ public class StudentView extends UserView {
                     logout(); 
                     displayMessage("Logged out successfully.");
                     return; // Exit the student loop back to the main login prompt
-                case 5:
-                    displayMessage("Exiting application.");
-                    System.exit(0); // Terminate the application
+            
                 default:
                     displayMessage("Invalid Choice, please try again!");
             }

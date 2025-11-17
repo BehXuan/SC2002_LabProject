@@ -58,9 +58,9 @@ public class ProjectApp {
             if (controller instanceof StudentController) {
                 StudentController ctrl = (StudentController) controller;
                 new StudentView(ctrl).start();
-            } //else if (controller instanceof CompanyRepresentativeController) {
-                //CompanyRepresentativeController ctrl = (CompanyRepresentativeController) controller;
-                //new CompanyRepresentativeView(ctrl).start();}
+            } else if (controller instanceof CompanyRepresentativeController) {
+                CompanyRepresentativeController ctrl = (CompanyRepresentativeController) controller;
+                new CompanyRepresentativeView(ctrl).start();}
              else if (controller instanceof CareerCenterStaffController) {
                 CareerCenterStaffController ctrl = (CareerCenterStaffController) controller;
                 new CareerCenterStaffView(ctrl).start();

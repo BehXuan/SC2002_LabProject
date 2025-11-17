@@ -92,7 +92,7 @@ public class StudentController implements AuthController{
         }
 
         // Check major compatibility
-        if (!internship.getMajor().equals(getCurrentStudent().getMajor())) {
+        if (!internship.getMajor().toLowerCase().equals(getCurrentStudent().getMajor().toLowerCase())) {
             return false;
         }
 
