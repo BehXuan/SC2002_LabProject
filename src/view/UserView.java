@@ -32,9 +32,6 @@ public abstract class UserView {
         System.out.println("Logged out.");
     }
 
-    public void displayMessage(String string){
-        System.out.println(string);
-    }
     // ABSTRACT METHOD NEEDS TO BE IMPLEMENTED
     public abstract void start();
 }

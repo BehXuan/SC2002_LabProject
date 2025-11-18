@@ -13,13 +13,14 @@ public class ProjectApp {
 
         DataStore dataStore = DataStore.getInstance();
         System.out.println("DataStore instance obtained in ProjectApp.");
-        System.out.println(dataStore.getStudentList());
-        System.out.println(dataStore.getCareerCenterStaffList());
+        // System.out.println(dataStore.getStudentList());
+        // System.out.println(dataStore.getCareerCenterStaffList());
+        // System.out.println(dataStore.getCompanyRepresentativeList());
 
         //Take inputs
         Scanner sc = new Scanner(System.in);
 
-        while (true) {
+        while (true) {  // while true not good coding practice
             System.out.println("========== MAIN MENU ==========");
             System.out.println("Select user type:");
             System.out.println("1. Student");
