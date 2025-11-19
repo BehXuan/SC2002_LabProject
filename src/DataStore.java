@@ -59,9 +59,8 @@ public class DataStore {
         System.out.println("- " + studentList.size() + " students");
         System.out.println("- " + careerCenterStaffList.size() + " staff members");
         System.out.println("- " + companyRepresentativeList.size() + " company representatives");
-        System.out.println(internshipList.size() + "Internships");
-        System.out.println(internshipApplicationsList.size() + "Internship applications");
-
+        System.out.println("- " + internshipList.size() + " Internships");
+        System.out.println("- " + internshipApplicationsList.size() + " Internship applications");
     }
 
 
@@ -212,7 +211,6 @@ public class DataStore {
                         if (s != null) internship.addApplicant(s);
                     }
                 }
-
                 internshipList.add(internship);
                 rep.getInternships().add(internship);
                 rep.setInternshipCount(rep.getInternships().size());
@@ -254,7 +252,7 @@ public class DataStore {
                         internshipApplicationsList.add(app);
 
                         student.applyInternship(app);
-                        internship.addApplicant(student);
+                        // internship.addApplicant(student);
                         if (!rep.getInternships().contains(internship)) {
                             rep.getInternships().add(internship);
                             rep.setInternshipCount(rep.getInternships().size());
