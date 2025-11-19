@@ -3,6 +3,7 @@ package src.view;
 import src.controller.CompanyRepresentativeController;
 // import src.controller.AuthController;
 import src.entity.*;
+import src.enums.InternshipLevel;
 // import src.enums.*;
 
 import java.util.ArrayList;
@@ -128,8 +129,8 @@ public class CompanyRepresentativeView extends UserView {
                     String title = sc.nextLine();
                     System.out.print("Enter Internship Description: ");
                     String description = sc.nextLine();
-                    System.out.print("Enter Internship Level: ");
-                    String level = sc.nextLine();
+                    System.out.print("Enter Internship Level (Basic, Intermediate, Advanced): ");
+                    InternshipLevel internshipLevel = InternshipLevel.valueOf(sc.nextLine().toUpperCase());
                     System.out.print("Enter Internship Major: ");
                     String major = sc.nextLine();
                     System.out.print("Enter Open Date (YYYY-MM-DD): ");
@@ -138,7 +139,7 @@ public class CompanyRepresentativeView extends UserView {
                     String closeDateStr = sc.nextLine();
                     System.out.print("Enter Number of Slots Left: ");
                     int slots = Integer.parseInt(sc.nextLine());
-                    boolean created = repController.createInternship(0, title, description, level, major,
+                    boolean created = repController.createInternship(0, title, description, internshipLevel, major,
                             java.time.LocalDate.parse(openDateStr), java.time.LocalDate.parse(closeDateStr), slots);
                     if (created) {
                         System.out.println("Internship created successfully.");

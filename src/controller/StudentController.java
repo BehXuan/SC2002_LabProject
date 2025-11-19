@@ -7,6 +7,7 @@ import src.entity.Student;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
+import src.enums.InternshipLevel;
 
 
 public class StudentController implements AuthController{
@@ -70,7 +71,7 @@ public class StudentController implements AuthController{
         }
         ArrayList<Internship> basicInternships = new ArrayList<Internship>();
         for (Internship i : visibleInternships) {
-            if (i.getLevel().equals("Basic")) { //should change to enum?
+            if (i.getLevel().equals(InternshipLevel.BASIC)) { //should change to enum?
                 basicInternships.add(i);
             }
         }

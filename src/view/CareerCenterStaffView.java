@@ -24,7 +24,8 @@ public class CareerCenterStaffView extends UserView{
     }
 
     private void loginMenu() {
-        while (true) {
+        
+        while(true){
             System.out.println("----- Career Center Staff Login -----");
             System.out.println("Enter 0 at any time to return to main menu.");
             System.out.print("Username: ");

@@ -33,6 +33,7 @@ public class DataStore {
         loadInitialData();
     }
 
+    
     public static DataStore getInstance() {
         if (instance == null) {
             instance = new DataStore();
@@ -202,6 +203,10 @@ public class DataStore {
 
     public void addInternship(Internship internship) {
         internshipList.add(internship);
+    }
+
+    public int getNextInternshipId(){
+        return internshipList.size();
     }
 
     // FINDERS: USED TO FIND WHETHER USERID EXISTs WITHIN RESP DATASTORE

@@ -4,12 +4,13 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 import src.enums.InternshipStatus;
+import src.enums.InternshipLevel;
 
 public class Internship {
     private int internshipId;
     private String title;
     private String description;
-    private String level;
+    private InternshipLevel internshipLevel;
     private String major;
     private LocalDate openDate;
     private LocalDate closeDate;
@@ -22,13 +23,13 @@ public class Internship {
     public Internship() {
     }
 
-    public Internship(int internshipId, String title, String description, String level, String major,
+    public Internship(int internshipId, String title, String description, InternshipLevel internshipLevel, String major,
             LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft,
             CompanyRepresentative companyRep) {
         this.internshipId = internshipId;
         this.title = title;
         this.description = description;
-        this.level = level;
+        this.internshipLevel = internshipLevel;
         this.major = major;
         this.openDate = openDate;
         this.closeDate = closeDate;
@@ -68,12 +69,12 @@ public class Internship {
         this.description = description;
     }
 
-    public String getLevel() {
-        return this.level;
+    public InternshipLevel getLevel() {
+        return this.internshipLevel;
     }
 
-    public void setLevel(String level) {
-        this.level = level;
+    public void setLevel(InternshipLevel internshipLevel) {
+        this.internshipLevel = internshipLevel;
     }
 
     public String getMajor() {

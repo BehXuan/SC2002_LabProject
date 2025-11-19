@@ -2,13 +2,13 @@ package src.report;
 
 import java.time.LocalDate;
 import src.enums.InternshipStatus;
-
+import src.enums.InternshipLevel;
 public class ReportCriteria {
     public enum SortType{TITLE, COMPANY, OPEN_DATE, CLOSE_DATE}
 
     private String title;
     private String major;
-    private String level;
+    private InternshipLevel level;
     private LocalDate openDate;
     private LocalDate closeDate;
     private InternshipStatus internshipStatus;
@@ -32,11 +32,11 @@ public class ReportCriteria {
         this.major = major;
     }
 
-    public String getLevel(){
+    public InternshipLevel getLevel(){
         return this.level;
     }
 
-    public void setLevel(String level){
+    public void setLevel(InternshipLevel level){
         this.level = level;
     }
 
@@ -80,7 +80,7 @@ public class ReportCriteria {
     }
 
     public boolean hasLevel(){
-        return this.level != null && !level.isEmpty();
+        return this.level != null;
     }
 
     public boolean hasOpenDate(){

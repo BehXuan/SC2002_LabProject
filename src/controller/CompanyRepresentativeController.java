@@ -4,6 +4,7 @@ package src.controller;
 import src.entity.*;
 import src.enums.CompanyApprovalStatus;
 import src.enums.InternshipStatus;
+import src.enums.InternshipLevel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -90,13 +91,15 @@ public class CompanyRepresentativeController implements AuthController{
         return internships;
     }
 
-    public boolean createInternship(int internshipId, String title, String description, String level, String major,
+    public boolean createInternship(int internshipId, String title, String description, InternshipLevel internshipLevel, String major,
             LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft) {
         if (getCurrentCompayRepresentative() == null) {
             return false;
         }
+
+        int newId = dataStore.getNextInternshipId();
             
-        Internship newInternship = new Internship(0, title, description, level, major,
+        Internship newInternship = new Internship(newId, title, description, internshipLevel, major,
             openDate, closeDate, numberOfSlotsLeft, getCurrentCompayRepresentative());
         newInternship.setCompanyRep(getCurrentCompayRepresentative());
         dataStore.addInternship(newInternship);

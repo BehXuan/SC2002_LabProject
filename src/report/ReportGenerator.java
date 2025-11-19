@@ -12,7 +12,7 @@ public class ReportGenerator {
         return allInternships.stream()
                 .filter(i -> !criteria.hasTitle() || i.getTitle().toLowerCase().contains(criteria.getTitle().toLowerCase()))
                 .filter(i -> !criteria.hasMajor() || i.getMajor().equalsIgnoreCase(criteria.getMajor()))
-                .filter(i -> !criteria.hasLevel() || i.getLevel().equalsIgnoreCase(criteria.getLevel()))
+                .filter(i -> !criteria.hasLevel() || i.getLevel() == criteria.getLevel())
                 .filter(i -> !criteria.hasCompanyName() || i.getCompanyRep().getCompanyName().equalsIgnoreCase(criteria.getCompanyName()))
                 .filter(i -> !criteria.hasInternshipStatus() || i.getStatus() == criteria.getInternshipStatus())
                 .filter(i -> !criteria.hasOpenDate() || !i.getOpenDate().isBefore(criteria.getOpenDate()))

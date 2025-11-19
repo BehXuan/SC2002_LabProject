@@ -19,8 +19,9 @@ public class ProjectApp {
 
         //Take inputs
         Scanner sc = new Scanner(System.in);
+        int choice;
 
-        while (true) {  // while true not good coding practice
+        do {  // while true not good coding practice
             System.out.println("========== MAIN MENU ==========");
             System.out.println("Select user type:");
             System.out.println("1. Student");
@@ -29,7 +30,7 @@ public class ProjectApp {
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
 
-            int choice = sc.nextInt();
+            choice = sc.nextInt();
             sc.nextLine();
 
             if (choice == 0) {
@@ -68,9 +69,8 @@ public class ProjectApp {
             }
 
             System.out.println("\nReturning to main menu...\n");
-        }
+        } while(choice != 0);
 
         sc.close();
     }
 }
-
