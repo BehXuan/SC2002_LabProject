@@ -5,6 +5,7 @@ import src.entity.*;
 import java.util.ArrayList;
 import java.util.List;
 import src.enums.*;
+import src.interfaces.AuthController;
 import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.DataStore;

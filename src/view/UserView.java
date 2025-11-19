@@ -1,6 +1,7 @@
 package src.view;
 import java.util.Scanner;
-import src.controller.AuthController;
+
+import src.interfaces.AuthController;
 
 
 

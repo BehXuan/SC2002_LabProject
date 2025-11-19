@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 // import src.entity.*;
 import src.controller.*;
+import src.interfaces.AuthController;
 import src.view.*;
 // import src.*;
 

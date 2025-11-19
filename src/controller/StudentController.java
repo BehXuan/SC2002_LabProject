@@ -8,6 +8,7 @@ import src.entity.Student;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
+import src.interfaces.AuthController;
 import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
