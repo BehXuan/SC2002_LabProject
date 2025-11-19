@@ -1,6 +1,6 @@
 package src.entity;
 
-public class User {
+abstract public class User {
    private String userID;
    private String password;
    private String name;
@@ -16,43 +16,24 @@ public class User {
       this.email = email;
    }
 
-   public void setUserId(String userid) {
-      this.userID = userid;
-   }
+   // Setter
+   public void setUserId(String userid) {this.userID = userid;}
+   public void setPassword(String pw) {this.password = pw;}
+   public void setName(String name) {this.name = name;}
+   public void setEmail(String email) {this.email = email;}
 
-   public void setPassword(String pw) {
-      this.password = pw;
-   }
+   // Getter
+   public String getUserId() {return this.userID;}
+   public String getPassword() {return this.password;}
+   public String getName() {return this.name;}
+   public String getEmail() {return this.email;}
 
-   public void setName(String name) {
-      this.name = name;
-   }
-
-   public void setEmail(String email) {
-      this.email = email;
-   }
-
-   public String getUserId() {
-      return this.userID;
-   }
-
-   public String getPassword() {
-      return this.password;
-   }
-
-   public String getName() {
-      return this.name;
-   }
-
-   public String getEmail() {
-      return this.email;
-   }
-
+   
    public String toString() {
       return "User{" +
-              "userID='" + userID + '\'' +
-              ", name='" + name + '\'' +
-              ", email='" + email + '\'' +
-              '}';
+            "userID='" + userID + '\'' +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            '}';
    }
 }

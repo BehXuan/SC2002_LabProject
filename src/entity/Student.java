@@ -2,13 +2,12 @@ package src.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-// import src.enums.InternshipWithdrawalStatus;
 
 public class Student extends User {
     private int yearOfStudy;
     private String major;
-    private Internship internshipAccepted;
-    private ArrayList<InternshipApplication> internshipApplied;
+    private Internship internshipAccepted;  // if not null, internship accplied should be empty/null
+    private ArrayList<InternshipApplication> internshipApplied;  // max 3
     
 
     public Student(){}
@@ -58,6 +57,7 @@ public class Student extends User {
 
     public void setInternshipAccepted(Internship internshipAccepted) {
         this.internshipAccepted = internshipAccepted;
+
     }
 
     @Override

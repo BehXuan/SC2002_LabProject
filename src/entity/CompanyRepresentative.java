@@ -3,15 +3,15 @@ import java.util.ArrayList;
 import java.util.List;
 import src.enums.CompanyApprovalStatus;
 
-public class CompanyRepresentative extends User{
+public class CompanyRepresentative extends User {
     private String companyName;
-    private CompanyApprovalStatus companyApprovalStatus;
-    private List<Internship> internships; // "pending", "approved","rejected" 
+    private CompanyApprovalStatus companyApprovalStatus;  // "pending", "approved","rejected"
+    private List<Internship> internships;  
     private int internshipCount; // max 5
     private String position;
     private String department;
 
-    public CompanyRepresentative(){}
+    // public CompanyRepresentative(){}
 
     public CompanyRepresentative(String id, String pw, String name,String email, String companyName,String department,String position){
         super(id,pw,name, email);
