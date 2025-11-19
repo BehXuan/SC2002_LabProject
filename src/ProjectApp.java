@@ -34,6 +34,8 @@ public class ProjectApp {
             sc.nextLine();
 
             if (choice == 0) {
+                System.out.println("Saving Data");
+                dataStore.saveAll();
                 System.out.println("Exiting system... Goodbye!");
                 break;
             }

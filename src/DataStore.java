@@ -11,6 +11,10 @@ import src.enums.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+
 
 
 
@@ -33,6 +37,7 @@ public class DataStore {
         loadInitialData();
     }
 
+
     
     public static DataStore getInstance() {
         if (instance == null) {
@@ -45,7 +50,9 @@ public class DataStore {
         loadStudentsFromCSV("src\\csvFiles\\sample_student_list.csv");
         loadStaffFromCSV("src\\csvFiles\\sample_staff_list.csv");
         loadCompanyRepsFromCSV("src\\csvFiles\\sample_company_representative_list.csv");
-        
+        loadInternshipsFromCSV("src\\csv\\csvFiles\\sample_internship_list.csv");
+        loadApplicationsFromCSV("src\\csv\\csvFiles\\sample_internship_applications.csv");
+
         System.out.println("DataStore initialized with:");
         System.out.println("- " + studentList.size() + " students");
         System.out.println("- " + careerCenterStaffList.size() + " staff members");
@@ -74,8 +81,9 @@ public class DataStore {
                     int yearOfStudy = Integer.parseInt(data[3].trim());
                     String email = data[4].trim();
                     
+                    String password = (data.length >= 6) ? data[5].trim() : "password";
                     // Default password is "password" as per requirements
-                    Student student = new Student(studentId, "password", name, email, yearOfStudy, major);
+                    Student student = new Student(studentId, password, name, email, yearOfStudy, major);
                     studentList.add(student);
                 }
             }
@@ -106,8 +114,9 @@ public class DataStore {
                      String department = data[3].trim();
                      String email = data[4].trim();
                     
+                     String password = (data.length >= 6) ? data[5].trim() : "password";
                      // Default password is "password" as per requirements
-                     CareerCenterStaff staff = new CareerCenterStaff(staffId, "password", name, email,role,department);
+                     CareerCenterStaff staff = new CareerCenterStaff(staffId, password, name, email,role,department);
                      careerCenterStaffList.add(staff);
                  }
              }
@@ -138,8 +147,9 @@ public class DataStore {
                      String email = data[5].trim();
                      String status = data[6].trim();
                     
+                     String password = (data.length >= 8) ? data[5].trim() : "password";
                      // Default password is "password" as per requirements
-                     CompanyRepresentative rep = new CompanyRepresentative(repId, "password", name, email, companyName, department, position);
+                     CompanyRepresentative rep = new CompanyRepresentative(repId, password, name, email, companyName, department, position);
                     
     //                 // Set approval status based on CSV
                      if ("APPROVED".equalsIgnoreCase(status) || status == null) {
@@ -158,6 +168,80 @@ public class DataStore {
              System.out.println("Error: " + e.getMessage());
          }
      }
+
+        private void loadInternshipsFromCSV(String filename) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            boolean isFirstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) { isFirstLine = false; continue; }
+                String[] data = line.split(",");
+                if (data.length >= 8) {
+                    int id = Integer.parseInt(data[0].trim());
+                    String title = data[1].trim();
+                    String description = data[2].trim();
+                    InternshipLevel level = InternshipLevel.valueOf(data[3].trim());
+                    String major = data[4].trim();
+                    LocalDate open = LocalDate.parse(data[5].trim());
+                    LocalDate close = LocalDate.parse(data[6].trim());
+                    int slots = Integer.parseInt(data[7].trim());
+                    String repId = data[8].trim();
+
+                    CompanyRepresentative rep = findCompanyRep(repId);
+                    if (rep != null) {
+                        Internship internship = new Internship(id, title, description, level, major, open, close, slots, rep);
+                        internshipList.add(internship);
+                        rep.getInternships().add(internship);
+                        rep.setInternshipCount(rep.getInternships().size());
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading internships: " + e.getMessage());
+        }
+    }
+
+    private void loadApplicationsFromCSV(String filename) {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            boolean isFirstLine = true;
+            while ((line = br.readLine()) != null) {
+                if (isFirstLine) { isFirstLine = false; continue; }
+                String[] data = line.split(",");
+                if (data.length >= 7) {
+                    int appId = Integer.parseInt(data[0].trim());
+                    String studentId = data[1].trim();
+                    int internshipId = Integer.parseInt(data[2].trim());
+                    String repId = data[3].trim();
+                    InternshipStatus companyAccept = InternshipStatus.valueOf(data[4].trim());
+                    InternshipStatus studentAccept = InternshipStatus.valueOf(data[5].trim());
+                    InternshipWithdrawalStatus studentWithdraw = InternshipWithdrawalStatus.valueOf(data[6].trim());
+
+                    Student student = findStudent(studentId);
+                    Internship internship = findInternship(internshipId);
+                    CompanyRepresentative rep = findCompanyRep(repId);
+
+                    if (student != null && internship != null && rep != null) {
+                        InternshipApplication app = new InternshipApplication(appId, rep, student, internship);
+                        app.setCompanyAccept(companyAccept);
+                        app.setStudentAccept(studentAccept);
+                        app.setInternshipWithdrawalStatus(studentWithdraw);
+
+                        internshipApplicationsList.add(app);
+
+                        student.applyInternship(app);
+                        internship.addApplicant(student);
+                        if (!rep.getInternships().contains(internship)) {
+                            rep.getInternships().add(internship);
+                            rep.setInternshipCount(rep.getInternships().size());
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error loading applications: " + e.getMessage());
+        }
+    }
     // GETTERS
 
     public ArrayList<Student> getStudentList() {
@@ -237,5 +321,76 @@ public class DataStore {
         }
         return null;
     }
+
+    public void saveStudents(String filename) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            pw.println("ID,Name,Major,Year,Email,Password");
+            for (Student s : studentList) {
+                pw.printf("%s,%s,%s,%d,%s,%s\n",
+                    s.getUserId(), s.getName(), s.getMajor(), s.getYearOfStudy(), s.getEmail(), s.getPassword());
+            }
+        } catch (Exception e) { System.out.println("Error saving students: " + e.getMessage()); }
+    }
+
+    public void saveStaff(String filename) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            pw.println("ID,Name,Role,Department,Email,Password");
+            for (CareerCenterStaff s : careerCenterStaffList) {
+                pw.printf("%s,%s,%s,%s,%s,%s\n",
+                    s.getUserId(), s.getName(), s.getStaffRole(), s.getStaffDepartment(), s.getEmail(), s.getPassword());
+            }
+        } catch (Exception e) { System.out.println("Error saving staff: " + e.getMessage()); }
+    }
+
+    public void saveCompanyReps(String filename) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            pw.println("ID,Name,CompanyName,Department,Position,Email,Status,Password");
+            for (CompanyRepresentative rep : companyRepresentativeList) {
+                pw.printf("%s,%s,%s,%s,%s,%s,%s,%s\n",
+                    rep.getUserId(), rep.getName(), rep.getCompanyName(), rep.getDepartment(),
+                    rep.getPosition(), rep.getEmail(), rep.getApproval().name(), rep.getPassword());
+            }
+        } catch (Exception e) { System.out.println("Error saving company reps: " + e.getMessage()); }
+    }
+
+    public void saveInternships(String filename) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            pw.println("ID,Title,Description,Level,Major,OpenDate,CloseDate,Slots,RepID");
+            for (Internship i : internshipList) {
+                pw.printf("%d,%s,%s,%s,%s,%s,%s,%d,%s\n",
+                    i.getInternshipId(), i.getTitle(), i.getDescription(), i.getLevel().name(),
+                    i.getMajor(), i.getOpenDate(), i.getCloseDate(), i.getNumberOfSlotsLeft(),
+                    i.getCompanyRep().getUserId());
+            }
+        } catch (Exception e) { System.out.println("Error saving internships: " + e.getMessage()); }
+    }
+
+    public void saveApplications(String filename) {
+        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+            pw.println("AppID,StudentID,InternshipID,RepID,CompanyAccept,StudentAccept,StudentWithdraw");
+            for (InternshipApplication app : internshipApplicationsList) {
+                pw.printf("%d,%s,%d,%s,%s,%s,%s\n",
+                    app.getApplicationId(),
+                    app.getStudent().getUserId(),
+                    app.getInternship().getInternshipId(),
+                    app.getCompanyRep().getUserId(),
+                    app.getCompanyAccept().name(),
+                    app.getStudentAccept().name(),
+                    app.getInternshipWithdrawalStatus().name()
+                );
+            }
+        } catch (Exception e) { System.out.println("Error saving applications: " + e.getMessage()); }
+    }
+
+    // Convenience: Save everything at once
+    public void saveAll() {
+        saveStudents("src\\csvFiles\\sample_student_list.csv");
+        saveStaff("src\\csvFiles\\sample_staff_list.csv");
+        saveCompanyReps("src\\csvFiles\\sample_company_representative_list.csv");
+        saveInternships("src\\csvFiles\\sample_internship_list.csv");
+        saveApplications("src\\csvFiles\\sample_internship_applications.csv");
+        System.out.println("All data saved to CSV.");
+    }
+
 
 }
