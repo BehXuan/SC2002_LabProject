@@ -4,14 +4,17 @@ package src.controller;
 import src.entity.*;
 import src.enums.CompanyApprovalStatus;
 import src.enums.InternshipStatus;
+import src.report.ReportCriteria;
+import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import src.DataStore;
 
-public class CompanyRepresentativeController implements AuthController{
+public class CompanyRepresentativeController implements AuthController, IReportGenerator{
     private CompanyRepresentative currentRep;
     private DataStore dataStore;
 
@@ -122,6 +125,32 @@ public class CompanyRepresentativeController implements AuthController{
 
         app.setCompanyAccept(InternshipStatus.REJECTED);
         return true;
+    }
+
+    private ReportGenerator reportGen = new ReportGenerator();
+
+    @Override
+    public List<Internship> generateReport(ReportCriteria criteria) {
+        return reportGen.generateReport(criteria);
+    }
+
+    public void printReport(List<Internship> internships) {
+        System.out.println("===== Company Representative Internship Report =====");
+        if (internships.isEmpty()) {
+            System.out.println("No internships found for the given criteria.");
+            return;
+        }
+        for (Internship i : internships) {
+            System.out.printf(
+                "ID: %d | Title: %s | Level: %s | Slots left: %d | Status: %s | Major: %s\n",
+                i.getInternshipId(),
+                i.getTitle(),
+                i.getLevel(),
+                i.getNumberOfSlotsLeft(),
+                i.getStatus(),
+                i.getMajor()
+            );
+        }
     }
 
 }

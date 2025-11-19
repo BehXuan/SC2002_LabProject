@@ -5,9 +5,11 @@ import src.controller.StudentController;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 // import src.entity.Student;
-
+import src.enums.InternshipStatus;
+import src.report.ReportCriteria;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class StudentView extends UserView {
@@ -90,7 +92,7 @@ public class StudentView extends UserView {
             int choice = displayStudentMenu();
             switch (choice) {
                 case 1:
-                    viewInternshipOpportunities();
+                    generateReport();
                     break;
                 case 2:
                     viewMyApplications();
@@ -210,6 +212,58 @@ public class StudentView extends UserView {
         } else {
             System.out.println("Failed to accept the internship offer. Ensure the application is approved by the company.");
         }
+    }
+
+    private void generateReport() {
+        ReportCriteria criteria = new ReportCriteria();
+
+        System.out.print("Filter by Title (or leave blank): ");
+        String title = sc.nextLine();
+        if (!title.isBlank()) criteria.setTitle(title);
+
+        System.out.print("Filter by Major (or leave blank): ");
+        String major = sc.nextLine();
+        if (!major.isBlank()) criteria.setMajor(major);
+
+        System.out.print("Filter by Company ID (or leave blank): ");
+        String companyId = sc.nextLine();
+        if (!companyId.isBlank()) criteria.setCompanyRepId(companyId);
+
+        criteria.setStatus(InternshipStatus.APPROVED); // Students only see approved internships
+
+        System.out.print("Filter by Internship Level (BASIC/INTERMEDIATE/ADVANCED or leave blank): ");
+        String level = sc.nextLine();
+        if (!level.isBlank()) {
+            try {
+                criteria.setLevel(src.enums.InternshipLevel.valueOf(level.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid Level. Ignoring.");
+            }
+        }
+
+        System.out.print("Minimum Slots left (or leave blank): ");
+        String minSlots = sc.nextLine();
+        if (!minSlots.isBlank()) {
+            try {
+                criteria.setMinSlots(Integer.parseInt(minSlots));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Ignoring.");
+            }
+        }
+
+        System.out.print("Sort by (TITLE, COMPANY, OPEN_DATE, CLOSE_DATE, SLOTS_LEFT): ");
+        String sort = sc.nextLine();
+        if (!sort.isBlank()) {
+            try {
+                criteria.setSortType(src.enums.ReportSortType.valueOf(sort.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid sort type. Defaulting to TITLE.");
+            }
+        }
+
+        // Delegate report generation and printing to controller
+        List<Internship> report = studentController.generateReport(criteria);
+        studentController.printReport(report);
     }
 
 }

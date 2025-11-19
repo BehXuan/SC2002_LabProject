@@ -1,16 +1,19 @@
 package src.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import src.DataStore;
 import src.entity.Student;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
+import src.report.ReportCriteria;
+import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
 
 
-public class StudentController implements AuthController{
+public class StudentController implements AuthController, IReportGenerator{
     private Student currentStudent;
     private DataStore dataStore;
 
@@ -129,5 +132,35 @@ public class StudentController implements AuthController{
         getCurrentStudent().reset();
         return true;
 
+    }
+
+    private ReportGenerator reportGen = new ReportGenerator();
+
+    @Override
+    public List<Internship> generateReport(ReportCriteria criteria) {
+        return reportGen.generateReport(criteria);
+    }
+
+    // Helper to print a report
+    public void printReport(List<Internship> internships) {
+        System.out.println("===== Internship Report =====");
+        if (internships.isEmpty()) {
+            System.out.println("No internships found for the given criteria.");
+            return;
+        }
+
+        for (Internship i : internships) {
+            System.out.printf(
+                "ID: %d | Title: %s | Company: %s | Status: %s | Open: %s | Close: %s | Level: %s | Slots left: %d\n",
+                i.getInternshipId(),
+                i.getTitle(),
+                i.getCompanyRep().getCompanyName(),
+                i.getStatus(),
+                i.getOpenDate(),
+                i.getCloseDate(),
+                i.getLevel(),
+                i.getNumberOfSlotsLeft()
+            );
+        }
     }
 }

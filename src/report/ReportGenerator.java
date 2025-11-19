@@ -1,32 +1,74 @@
 package src.report;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 import src.entity.Internship;
+import src.DataStore;
 
 public class ReportGenerator {
 
-    public List<Internship> generateReport(List<Internship> allInternships, ReportCriteria criteria) {
+    private DataStore dataStore;
 
-        return allInternships.stream()
-                .filter(i -> !criteria.hasTitle() || i.getTitle().toLowerCase().contains(criteria.getTitle().toLowerCase()))
-                .filter(i -> !criteria.hasMajor() || i.getMajor().equalsIgnoreCase(criteria.getMajor()))
-                .filter(i -> !criteria.hasLevel() || i.getLevel() == criteria.getLevel())
-                .filter(i -> !criteria.hasCompanyName() || i.getCompanyRep().getCompanyName().equalsIgnoreCase(criteria.getCompanyName()))
-                .filter(i -> !criteria.hasInternshipStatus() || i.getStatus() == criteria.getInternshipStatus())
-                .filter(i -> !criteria.hasOpenDate() || !i.getOpenDate().isBefore(criteria.getOpenDate()))
-                .filter(i -> !criteria.hasCloseDate() || !i.getCloseDate().isAfter(criteria.getCloseDate()))
-                .sorted(getComparator(criteria))
-                .collect(Collectors.toList());
+    public ReportGenerator() {
+        this.dataStore = DataStore.getInstance();
     }
 
-    private Comparator<Internship> getComparator(ReportCriteria criteria) {
-        return switch (criteria.getSortType()) {
+    public List<Internship> generateReport(ReportCriteria c) {
+        return dataStore.getInternshipList().stream()
+
+            // Title contains
+            .filter(i -> c.getTitle() == null ||
+                         i.getTitle().toLowerCase().contains(c.getTitle().toLowerCase()))
+
+            // Major filter
+            .filter(i -> c.getMajor() == null ||
+                         i.getMajor().equalsIgnoreCase(c.getMajor()))
+
+            // Level filter
+            .filter(i -> c.getLevel() == null ||
+                         i.getLevel() == c.getLevel())
+
+            // Status filter
+            .filter(i -> c.getStatus() == null ||
+                         i.getStatus() == c.getStatus())
+
+            // Visibility filter
+            .filter(i -> c.getVisibility() == null ||
+                         i.getVisibility() == c.getVisibility())
+
+            // Filter by CompanyRep ID
+            .filter(i -> c.getCompanyRepId() == null ||
+                (i.getCompanyRep() != null &&
+                 i.getCompanyRep().getUserId().equals(c.getCompanyRepId())))
+
+            // Open date filter
+            .filter(i -> c.getOpenDate() == null ||
+                         !i.getOpenDate().isBefore(c.getOpenDate()))
+
+            // Close date filter
+            .filter(i -> c.getCloseDate() == null ||
+                         !i.getCloseDate().isAfter(c.getCloseDate()))
+
+            // Slots >= minSlots
+            .filter(i -> c.getMinSlots() == null ||
+                         i.getNumberOfSlotsLeft() >= c.getMinSlots())
+
+            // Sorting
+            .sorted(getComparator(c))
+
+            .collect(Collectors.toList());
+    }
+
+    private Comparator<Internship> getComparator(ReportCriteria c) {
+        if (c.getSortType() == null) return Comparator.comparing(i -> i.getTitle().toLowerCase());
+
+        return switch (c.getSortType()) {
             case TITLE -> Comparator.comparing(i -> i.getTitle().toLowerCase());
             case COMPANY -> Comparator.comparing(i -> i.getCompanyRep().getCompanyName().toLowerCase());
-            case OPEN_DATE -> Comparator.comparing(i -> i.getOpenDate());
-            case CLOSE_DATE -> Comparator.comparing(i -> i.getCloseDate());
+            case OPEN_DATE -> Comparator.comparing(Internship::getOpenDate);
+            case CLOSE_DATE -> Comparator.comparing(Internship::getCloseDate);
+            case SLOTS_LEFT -> Comparator.comparingInt(Internship::getNumberOfSlotsLeft);
         };
     }
 }

@@ -9,7 +9,7 @@ import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.DataStore;
 
-public class CareerCenterStaffController implements AuthController {
+public class CareerCenterStaffController implements AuthController, IReportGenerator {
     private CareerCenterStaff currentStaff;
     private DataStore dataStore;
 
@@ -154,10 +154,31 @@ public class CareerCenterStaffController implements AuthController {
 
 
 
+    private ReportGenerator reportGen = new ReportGenerator();
+
+    @Override
     public List<Internship> generateReport(ReportCriteria criteria) {
-    ReportGenerator generator = new ReportGenerator();
-    return generator.generateReport(dataStore.getInternshipList(), criteria);
-}
-            
+        return reportGen.generateReport(criteria);
+    }
+
+    public void printReport(List<Internship> internships) {
+        System.out.println("===== Career Center Staff Internship Report =====");
+        if (internships.isEmpty()) {
+            System.out.println("No internships found for the given criteria.");
+            return;
+        }
+        for (Internship i : internships) {
+            System.out.printf(
+                "ID: %d | Title: %s | Major: %s | Level: %s | Slots left: %d | Company: %s | Status: %s\n",
+                i.getInternshipId(),
+                i.getTitle(),
+                i.getMajor(),
+                i.getLevel(),
+                i.getNumberOfSlotsLeft(),
+                i.getCompanyRep().getCompanyName(),
+                i.getStatus()
+            );
+        }
+    }     
             
 }
