@@ -50,8 +50,8 @@ public class DataStore {
         loadStudentsFromCSV("src\\csvFiles\\sample_student_list.csv");
         loadStaffFromCSV("src\\csvFiles\\sample_staff_list.csv");
         loadCompanyRepsFromCSV("src\\csvFiles\\sample_company_representative_list.csv");
-        loadInternshipsFromCSV("src\\csv\\csvFiles\\sample_internship_list.csv");
-        loadApplicationsFromCSV("src\\csv\\csvFiles\\sample_internship_applications.csv");
+        loadInternshipsFromCSV("src\\csvFiles\\sample_internship_list.csv");
+        loadApplicationsFromCSV("src\\csvFiles\\sample_internship_applications.csv");
 
         System.out.println("DataStore initialized with:");
         System.out.println("- " + studentList.size() + " students");
