@@ -47,4 +47,12 @@ public class User {
    public String getEmail() {
       return this.email;
    }
+
+   public String toString() {
+      return "User{" +
+              "userID='" + userID + '\'' +
+              ", name='" + name + '\'' +
+              ", email='" + email + '\'' +
+              '}';
+   }
 }

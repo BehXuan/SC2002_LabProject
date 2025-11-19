@@ -30,4 +30,15 @@ public class CareerCenterStaff extends User{
     public void setStaffRole(String role){
         this.role = role;
     }
+
+    @Override
+    public String toString() {
+        return "CareerCenterStaff{" +
+                "userId='" + getUserId() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", staffDepartment='" + getStaffDepartment() + '\'' +
+                ", role='" + getStaffRole() + '\'' +
+                '}';
+    }
 }

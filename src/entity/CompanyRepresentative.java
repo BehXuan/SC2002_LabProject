@@ -73,4 +73,25 @@ public class CompanyRepresentative extends User{
     public void setPosition(String position){
         this.position = position;
     }
+
+    @Override
+    public String toString() {
+        List<Internship> allInternships = getInternships();
+        List<String> internshipTitles = new ArrayList<>();
+        for(Internship internship : allInternships){
+            internshipTitles.add(internship.getTitle());
+        }
+
+        return "CompanyRepresentative{" +
+                "userId='" + getUserId() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", companyName='" + getCompanyName() + '\'' +
+                ", companyApprovalStatus='" + getApproval() + '\'' +
+                ", internshipCount=" + getInternshipCount() + '\'' +
+                ", internships=" + String.join(",", internshipTitles) + '\'' +
+                ", position='" + getPosition() + '\'' +
+                ", department='" + getDepartment() + '\'' +
+                '}';
+    }
 }

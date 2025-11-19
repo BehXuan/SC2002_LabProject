@@ -146,4 +146,27 @@ public class Internship {
         applicants.remove(student);
         this.numberOfSlotsLeft++;
     }
+
+    @Override
+    public String toString() {
+        List<String> applicantsName = new ArrayList<>();
+        for (Student s : applicants) {
+            applicantsName.add(s.getName());
+        }
+
+        return "Internship{" +
+                "internshipId=" + internshipId +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", internshipLevel=" + internshipLevel +
+                ", major='" + major + '\'' +
+                ", openDate=" + openDate +
+                ", closeDate=" + closeDate +
+                ", internshipStatus=" + internshipStatus +
+                ", numberOfSlotsLeft=" + numberOfSlotsLeft +
+                ", visibility=" + visibility +
+                ", companyRep=" + companyRep.getCompanyName() +
+                ", applicants=" + String.join(", ", applicantsName) +
+                '}';
+    }
 }

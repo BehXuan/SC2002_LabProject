@@ -69,4 +69,17 @@ public class InternshipApplication {
     public InternshipWithdrawalStatus getInternshipWithdrawalStatus(){
         return this.studentWithdraw;
     }
+
+    @Override
+    public String toString() {
+        return "InternshipApplication{" +
+                "applicationId=" + applicationId +
+                ", companyRep=" + companyRep.getCompanyName() +
+                ", student=" + student.getName() +
+                ", internship=" + internship.getTitle() +
+                ", studentAccept=" + studentAccept +
+                ", companyAccept=" + companyAccept +
+                ", studentWithdraw=" + studentWithdraw +
+                '}';
+    }
 }

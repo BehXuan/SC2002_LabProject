@@ -1,6 +1,7 @@
 package src.entity;
 
 import java.util.ArrayList;
+import java.util.List;
 // import src.enums.InternshipWithdrawalStatus;
 
 public class Student extends User {
@@ -16,7 +17,7 @@ public class Student extends User {
         super(userid, pw, name, email);
         this.yearOfStudy = yearOfStudy;
         this.major = major;
-        this.internshipApplied = new ArrayList<>();
+        this.internshipApplied = new ArrayList<InternshipApplication>();
         this.internshipAccepted = null;
     }
     public void setYearOfStudy(int yearOfStudy) {
@@ -57,5 +58,23 @@ public class Student extends User {
 
     public void setInternshipAccepted(Internship internshipAccepted) {
         this.internshipAccepted = internshipAccepted;
+    }
+
+    @Override
+    public String toString() {
+        List<String> internshipAppliedNames = new ArrayList<>();
+        for (InternshipApplication ia : internshipApplied) {
+            internshipAppliedNames.add(ia.getInternship().getTitle());
+        }
+
+        return "Student{" +
+                "userId='" + getUserId() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", email='" + getEmail() + '\'' +
+                ", yearOfStudy=" + yearOfStudy +
+                ", major='" + major + '\'' +
+                ", internshipAccepted=" + (internshipAccepted != null ? internshipAccepted.getTitle() : "None") +
+                ", internshipApplied=" + String.join(",", internshipAppliedNames) +
+                '}';
     }
 }
