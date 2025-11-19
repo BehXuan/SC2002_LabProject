@@ -7,12 +7,14 @@ import src.entity.InternshipApplication;
 // import src.entity.Student;
 import src.enums.InternshipStatus;
 import src.report.ReportCriteria;
+import src.interfaces.viewApplication;
+import src.interfaces.viewInternship;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class StudentView extends UserView {
+public class StudentView extends UserView implements viewInternship, viewApplication {
     // The controller is casted to StudentController for student-specific methods
     private StudentController studentController;
     private Scanner sc = new Scanner(System.in);
@@ -95,7 +97,7 @@ public class StudentView extends UserView {
                     generateReport();
                     break;
                 case 2:
-                    viewMyApplications();
+                    viewApplications();
                     break;
                 case 3:
                     viewInternshipOpportunities();
@@ -112,7 +114,7 @@ public class StudentView extends UserView {
                     }
                     break;
                 case 4:
-                    viewMyApplications();
+                    viewApplications();
                     ArrayList<InternshipApplication> applications = studentController.getMyApplications();
                     System.out.println("Enter the number of the application you want to accept:");
                     int appChoice = sc.nextInt();
@@ -183,8 +185,8 @@ public class StudentView extends UserView {
             }
         }
     }
-
-    private void viewMyApplications() {
+    @Override
+    public void viewApplications() {
         ArrayList<InternshipApplication> applications = studentController.getMyApplications();
         if (applications.isEmpty()) {
             System.out.println("\nYou have no active internship applications.");
@@ -192,7 +194,7 @@ public class StudentView extends UserView {
         }
 
         System.out.println("\n--- My Internship Applications ---");
-        for (int i = 0; i < applications.size(); i++) {
+        for (int i = 0; i < applications.size(); i++) { // can i just do viewApplicationDetails here?
             InternshipApplication app = applications.get(i);
             // Student status should be based on companyAccept [cite: 61, 62]
             String status = app.getCompanyAccept().toString(); 
@@ -203,6 +205,11 @@ public class StudentView extends UserView {
             System.out.println(String.format("%d. Internship: %s | Company: %s | Status: %s", 
                 i + 1, app.getInternship().getTitle(), app.getInternship().getCompanyRep().getCompanyName(), status));
         }
+    }
+
+    @Override
+    public void viewApplicationDetails(InternshipApplication application) {
+        System.out.println(application);
     }
 
     private void acceptInternship(InternshipApplication selectedApp) {
@@ -264,6 +271,27 @@ public class StudentView extends UserView {
         // Delegate report generation and printing to controller
         List<Internship> report = studentController.generateReport(criteria);
         studentController.printReport(report);
+    }
+
+    @Override
+    public void viewInternshipDetails(Internship internship) {
+        System.out.println(internship);
+    }
+
+    @Override
+    public void viewInternships() {
+        ArrayList<Internship> opportunities = studentController.getInternshipsOpportunities();
+        if (opportunities.isEmpty()) {
+            System.out.println("\nNo internship opportunities are currently visible or available for your profile.");
+            return;
+        }
+
+        System.out.println("\n--- Available Internship Opportunities ---");
+        for (int i = 0; i < opportunities.size(); i++) {
+            Internship opp = opportunities.get(i);
+            System.out.println(String.format("%d. ID: %d | Title: %s | Company: %s | Level: %s | Slots: %d", 
+                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyRep().getCompanyName(), opp.getLevel(), opp.getNumberOfSlotsLeft()));
+        }
     }
 
 }

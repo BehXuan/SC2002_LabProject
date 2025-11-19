@@ -5,12 +5,14 @@ import src.controller.CompanyRepresentativeController;
 import src.entity.*;
 import src.enums.InternshipLevel;
 // import src.enums.*;
+import src.interfaces.viewApplication;
+import src.interfaces.viewInternship;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class CompanyRepresentativeView extends UserView {
+public class CompanyRepresentativeView extends UserView implements viewInternship, viewApplication {
     private CompanyRepresentativeController repController;
     private Scanner sc = new Scanner(System.in);
 
@@ -223,8 +225,9 @@ public class CompanyRepresentativeView extends UserView {
             }
         }
     }
-
-    public void viewInternshipApplications() {
+    
+    @Override
+    public void viewApplications() {
         ArrayList<InternshipApplication> applications = repController.getApplications();
         if (applications == null || applications.isEmpty()) {
             System.out.println("No internship applications found.");
@@ -233,13 +236,16 @@ public class CompanyRepresentativeView extends UserView {
 
         System.out.println("Internship Applications:");
         for (InternshipApplication app : applications) {
-            // Print statement using getters directly as requested
-            System.out.println("  > Student: " + app.getStudent().getName());
-            System.out.println("  > Company Status: " + app.getCompanyAccept());
-            System.out.println("-----------------------------------------");
+            viewApplicationDetails(app);
         }
     }
 
+    @Override
+    public void viewApplicationDetails(InternshipApplication application) {
+        System.out.println(application);
+    }
+
+    @Override
     public void viewInternships() {
         ArrayList<Internship> internships = repController.getInternships();
         if (internships == null || internships.isEmpty()) {
@@ -250,16 +256,12 @@ public class CompanyRepresentativeView extends UserView {
         System.out.println("Internships:");
         for (Internship internship : internships) {
             // Print statement using getters directly as requested
-            System.out.println("  > Title: " + internship.getTitle());
-            System.out.println("  > Description: " + internship.getDescription());
-            System.out.println("  > Level: " + internship.getLevel());
-            System.out.println("  > Major: " + internship.getMajor());
-            System.out.println("  > Open Date: " + internship.getOpenDate());
-            System.out.println("  > Close Date: " + internship.getCloseDate());
-            System.out.println("  > Status: " + internship.getStatus());
-            System.out.println("  > Slots Left: " + internship.getNumberOfSlotsLeft());
-            
-            System.out.println("-----------------------------------------");
+            viewInternshipDetails(internship);
         }
+    }
+
+    @Override
+    public void viewInternshipDetails(Internship internship) {
+        System.out.println(internship);
     }
 }

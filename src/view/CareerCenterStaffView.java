@@ -6,12 +6,13 @@ import src.entity.*;
 //import src.enums.*;
 import src.enums.InternshipStatus;
 import src.report.ReportCriteria;
+import src.interfaces.*;
 
 
 import java.util.List;
 import java.util.Scanner;
 
-public class CareerCenterStaffView extends UserView{
+public class CareerCenterStaffView extends UserView implements viewInternship{
     private CareerCenterStaffController staffController;
     private Scanner sc = new Scanner(System.in);
 
@@ -87,7 +88,7 @@ public class CareerCenterStaffView extends UserView{
                 case 2 -> viewPendingCompanyReps();
                 case 3 -> authorizeCompany();
                 case 4 -> rejectCompany();
-                case 5 -> viewPendingInternships();
+                case 5 -> viewInternships();
                 case 6 -> approveInternship();
                 case 7 -> rejectInternship();
                 case 8 -> viewPendingWithdrawals();
@@ -130,15 +131,22 @@ public class CareerCenterStaffView extends UserView{
     }
 
     // ---- Internships ----
-    private void viewPendingInternships() {
+    @Override
+    public void viewInternships() { // view pending internship
         List<Internship> pending = staffController.getPendingInternships();
         System.out.println("\n===== Pending Internships =====");
         if (pending.isEmpty()) System.out.println("No pending internships.");
         else
             for (Internship i : pending) {
-                System.out.println("ID: " + i.getInternshipId() + ", Title: " + i.getTitle() + ", Company: " + i.getCompanyRep().getCompanyName());
+                viewInternshipDetails(i);          
             }
     }
+
+    @Override
+    public void viewInternshipDetails(Internship internship) {
+        System.out.println(internship);
+    }
+
 
     private void approveInternship() {
         System.out.print("Enter Internship ID to approve: ");

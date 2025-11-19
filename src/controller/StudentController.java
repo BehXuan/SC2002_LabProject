@@ -141,7 +141,7 @@ public class StudentController implements AuthController, IReportGenerator{
         return reportGen.generateReport(criteria);
     }
 
-    // Helper to print a report
+    // Helper to print a report  // to print all internships?
     public void printReport(List<Internship> internships) {
         System.out.println("===== Internship Report =====");
         if (internships.isEmpty()) {
@@ -150,17 +150,7 @@ public class StudentController implements AuthController, IReportGenerator{
         }
 
         for (Internship i : internships) {
-            System.out.printf(
-                "ID: %d | Title: %s | Company: %s | Status: %s | Open: %s | Close: %s | Level: %s | Slots left: %d\n",
-                i.getInternshipId(),
-                i.getTitle(),
-                i.getCompanyRep().getCompanyName(),
-                i.getStatus(),
-                i.getOpenDate(),
-                i.getCloseDate(),
-                i.getLevel(),
-                i.getNumberOfSlotsLeft()
-            );
+            System.out.println(i);
         }
     }
 }
