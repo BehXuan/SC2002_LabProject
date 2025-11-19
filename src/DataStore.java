@@ -6,7 +6,6 @@ import src.entity.CompanyRepresentative;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import java.util.ArrayList;
-import java.util.List;
 
 import src.enums.*;
 
@@ -340,10 +339,28 @@ public class DataStore {
         return null;
     }
 
-    public Internship findInternship(int internshipId) {
+    public Internship findInternship(int internshipId) { // might be hard to work with id, cannot ensure id uniqueness
         for (Internship i : internshipList) {
             if (i.getInternshipId() == internshipId) {
                 return i;
+            }
+        }
+        return null;
+    }
+
+    public InternshipApplication findInternshipApplication(int applicationId) { // might be hard to work with id, cannot ensure id uniqueness
+        for (InternshipApplication app : internshipApplicationsList) {
+            if (app.getApplicationId() == applicationId) {
+                return app;
+            }
+        }
+        return null;
+    }
+
+    public CareerCenterStaff findCareerCenterStaff(String staffId) {
+        for (CareerCenterStaff staff : careerCenterStaffList) {
+            if (staff.getUserId().equals(staffId)) {
+                return staff;
             }
         }
         return null;

@@ -1,41 +1,34 @@
 package src.controller;
 
-import src.entity.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
 import src.enums.*;
-import src.interfaces.AuthController;
-import src.report.ReportCriteria;
-import src.report.ReportGenerator;
+import src.interfaces.*;
+import src.report.*;
 import src.DataStore;
+import src.entity.*;
 
 public class CareerCenterStaffController implements AuthController, IReportGenerator {
     private CareerCenterStaff currentStaff;
     private DataStore dataStore;
 
 
-    public CareerCenterStaffController() {
-        this.dataStore = DataStore.getInstance();
-    }
+    public CareerCenterStaffController() {this.dataStore = DataStore.getInstance();}
 
-    public void setCurrentStaff(CareerCenterStaff c){
-        this.currentStaff = c;
-    }
+    public void setCurrentStaff(CareerCenterStaff c){this.currentStaff = c;}
 
-    public CareerCenterStaff getCurrentStaff(){
-        return this.currentStaff;
-    }
+    public CareerCenterStaff getCurrentStaff(){return this.currentStaff;}
 
 
     @Override
-    public boolean login(String userName, String pw) {
-        // check the userName and pw against dataStore
-        for (CareerCenterStaff c : dataStore.getCareerCenterStaffList()) {
-            if (c.getUserId().equals(userName) && c.getPassword().equals(pw)) {
-                setCurrentStaff(c);
-                return true;
-            }
+    public boolean login(String userName, String pw) {  // do we c
+        CareerCenterStaff c = dataStore.findCareerCenterStaff(userName);
+        if (c != null && c.getPassword().equals(pw)) {
+            setCurrentStaff(c);
+            return true;
         }
         return false;
     }
@@ -67,7 +60,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
     }
 
     //COMPANY REP AUTHORIZE/REJECT
-    public boolean authorizeCompany(String companyRepId) {
+    public boolean authoriseCompany(String companyRepId) {
         CompanyRepresentative company = dataStore.findCompanyRep(companyRepId);
         if (company != null) {
             company.setApproval(CompanyApprovalStatus.APPROVED);
@@ -76,7 +69,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
         return false;
     }
 
-    public boolean rejectCompany(String companyRepId) {
+    public boolean rejectCompany(String companyRepId) {  // if rejected, do we still need it in the csv/list/db?
         CompanyRepresentative company = dataStore.findCompanyRep(companyRepId);
         if (company != null) {
             company.setApproval(CompanyApprovalStatus.REJECTED);
@@ -96,7 +89,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
     return pending;
 }
     //INTERNSHIP APPROVE/ REJECT
-    public boolean approveInternship(int internshipId) {
+    public boolean approveInternship(int internshipId) {  // id may be a bit hard for uniqueness
         Internship internship = dataStore.findInternship(internshipId);
         if (internship != null) {
             internship.setStatus(InternshipStatus.APPROVED);
@@ -105,7 +98,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
         return false;
     }
 
-    public boolean rejectInternship(int internshipId) {
+    public boolean rejectInternship(int internshipId) {  // if internship rejected, do we still need it in the csv/list/db?
         Internship internship = dataStore.findInternship(internshipId);
         if (internship != null) {
             internship.setStatus(InternshipStatus.REJECTED);

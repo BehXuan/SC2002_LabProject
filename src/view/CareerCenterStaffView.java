@@ -119,7 +119,7 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
     private void authorizeCompany() {
         System.out.print("Enter Company Rep ID to authorize: ");
         String id = sc.nextLine();
-        if (staffController.authorizeCompany(id)) System.out.println("Company authorized.");
+        if (staffController.authoriseCompany(id)) System.out.println("Company authorized.");
         else System.out.println("Company not found.");
     }
 
