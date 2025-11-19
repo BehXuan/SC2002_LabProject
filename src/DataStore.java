@@ -6,6 +6,8 @@ import src.entity.CompanyRepresentative;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import java.util.ArrayList;
+import java.util.List;
+
 import src.enums.*;
 
 import java.io.BufferedReader;
@@ -57,7 +59,8 @@ public class DataStore {
         System.out.println("- " + studentList.size() + " students");
         System.out.println("- " + careerCenterStaffList.size() + " staff members");
         System.out.println("- " + companyRepresentativeList.size() + " company representatives");
-
+        System.out.println(internshipList.size() + "Internships");
+        System.out.println(internshipApplicationsList.size() + "Internship applications");
 
     }
 
@@ -147,7 +150,7 @@ public class DataStore {
                      String email = data[5].trim();
                      String status = data[6].trim();
                     
-                     String password = (data.length >= 8) ? data[5].trim() : "password";
+                     String password = (data.length >= 8) ? data[7].trim() : "password";
                      // Default password is "password" as per requirements
                      CompanyRepresentative rep = new CompanyRepresentative(repId, password, name, email, companyName, department, position);
                     
@@ -169,37 +172,58 @@ public class DataStore {
          }
      }
 
-        private void loadInternshipsFromCSV(String filename) {
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            String line;
-            boolean isFirstLine = true;
-            while ((line = br.readLine()) != null) {
-                if (isFirstLine) { isFirstLine = false; continue; }
-                String[] data = line.split(",");
-                if (data.length >= 8) {
-                    int id = Integer.parseInt(data[0].trim());
-                    String title = data[1].trim();
-                    String description = data[2].trim();
-                    InternshipLevel level = InternshipLevel.valueOf(data[3].trim());
-                    String major = data[4].trim();
-                    LocalDate open = LocalDate.parse(data[5].trim());
-                    LocalDate close = LocalDate.parse(data[6].trim());
-                    int slots = Integer.parseInt(data[7].trim());
-                    String repId = data[8].trim();
+    private void loadInternshipsFromCSV(String filename) {
+    try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+        String line;
+        boolean isFirstLine = true;
+        while ((line = br.readLine()) != null) {
+            if (isFirstLine) { isFirstLine = false; continue; }
 
-                    CompanyRepresentative rep = findCompanyRep(repId);
-                    if (rep != null) {
-                        Internship internship = new Internship(id, title, description, level, major, open, close, slots, rep);
-                        internshipList.add(internship);
-                        rep.getInternships().add(internship);
-                        rep.setInternshipCount(rep.getInternships().size());
+            // Split CSV while respecting quoted commas
+            String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+            if (data.length < 12) continue;
+
+            int id = Integer.parseInt(data[0].trim());
+            String title = data[1].trim();
+            String description = data[2].trim();
+            if (description.startsWith("\"") && description.endsWith("\"")) {
+                description = description.substring(1, description.length()-1);
+            }
+            InternshipLevel level = InternshipLevel.valueOf(data[3].trim());
+            String major = data[4].trim();
+            LocalDate open = LocalDate.parse(data[5].trim());
+            LocalDate close = LocalDate.parse(data[6].trim());
+            int slots = Integer.parseInt(data[7].trim());
+            String repId = data[8].trim();
+            InternshipStatus status = InternshipStatus.valueOf(data[9].trim());
+            boolean visibility = Boolean.parseBoolean(data[10].trim());
+            String applicantsStr = data[11].trim();
+
+            CompanyRepresentative rep = findCompanyRep(repId);
+            if (rep != null) {
+                Internship internship = new Internship(id, title, description, level, major, open, close, slots, rep);
+                internship.setStatus(status);
+                internship.setVisibility(visibility);
+
+                if (!applicantsStr.isEmpty()) {
+                    String[] studentIds = applicantsStr.split(";");
+                    for (String sid : studentIds) {
+                        Student s = findStudent(sid);
+                        if (s != null) internship.addApplicant(s);
                     }
                 }
+
+                internshipList.add(internship);
+                rep.getInternships().add(internship);
+                rep.setInternshipCount(rep.getInternships().size());
             }
-        } catch (Exception e) {
-            System.out.println("Error loading internships: " + e.getMessage());
         }
+    } catch (Exception e) {
+        System.out.println("Error loading internships: " + e.getMessage());
+        e.printStackTrace();
     }
+}
+
 
     private void loadApplicationsFromCSV(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
@@ -259,6 +283,11 @@ public class DataStore {
     public ArrayList<Internship> getInternshipList() {
         return this.internshipList;
     }
+
+    public ArrayList<Internship> getAllInternships() {
+        return internshipList; 
+    }
+
 
     public ArrayList<InternshipApplication> getInternshipApplicationsList() {
         return this.internshipApplicationsList;
@@ -354,16 +383,22 @@ public class DataStore {
     }
 
     public void saveInternships(String filename) {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
-            pw.println("ID,Title,Description,Level,Major,OpenDate,CloseDate,Slots,RepID");
-            for (Internship i : internshipList) {
-                pw.printf("%d,%s,%s,%s,%s,%s,%s,%d,%s\n",
-                    i.getInternshipId(), i.getTitle(), i.getDescription(), i.getLevel().name(),
-                    i.getMajor(), i.getOpenDate(), i.getCloseDate(), i.getNumberOfSlotsLeft(),
-                    i.getCompanyRep().getUserId());
-            }
-        } catch (Exception e) { System.out.println("Error saving internships: " + e.getMessage()); }
+    try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
+        pw.println("ID,Title,Description,Level,Major,OpenDate,CloseDate,Slots,RepID,Status,Visibility,Applicants");
+        for (Internship i : internshipList) {
+            String applicantsStr = String.join(";", 
+                i.getApplicants().stream().map(Student::getUserId).toArray(String[]::new)
+            );
+
+            pw.printf("%d,%s,%s,%s,%s,%s,%s,%d,%s,%s,%b,%s\n",i.getInternshipId(),i.getTitle(),i.getDescription(),i.getLevel().name(),i.getMajor(),i.getOpenDate(),i.getCloseDate(),i.getNumberOfSlotsLeft(),i.getCompanyRep().getUserId(),i.getStatus().name(),i.getVisibility(),
+                applicantsStr
+            );
+        }
+    } catch (Exception e) {
+        System.out.println("Error saving internships: " + e.getMessage());
     }
+}
+
 
     public void saveApplications(String filename) {
         try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {

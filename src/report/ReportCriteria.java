@@ -1,110 +1,60 @@
 package src.report;
 
 import java.time.LocalDate;
-import src.enums.InternshipStatus;
 import src.enums.InternshipLevel;
+import src.enums.InternshipStatus;
+import src.enums.ReportSortType;
+
 public class ReportCriteria {
-    public enum SortType{TITLE, COMPANY, OPEN_DATE, CLOSE_DATE}
 
     private String title;
     private String major;
     private InternshipLevel level;
+    private String companyName;
+    private String companyRepId;
+    private InternshipStatus status;
     private LocalDate openDate;
     private LocalDate closeDate;
-    private InternshipStatus internshipStatus;
-    private String companyName;
-    private SortType sortType = SortType.TITLE; 
-    public ReportCriteria(){}
+    private Boolean visibility;
+    private Integer minSlots; // Minimum number of slots left
+    private ReportSortType sortType;
 
-    public String getTitle(){
-        return this.title;
-    }
+    // ---------- Setters ----------
+    public void setTitle(String title) { this.title = title; }
+    public void setMajor(String major) { this.major = major; }
+    public void setLevel(InternshipLevel level) { this.level = level; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public void setCompanyRepId(String companyRepId) { this.companyRepId = companyRepId; }
+    public void setStatus(InternshipStatus status) { this.status = status; }
+    public void setOpenDate(LocalDate openDate) { this.openDate = openDate; }
+    public void setCloseDate(LocalDate closeDate) { this.closeDate = closeDate; }
+    public void setVisibility(Boolean visibility) { this.visibility = visibility; }
+    public void setMinSlots(Integer minSlots) { this.minSlots = minSlots; }
+    public void setSortType(ReportSortType sortType) { this.sortType = sortType; }
 
-    public void setTitle(String title){
-        this.title = title;
-    }
+    // ---------- Helper methods ----------
+    public boolean hasTitle() { return title != null && !title.isEmpty(); }
+    public boolean hasMajor() { return major != null && !major.isEmpty(); }
+    public boolean hasLevel() { return level != null; }
+    public boolean hasCompanyName() { return companyName != null && !companyName.isEmpty(); }
+    public boolean hasCompanyRepId() { return companyRepId != null && !companyRepId.isEmpty(); }
+    public boolean hasInternshipStatus() { return status != null; }
+    public boolean hasOpenDate() { return openDate != null; }
+    public boolean hasCloseDate() { return closeDate != null; }
+    public boolean hasVisibility() { return visibility != null; }
+    public boolean hasMinSlots() { return minSlots != null; }
 
-    public String getMajor(){
-        return this.major;
-    }
+    public ReportSortType getSortType() { return sortType != null ? sortType : ReportSortType.TITLE; }
 
-    public void setMajor(String major){
-        this.major = major;
-    }
-
-    public InternshipLevel getLevel(){
-        return this.level;
-    }
-
-    public void setLevel(InternshipLevel level){
-        this.level = level;
-    }
-
-    public LocalDate getOpenDate(){
-        return this.openDate;
-    }
-    public void setOpenDate(LocalDate openDate){
-        this.openDate = openDate;
-    }
-
-    public LocalDate getCloseDate(){
-        return this.closeDate;
-    }
-
-    public void setCloseDate(LocalDate closeDate){
-        this.closeDate = closeDate;
-    }
-
-    public InternshipStatus getInternshipStatus(){
-        return this.internshipStatus;
-    }
-
-    public void setInternshipStatus(InternshipStatus internshipStatus){
-        this.internshipStatus = internshipStatus;
-    }
-
-    public String getCompanyName(){
-        return this.companyName;
-    }
-
-    public void setCompanyName(String companyName){
-        this.companyName = companyName;
-    }
-
-    public boolean hasTitle(){
-        return this.title != null && !title.isEmpty();
-    }
-
-    public boolean hasMajor(){
-        return this.major != null && !major.isEmpty() ;
-    }
-
-    public boolean hasLevel(){
-        return this.level != null;
-    }
-
-    public boolean hasOpenDate(){
-        return this.openDate != null;
-    }
-
-    public boolean hasCloseDate(){
-        return this.closeDate != null;
-    }
-
-    public boolean hasInternshipStatus(){
-        return this.internshipStatus != null;
-    }
-
-    public boolean hasCompanyName(){
-        return this.companyName != null && !companyName.isEmpty();
-    }
-
-    public SortType getSortType(){
-        return this.sortType;
-    }
-
-    public void setSortType(SortType sortType){
-        this.sortType = sortType;
-    }
+    // ---------- Getters ----------
+    public String getTitle() { return title; }
+    public String getMajor() { return major; }
+    public InternshipLevel getLevel() { return level; }
+    public String getCompanyName() { return companyName; }
+    public String getCompanyRepId() { return companyRepId; }
+    public InternshipStatus getStatus() { return status; }
+    public LocalDate getOpenDate() { return openDate; }
+    public LocalDate getCloseDate() { return closeDate; }
+    public Boolean getVisibility() { return visibility; }
+    public Integer getMinSlots() { return minSlots; }
 }
-

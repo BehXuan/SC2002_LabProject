@@ -4,8 +4,10 @@ import src.controller.CareerCenterStaffController;
 //import src.controller.AuthController;
 import src.entity.*;
 //import src.enums.*;
+import src.enums.InternshipStatus;
+import src.report.ReportCriteria;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -91,7 +93,7 @@ public class CareerCenterStaffView extends UserView{
                 case 8 -> viewPendingWithdrawals();
                 case 9 -> approveWithdrawal();
                 case 10 -> rejectWithdrawal();
-                //case 11 -> generateReport();
+                case 11 -> generateReport();
                 case 12 -> {
                     logout(); // from UserView
                     System.out.println("Logged out. Returning to main menu...");
@@ -230,10 +232,64 @@ public class CareerCenterStaffView extends UserView{
 }
 
 
-    // ---- Reports ----
-    /**private void generateReport() {
-        System.out.println("Generating report... (Functionality TBD)");
-        staffController.generateReports("", "", "", "", "", "", "");
-        System.out.println("Report generated.");
-    }**/
+    private void generateReport() {
+        ReportCriteria criteria = new ReportCriteria();
+
+        System.out.print("Filter by Title (or leave blank): ");
+        String title = sc.nextLine();
+        if (!title.isBlank()) criteria.setTitle(title);
+
+        System.out.print("Filter by Major (or leave blank): ");
+        String major = sc.nextLine();
+        if (!major.isBlank()) criteria.setMajor(major);
+
+        System.out.print("Filter by Company ID (or leave blank): ");
+        String companyId = sc.nextLine();
+        if (!companyId.isBlank()) criteria.setCompanyRepId(companyId);
+
+        System.out.print("Filter by Internship Status (PENDING/APPROVED/REJECTED or leave blank): ");
+        String status = sc.nextLine();
+        if (!status.isBlank()) {
+            try {
+                criteria.setStatus(InternshipStatus.valueOf(status.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid status. Ignoring.");
+            }
+        }
+
+        System.out.print("Filter by Internship Level (BASIC/INTERMEDIATE/ADVANCED or leave blank): ");
+        String level = sc.nextLine();
+        if (!level.isBlank()) {
+            try {
+                criteria.setLevel(src.enums.InternshipLevel.valueOf(level.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid level. Ignoring.");
+            }
+        }
+
+        System.out.print("Minimum Slots left (or leave blank): ");
+        String minSlots = sc.nextLine();
+        if (!minSlots.isBlank()) {
+            try {
+                criteria.setMinSlots(Integer.parseInt(minSlots));
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number. Ignoring.");
+            }
+        }
+
+        System.out.print("Sort by (TITLE, COMPANY, OPEN_DATE, CLOSE_DATE, SLOTS_LEFT): ");
+        String sort = sc.nextLine();
+        if (!sort.isBlank()) {
+            try {
+                criteria.setSortType(src.enums.ReportSortType.valueOf(sort.toUpperCase()));
+            } catch (IllegalArgumentException e) {
+                System.out.println("Invalid sort type. Defaulting to TITLE.");
+            }
+        }
+
+        // Delegate to controller to generate & print
+        List<Internship> report = staffController.generateReport(criteria);
+        staffController.printReport(report);
+    }
+
 }
