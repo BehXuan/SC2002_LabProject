@@ -89,7 +89,7 @@ public class CompanyRepresentative extends User {
                 ", companyName='" + getCompanyName() + '\'' +
                 ", companyApprovalStatus='" + getApproval() + '\'' +
                 ", internshipCount=" + getInternshipCount() + '\'' +
-                ", internships=" + String.join(",", internshipTitles) + '\'' +
+                ", internships=" + String.join(";", internshipTitles) + '\'' +
                 ", position='" + getPosition() + '\'' +
                 ", department='" + getDepartment() + '\'' +
                 '}';
