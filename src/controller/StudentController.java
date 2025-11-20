@@ -106,7 +106,7 @@ public class StudentController implements AuthController, IReportGenerator {
         }
 
         InternshipApplication newApplication = new InternshipApplication(
-                getCurrentStudent().getUserId() + "_" + internship.getCompanyRep().getUserId(), internship.getCompanyRep(), getCurrentStudent(),
+                getCurrentStudent().getUserId() + "_" + internship.getInternshipId(), internship.getCompanyRep(), getCurrentStudent(),
                 internship);
         getCurrentStudent().applyInternship(newApplication);
         dataStore.getInternshipApplicationsList().add(newApplication);
