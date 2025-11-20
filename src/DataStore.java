@@ -341,7 +341,7 @@ public class DataStore {
 
     public Internship findInternship(String internshipId) {
         for (Internship i : internshipList) {
-            if (i.getInternshipId() == internshipId) {
+            if (i.getInternshipId().equals(internshipId)) {
                 return i;
             }
         }
@@ -405,7 +405,7 @@ public class DataStore {
                 i.getApplicants().stream().map(Student::getUserId).toArray(String[]::new)
             );
 
-            pw.printf("%d,%s,%s,%s,%s,%s,%s,%d,%s,%s,%b,%s\n",i.getInternshipId(),i.getTitle(),i.getDescription(),i.getLevel().name(),i.getMajor(),i.getOpenDate(),i.getCloseDate(),i.getNumberOfSlotsLeft(),i.getCompanyRep().getUserId(),i.getStatus().name(),i.getVisibility(),
+            pw.printf("%s,%s,%s,%s,%s,%s,%s,%d,%s,%s,%b,%s\n",i.getInternshipId(),i.getTitle(),i.getDescription(),i.getLevel().name(),i.getMajor(),i.getOpenDate(),i.getCloseDate(),i.getNumberOfSlotsLeft(),i.getCompanyRep().getUserId(),i.getStatus().name(),i.getVisibility(),
                 applicantsStr
             );
         }
@@ -419,7 +419,7 @@ public class DataStore {
         try (PrintWriter pw = new PrintWriter(new FileWriter(filename))) {
             pw.println("AppID,StudentID,InternshipID,RepID,CompanyAccept,StudentAccept,StudentWithdraw");
             for (InternshipApplication app : internshipApplicationsList) {
-                pw.printf("%d,%s,%d,%s,%s,%s,%s\n",
+                pw.printf("%s,%s,%s,%s,%s,%s,%s\n",
                     app.getApplicationId(),
                     app.getStudent().getUserId(),
                     app.getInternship().getInternshipId(),

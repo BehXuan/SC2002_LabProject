@@ -132,6 +132,8 @@ public class StudentController implements AuthController, IReportGenerator {
         for (InternshipApplication app : getCurrentStudent().getInternshipApplied()) {
             app.setApplicationId(-1); // mark other applications as void
         }
+        //
+        application.getInternship().setNumberOfSlotsLeft(application.getInternship().getNumberOfSlotsLeft() - 1);
         getCurrentStudent().reset();
         return true;
 
