@@ -166,6 +166,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                 case 6:
                     // Inherited from UserView
                     changePassword(); 
+                    logout();
                     break; 
                 case 7:
                     // Inherited from UserController/UserView
