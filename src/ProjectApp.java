@@ -20,7 +20,7 @@ public class ProjectApp {
 
         //Take inputs
         Scanner sc = new Scanner(System.in);
-        int choice;
+        String choice;
 
         do {  // while true not good coding practice
             System.out.println("========== MAIN MENU ==========");
@@ -31,10 +31,10 @@ public class ProjectApp {
             System.out.println("0. Exit");
             System.out.print("Enter choice: ");
 
-            choice = sc.nextInt();
+            choice = sc.nextLine();
             sc.nextLine();
 
-            if (choice == 0) {
+            if (choice.equals("0")) {
                 System.out.println("Saving Data");
                 dataStore.saveAll();
                 System.out.println("Exiting system... Goodbye!");
@@ -43,13 +43,13 @@ public class ProjectApp {
 
             AuthController controller = null;
             switch (choice) {
-                case 1:
+                case "1":
                     controller = new StudentController();
                     break;
-                case 2: 
+                case "2": 
                     controller = new CompanyRepresentativeController();
                     break;
-                case 3:
+                case "3":
                     controller = new CareerCenterStaffController();
                     break;
                 default:
@@ -72,7 +72,7 @@ public class ProjectApp {
             }
 
             System.out.println("\nReturning to main menu...\n");
-        } while(choice != 0);
+        } while(choice != "0");
 
         sc.close();
     }
