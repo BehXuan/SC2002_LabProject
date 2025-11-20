@@ -221,9 +221,9 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         String title = sc.nextLine();
         if (!title.isBlank()) criteria.setTitle(title);
 
-        System.out.print("Filter by Major (or leave blank): ");
-        String major = sc.nextLine();
-        if (!major.isBlank()) criteria.setMajor(major);
+        //System.out.print("Filter by Major (or leave blank): ");
+        // String major = sc.nextLine();
+        criteria.setMajor(studentController.getCurrentStudent().getMajor());
 
         System.out.print("Filter by Company ID (or leave blank): ");
         String companyId = sc.nextLine();
