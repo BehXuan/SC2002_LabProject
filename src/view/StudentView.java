@@ -185,32 +185,6 @@ public class StudentView extends UserView implements viewInternship, viewApplica
             }
         }
     }
-    @Override
-    public void viewApplications() {
-        ArrayList<InternshipApplication> applications = studentController.getMyApplications();
-        if (applications.isEmpty()) {
-            System.out.println("\nYou have no active internship applications.");
-            return;
-        }
-
-        System.out.println("\n--- My Internship Applications ---");
-        for (int i = 0; i < applications.size(); i++) { // can i just do viewApplicationDetails here?
-            InternshipApplication app = applications.get(i);
-            // Student status should be based on companyAccept [cite: 61, 62]
-            String status = app.getCompanyAccept().toString(); 
-            if (app.getStudentAccept() != null && app.getStudentAccept().toString().equals("ACCEPTED")) {
-                status = "ACCEPTED (Confirmed)";
-            }
-            
-            System.out.println(String.format("%d. Internship: %s | Company: %s | Status: %s", 
-                i + 1, app.getInternship().getTitle(), app.getInternship().getCompanyRep().getCompanyName(), status));
-        }
-    }
-
-    @Override
-    public void viewApplicationDetails(InternshipApplication application) {
-        System.out.println(application);
-    }
 
     private void acceptInternship(InternshipApplication selectedApp) {
         boolean success = studentController.acceptInternshipOffer(selectedApp);
@@ -273,6 +247,33 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         studentController.printReport(report);
     }
 
+    @Override
+    public void viewApplications() {
+        ArrayList<InternshipApplication> applications = studentController.getMyApplications();
+        if (applications.isEmpty()) {
+            System.out.println("\nYou have no active internship applications.");
+            return;
+        }
+
+        System.out.println("\n--- My Internship Applications ---");
+        for (int i = 0; i < applications.size(); i++) { // can i just do viewApplicationDetails here?
+            InternshipApplication app = applications.get(i);
+            // Student status should be based on companyAccept [cite: 61, 62]
+            String status = app.getCompanyAccept().toString(); 
+            if (app.getStudentAccept() != null && app.getStudentAccept().toString().equals("ACCEPTED")) {
+                status = "ACCEPTED (Confirmed)";
+            }
+            
+            System.out.println(String.format("%d. Internship: %s | Company: %s | Status: %s", 
+                i + 1, app.getInternship().getTitle(), app.getInternship().getCompanyRep().getCompanyName(), status));
+        }
+    }
+
+    @Override
+    public void viewApplicationDetails(InternshipApplication application) {
+        System.out.println(application);
+    }
+    
     @Override
     public void viewInternshipDetails(Internship internship) {
         System.out.println(internship);
