@@ -100,7 +100,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                     viewApplications();
                     break;
                 case 3:
-                    viewInternshipOpportunities();
+                    viewInternships();
                     System.out.println("Enter the number of the internship you want to apply for:");
                     int internChoice = sc.nextInt();
                     sc.nextLine(); // Clear newline
@@ -127,7 +127,41 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                     }
                     break;
                 case 5:
-                    System.out.println("Feature not implemented yet.");
+                    viewApplications();
+                    int indexToWithdraw = -1;
+                    boolean validInput = false;
+                    while (!validInput) {
+                        System.out.print("Enter index of Application to Delete: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToWithdraw = Integer.parseInt(input);
+                            if (indexToWithdraw >= 1 && indexToWithdraw <= studentController.getMyApplications().size()) {
+                                validInput = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + studentController.getMyApplications().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    }
+
+                    InternshipApplication appToWithdraw = studentController.getMyApplications().get(indexToWithdraw - 1);
+
+                    if (appToWithdraw != null) {
+                        if (appToWithdraw.getInternshipWithdrawalStatus() == src.enums.InternshipWithdrawalStatus.PENDING) {
+                            System.out.println("You have already requested a withdrawal for this application. Please wait for processing.");
+                            break;
+                        }
+                        boolean withdrawSuccess = studentController.wtihdraw(appToWithdraw);
+                        if (withdrawSuccess) {
+                            System.out.println("Application withdrawal request submitted successfully.");
+                        } else {
+                            System.out.println("Failed to submit withdrawal request. Please try again.");
+                        }
+                    } else {
+                        System.out.println("Application not found.");
+                    }
                     break;
                 case 6:
                     // Inherited from UserView
@@ -142,21 +176,6 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                 default:
                     System.out.println("Invalid Choice, please try again!");
             }
-        }
-    }
-
-    private void viewInternshipOpportunities() {
-        ArrayList<Internship> opportunities = studentController.getInternshipsOpportunities();
-        if (opportunities.isEmpty()) {
-            System.out.println("\nNo internship opportunities are currently visible or available for your profile.");
-            return;
-        }
-
-        System.out.println("\n--- Available Internship Opportunities ---");
-        for (int i = 0; i < opportunities.size(); i++) {
-            Internship opp = opportunities.get(i);
-            System.out.println(String.format("%d. ID: %d | Title: %s | Company: %s | Level: %s | Slots: %d", 
-                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyRep().getCompanyName(), opp.getLevel(), opp.getNumberOfSlotsLeft()));
         }
     }
 
@@ -184,32 +203,6 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                 System.out.println("Application failed. Possible reasons: Max applications reached (3), already applied, or not your major.");
             }
         }
-    }
-    @Override
-    public void viewApplications() {
-        ArrayList<InternshipApplication> applications = studentController.getMyApplications();
-        if (applications.isEmpty()) {
-            System.out.println("\nYou have no active internship applications.");
-            return;
-        }
-
-        System.out.println("\n--- My Internship Applications ---");
-        for (int i = 0; i < applications.size(); i++) { // can i just do viewApplicationDetails here?
-            InternshipApplication app = applications.get(i);
-            // Student status should be based on companyAccept [cite: 61, 62]
-            String status = app.getCompanyAccept().toString(); 
-            if (app.getStudentAccept() != null && app.getStudentAccept().toString().equals("ACCEPTED")) {
-                status = "ACCEPTED (Confirmed)";
-            }
-            
-            System.out.println(String.format("%d. Internship: %s | Company: %s | Status: %s", 
-                i + 1, app.getInternship().getTitle(), app.getInternship().getCompanyRep().getCompanyName(), status));
-        }
-    }
-
-    @Override
-    public void viewApplicationDetails(InternshipApplication application) {
-        System.out.println(application);
     }
 
     private void acceptInternship(InternshipApplication selectedApp) {
@@ -274,24 +267,44 @@ public class StudentView extends UserView implements viewInternship, viewApplica
     }
 
     @Override
+    public void viewApplications() {
+        ArrayList<InternshipApplication> applications = studentController.getMyApplications();
+        if (applications == null || applications.isEmpty()) {
+            System.out.println("No internship applications found.");
+            return;
+        }
+
+        System.out.println("\n--- My Internship Applications ---");
+        for (int i = 1; i <= applications.size(); i++) {
+            System.out.print(i + ". ");
+            viewApplicationDetails(applications.get(i-1));
+            
+        }
+    }
+
+    @Override
+    public void viewApplicationDetails(InternshipApplication application) {
+        System.out.println(application);
+    }
+    
+    @Override
     public void viewInternshipDetails(Internship internship) {
         System.out.println(internship);
     }
 
     @Override
     public void viewInternships() {
-        ArrayList<Internship> opportunities = studentController.getInternshipsOpportunities();
-        if (opportunities.isEmpty()) {
-            System.out.println("\nNo internship opportunities are currently visible or available for your profile.");
+        ArrayList<Internship> internships = studentController.getInternshipsOpportunities();
+        if (internships == null || internships.isEmpty()) {
+            System.out.println("No internships found.");
             return;
         }
-
         System.out.println("\n--- Available Internship Opportunities ---");
-        for (int i = 0; i < opportunities.size(); i++) {
-            Internship opp = opportunities.get(i);
-            System.out.println(String.format("%d. ID: %d | Title: %s | Company: %s | Level: %s | Slots: %d", 
-                i + 1, opp.getInternshipId(), opp.getTitle(), opp.getCompanyRep().getCompanyName(), opp.getLevel(), opp.getNumberOfSlotsLeft()));
+        for (int i=1; i<=internships.size(); i++) {
+            System.out.print(i + ". ");
+            viewInternshipDetails(internships.get(i-1));
         }
+        
     }
 
 }

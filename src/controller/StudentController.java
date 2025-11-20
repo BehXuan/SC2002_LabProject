@@ -8,6 +8,7 @@ import src.entity.Student;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
+import src.enums.InternshipWithdrawalStatus;
 import src.interfaces.AuthController;
 import src.interfaces.IReportGenerator;
 import src.report.ReportCriteria;
@@ -134,6 +135,11 @@ public class StudentController implements AuthController, IReportGenerator {
         getCurrentStudent().reset();
         return true;
 
+    }
+
+    public boolean wtihdraw(InternshipApplication application) {
+        application.setInternshipWithdrawalStatus(InternshipWithdrawalStatus.PENDING);
+        return true;
     }
 
     private ReportGenerator reportGen = new ReportGenerator();
