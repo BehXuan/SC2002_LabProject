@@ -32,7 +32,7 @@ public class ProjectApp {
             System.out.print("Enter choice: ");
 
             choice = sc.nextLine();
-            sc.nextLine();
+            // sc.nextLine();
 
             if (choice.equals("0")) {
                 System.out.println("Saving Data");
