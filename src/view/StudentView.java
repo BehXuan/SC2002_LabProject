@@ -264,6 +264,8 @@ public class StudentView extends UserView implements viewInternship, viewApplica
             }
         }
 
+        criteria.setVisibility(true);
+
         // Delegate report generation and printing to controller
         List<Internship> report = studentController.generateReport(criteria);
         studentController.printReport(report);
