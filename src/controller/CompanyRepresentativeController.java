@@ -84,7 +84,7 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     public ArrayList<Internship> getInternships() {
         ArrayList<Internship> internships = new ArrayList<Internship>();
         for (Internship internship : dataStore.getInternshipList()) {
-            if (internship.getCompanyRep() == getCurrentCompayRepresentative()) {
+            if (internship.getCompanyRep() == getCurrentCompayRepresentative() && internship.getInternshipId() != null) {
                 internships.add(internship);
             }
         }
@@ -97,7 +97,7 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         if (getCurrentCompayRepresentative().getInternshipCount() == 5) {
             return false; // limit to 5 internships
         }
-        String newId = getCurrentCompayRepresentative().getUserId() + "_" + getCurrentCompayRepresentative().getInternshipCount();
+        String newId = getCurrentCompayRepresentative().getUserId() + "_" + getCurrentCompayRepresentative().getInternships().size();
         Internship newInternship = new Internship(newId, title, description, internshipLevel, major,
                 openDate, closeDate, numberOfSlotsLeft, getCurrentCompayRepresentative());
         dataStore.addInternship(newInternship);
@@ -114,6 +114,35 @@ public class CompanyRepresentativeController implements AuthController, IReportG
                                                                             // rejected or just delete applicaiton from
                                                                             // list
         app.setCompanyAccept(InternshipStatus.REJECTED);
+        return true;
+    }
+
+    public boolean editInternship(Internship internship, String title, String description,
+            InternshipLevel internshipLevel, String major, LocalDate openDate, LocalDate closeDate,
+            int numberOfSlotsLeft) {
+        if (internship.getStatus() == InternshipStatus.APPROVED) {
+            return false; // cannot edit approved internships
+        }
+        internship.setTitle(title);
+        internship.setDescription(description);
+        internship.setLevel(internshipLevel);
+        internship.setMajor(major);
+        internship.setOpenDate(openDate);
+        internship.setCloseDate(closeDate);
+        internship.setNumberOfSlotsLeft(numberOfSlotsLeft);
+        return true;
+    }
+
+    public boolean deleteInternship(Internship internship) {
+        if (internship.getStatus() == InternshipStatus.APPROVED) {
+            return false; // cannot delete approved internships
+        }
+        internship.setInternshipId(null);
+        return true;
+    }
+
+    public boolean toggleVisibility(Internship internship) {
+        internship.setVisibility(!internship.getVisibility());
         return true;
     }
 

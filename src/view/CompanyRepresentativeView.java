@@ -141,6 +141,9 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
             System.out.println("5. Approve Internships");
             System.out.println("6. Reject Internships");
             System.out.println("7. Logout / Return to Main Menu");
+            System.out.println("8. Delete Internship");
+            System.out.println("9. Edit Internship");
+            System.out.println("10. Toggle Internship Visibility");
             System.out.print("Enter your choice: ");
             choice = Integer.parseInt(sc.nextLine());
 
@@ -310,6 +313,175 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                     logout();
                     System.out.println("Logged out. Returning to main menu...");
                     return;
+
+                case 8:
+                    // Delete Internship
+                    viewInternships();
+                    int indexToDelete = -1;
+                    validInput = false;
+                    while (!validInput) {
+                        System.out.print("Enter index of Internship to Delete: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToDelete = Integer.parseInt(input);
+                            if (indexToDelete >= 1 && indexToDelete <= repController.getInternships().size()) {
+                                validInput = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + repController.getInternships().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    }
+                    Internship internshipToDelete = repController.getInternships().get(indexToDelete - 1);
+                    if (internshipToDelete != null) {
+                        boolean deleted = repController.deleteInternship(internshipToDelete);
+                        if (deleted) {
+                            System.out.println("Internship deleted successfully.");
+                        } else {
+                            System.out.println("Failed to delete internship. It may be approved already.");
+                        }
+                    } else {
+                        System.out.println("Internship ID not found.");
+                    }
+
+                    break;
+
+                case 9:
+                    // Edit Internship
+                    viewInternships();
+                    int indexToEdit = -1;
+                    validInput = false;
+                    while (!validInput) {
+                        System.out.print("Enter index of Internship to Edit: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToEdit = Integer.parseInt(input);
+                            if (indexToEdit >= 1 && indexToEdit <= repController.getInternships().size()) {
+                                validInput = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + repController.getInternships().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    }
+                    Internship internshipToEdit = repController.getInternships().get(indexToEdit - 1);
+                    if (internshipToEdit != null) {
+                        // Gather new details
+                        System.out.print("Enter new Internship Title: ");
+                        String newTitle = sc.nextLine();
+                        System.out.print("Enter new Internship Description: ");
+                        String newDescription = sc.nextLine();
+                        // Internship Level with enum validation
+                        InternshipLevel newInternshipLevel = null;
+                        while (true) {
+                            System.out.print("Enter new Internship Level (Basic, Intermediate, Advanced): ");
+                            String levelInput = sc.nextLine().trim();
+                            try {
+                                newInternshipLevel = InternshipLevel.valueOf(levelInput.toUpperCase());
+                                break;
+                            } catch (IllegalArgumentException e) {
+                                System.out.println("Invalid level. Please enter: Basic, Intermediate, or Advanced.");
+                            }
+                        }
+                        System.out.print("Enter new Internship Major: ");
+                        String newMajor = sc.nextLine();
+
+                        // Open Date with date validation
+                        LocalDate newOpenDate = null;
+                        while (true) {
+                            System.out.print("Enter new Open Date (YYYY-MM-DD): ");
+                            String openDateStr = sc.nextLine().trim();
+                            try {
+                                newOpenDate = LocalDate.parse(openDateStr);
+                                break;
+                            } catch (DateTimeParseException e) {
+                                System.out
+                                        .println("Invalid date format. Please use YYYY-MM-DD format (e.g., 2024-01-15).");
+                            }
+                        }
+
+                        LocalDate newCloseDate = null;
+                        while (true) {
+                            System.out.print("Enter new Close Date (YYYY-MM-DD): ");
+                            String closeDateStr = sc.nextLine().trim();
+                            try {
+                                newCloseDate = LocalDate.parse(closeDateStr);
+                                // Check if close date is after open date
+                                if (newCloseDate.isBefore(newOpenDate) || newCloseDate.isEqual(newOpenDate)) {
+                                    System.out.println(
+                                            "Close date must be after the open date. Please enter a later date.");
+                                    continue;
+                                }
+                                break;
+                            } catch (DateTimeParseException e) {
+                                System.out.println(
+                                        "Invalid date format. Please use YYYY-MM-DD format (e.g., 2024-12-31).");
+                            }
+                        }
+
+                        int newSlots = 0;
+                        while (true) {
+                            System.out.print("Enter new Number of Slots: ");
+                            String slotsStr = sc.nextLine().trim();
+                            try {
+                                newSlots = Integer.parseInt(slotsStr);
+                                if (newSlots >= 1) {
+                                    break;
+                                } else {
+                                    System.out.println("Number of slots must be more then 0. Please try again.");
+                                }
+                            } catch (NumberFormatException e) {
+                                System.out.println("Invalid number. Please enter a valid number bigger than 0.");
+                            }
+                        }
+                        boolean edited = repController.editInternship(internshipToEdit, newTitle, newDescription,
+                                newInternshipLevel, newMajor, newOpenDate, newCloseDate, newSlots);
+                        if (edited) {
+                            System.out.println("Internship edited successfully.");
+                        } else {
+                            System.out.println("Failed to edit internship. It may be approved already.");
+                        }
+                    } else {
+                        System.out.println("Internship ID not found.");
+                    }
+                    break;
+
+                case 10:
+                    // Toggle Internship Visibility
+                    viewInternships();
+                    int indexToToggle = -1;
+                    validInput = false;
+                    while (!validInput) {
+                        System.out.print("Enter index of Internship to Toggle Visibility: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToToggle = Integer.parseInt(input);
+                            if (indexToToggle >= 1 && indexToToggle <= repController.getInternships().size()) {
+                                validInput = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + repController.getInternships().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    } 
+                    Internship internshipToToggle = repController.getInternships().get(indexToToggle - 1);
+                    if (internshipToToggle != null) {
+                        boolean toggled = repController.toggleVisibility(internshipToToggle);
+                        if (toggled) {
+                            System.out.println("Internship visibility toggled successfully.");
+                        } else {
+                            System.out.println("Failed to toggle internship visibility.");
+                        }
+                    } else {
+                        System.out.println("Internship ID not found.");
+                    }
+                    break;
 
                 default:
                     System.out.println("Invalid choice. Please try again.");
