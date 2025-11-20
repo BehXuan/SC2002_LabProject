@@ -91,7 +91,7 @@ public class StudentController implements AuthController, IReportGenerator {
         }
 
         for (InternshipApplication app : getCurrentStudent().getInternshipApplied()) {
-            if (app.getInternship() == internship) {
+            if (app.getInternship().getInternshipId().equals(internship.getInternshipId())) {
                 return false; // Already applied
             }
         }
