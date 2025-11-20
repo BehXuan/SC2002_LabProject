@@ -5,6 +5,7 @@ import src.entity.*;
 import src.enums.CompanyApprovalStatus;
 import src.enums.InternshipStatus;
 import src.interfaces.AuthController;
+import src.interfaces.IReportGenerator;
 import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
