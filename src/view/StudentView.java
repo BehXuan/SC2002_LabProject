@@ -231,6 +231,9 @@ public class StudentView extends UserView implements viewInternship, viewApplica
 
         criteria.setStatus(InternshipStatus.APPROVED); // Students only see approved internships
 
+        if (studentController.getCurrentStudent().getYearOfStudy() < 3) {
+            criteria.setLevel(src.enums.InternshipLevel.BASIC); // Year 1-2 can only see BASIC level
+        } else {
         System.out.print("Filter by Internship Level (BASIC/INTERMEDIATE/ADVANCED or leave blank): ");
         String level = sc.nextLine();
         if (!level.isBlank()) {
@@ -239,7 +242,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
             } catch (IllegalArgumentException e) {
                 System.out.println("Invalid Level. Ignoring.");
             }
-        }
+        }}
 
         System.out.print("Minimum Slots left (or leave blank): ");
         String minSlots = sc.nextLine();
