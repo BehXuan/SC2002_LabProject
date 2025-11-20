@@ -14,8 +14,7 @@ import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
 
-
-public class StudentController implements AuthController, IReportGenerator{
+public class StudentController implements AuthController, IReportGenerator {
     private Student currentStudent;
     private DataStore dataStore;
 
@@ -70,13 +69,13 @@ public class StudentController implements AuthController, IReportGenerator{
                 visibleInternships.add(i);
             }
         }
-        
-        if (getCurrentStudent().getYearOfStudy() >= 3){
+
+        if (getCurrentStudent().getYearOfStudy() >= 3) {
             return visibleInternships;
         }
         ArrayList<Internship> basicInternships = new ArrayList<Internship>();
         for (Internship i : visibleInternships) {
-            if (i.getLevel().equals(InternshipLevel.BASIC)) { //should change to enum?
+            if (i.getLevel().equals(InternshipLevel.BASIC)) { // should change to enum?
                 basicInternships.add(i);
             }
         }
@@ -102,8 +101,9 @@ public class StudentController implements AuthController, IReportGenerator{
             return false;
         }
 
-
-        InternshipApplication newApplication = new InternshipApplication(dataStore.getInternshipApplicationsList().size() + 1, internship.getCompanyRep(), getCurrentStudent(), internship);
+        InternshipApplication newApplication = new InternshipApplication(
+                dataStore.getInternshipApplicationsList().size() + 1, internship.getCompanyRep(), getCurrentStudent(),
+                internship);
         getCurrentStudent().applyInternship(newApplication);
         dataStore.getInternshipApplicationsList().add(newApplication);
         return true;
@@ -143,7 +143,7 @@ public class StudentController implements AuthController, IReportGenerator{
         return reportGen.generateReport(criteria);
     }
 
-    // Helper to print a report  // to print all internships?
+    // Helper to print a report // to print all internships?
     public void printReport(List<Internship> internships) {
         System.out.println("===== Internship Report =====");
         if (internships.isEmpty()) {

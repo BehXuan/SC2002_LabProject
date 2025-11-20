@@ -1,7 +1,5 @@
 package src.controller;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +22,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
 
 
     @Override
-    public boolean login(String userName, String pw) {  // do we c
+    public boolean login(String userName, String pw) {
         CareerCenterStaff c = dataStore.findCareerCenterStaff(userName);
         if (c != null && c.getPassword().equals(pw)) {
             setCurrentStaff(c);

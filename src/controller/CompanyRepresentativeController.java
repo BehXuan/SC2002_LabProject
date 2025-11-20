@@ -1,5 +1,8 @@
-
 package src.controller;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import src.entity.*;
 import src.enums.CompanyApprovalStatus;
@@ -9,14 +12,9 @@ import src.interfaces.IReportGenerator;
 import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 import src.DataStore;
 
-public class CompanyRepresentativeController implements AuthController, IReportGenerator{
+public class CompanyRepresentativeController implements AuthController, IReportGenerator {
     private CompanyRepresentative currentRep;
     private DataStore dataStore;
 
@@ -32,8 +30,10 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         return currentRep;
     }
 
-    public boolean createCompanyRepresentative(String userId, String password, String name, String email, String companyName, String department, String position) {
-        CompanyRepresentative newRep = new CompanyRepresentative(userId, password, name, email,  companyName, department, position);
+    public boolean createCompanyRepresentative(String userId, String password, String name, String email,
+            String companyName, String department, String position) {
+        CompanyRepresentative newRep = new CompanyRepresentative(userId, password, name, email, companyName, department,
+                position);
         dataStore.CompanyRepresentativeAdd(newRep);
         return true;
     }
@@ -42,7 +42,8 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
         for (CompanyRepresentative c : dataStore.getCompanyRepresentativeList()) {
-            if (c.getUserId().equals(userName) && c.getPassword().equals(pw) && c.getApproval().equals(CompanyApprovalStatus.APPROVED)) {
+            if (c.getUserId().equals(userName) && c.getPassword().equals(pw)
+                    && c.getApproval().equals(CompanyApprovalStatus.APPROVED)) {
                 setCurrentCompanyRepresentative(c);
                 return true;
             }
@@ -54,7 +55,7 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     public void logout() {
         setCurrentCompanyRepresentative(null);
     }
-    
+
     @Override
     public boolean updatePassword(String oldPW, String newPW) {
         if (getCurrentCompayRepresentative() == null) {
@@ -96,16 +97,17 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         return internships;
     }
 
-    public boolean createInternship(int internshipId, String title, String description, InternshipLevel internshipLevel, String major,
+    public boolean createInternship(int internshipId, String title, String description, InternshipLevel internshipLevel,
+            String major,
             LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft) {
         if (getCurrentCompayRepresentative() == null) {
             return false;
         }
 
         int newId = dataStore.getNextInternshipId();
-            
+
         Internship newInternship = new Internship(newId, title, description, internshipLevel, major,
-            openDate, closeDate, numberOfSlotsLeft, getCurrentCompayRepresentative());
+                openDate, closeDate, numberOfSlotsLeft, getCurrentCompayRepresentative());
         newInternship.setCompanyRep(getCurrentCompayRepresentative());
         dataStore.addInternship(newInternship);
         return true;
@@ -120,7 +122,9 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         return true;
     }
 
-    public boolean rejectInternshipApplication(InternshipApplication app) {  // do i need to show students they got rejected or just delete applicaiton from list
+    public boolean rejectInternshipApplication(InternshipApplication app) { // do i need to show students they got
+                                                                            // rejected or just delete applicaiton from
+                                                                            // list
         if (getCurrentCompayRepresentative() == null) {
             return false;
         }
@@ -144,14 +148,13 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         }
         for (Internship i : internships) {
             System.out.printf(
-                "ID: %d | Title: %s | Level: %s | Slots left: %d | Status: %s | Major: %s\n",
-                i.getInternshipId(),
-                i.getTitle(),
-                i.getLevel(),
-                i.getNumberOfSlotsLeft(),
-                i.getStatus(),
-                i.getMajor()
-            );
+                    "ID: %d | Title: %s | Level: %s | Slots left: %d | Status: %s | Major: %s\n",
+                    i.getInternshipId(),
+                    i.getTitle(),
+                    i.getLevel(),
+                    i.getNumberOfSlotsLeft(),
+                    i.getStatus(),
+                    i.getMajor());
         }
     }
 
