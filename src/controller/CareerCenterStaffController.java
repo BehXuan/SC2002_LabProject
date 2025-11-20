@@ -67,10 +67,11 @@ public class CareerCenterStaffController implements AuthController, IReportGener
         return false;
     }
 
-    public boolean rejectCompany(String companyRepId) {  // if rejected, do we still need it in the csv/list/db?
+    public boolean rejectCompany(String companyRepId) {
         CompanyRepresentative company = dataStore.findCompanyRep(companyRepId);
         if (company != null) {
-            company.setApproval(CompanyApprovalStatus.REJECTED);
+            // company.setApproval(CompanyApprovalStatus.REJECTED);  // alternatively, we can delete the company from the list
+            dataStore.getCompanyRepresentativeList().remove(company); 
             return true;
         }
         return false;
@@ -99,7 +100,9 @@ public class CareerCenterStaffController implements AuthController, IReportGener
     public boolean rejectInternship(String internshipId) {
         Internship internship = dataStore.findInternship(internshipId);
         if (internship != null) {
-            internship.setStatus(InternshipStatus.REJECTED);
+            // internship.setStatus(InternshipStatus.REJECTED); // alternatively, we can delete the internship from the list
+            dataStore.getInternshipList().remove(internship);
+            internship.getCompanyRep().removeInternship(internship);
             return true;
         }
         return false;
@@ -127,6 +130,8 @@ public class CareerCenterStaffController implements AuthController, IReportGener
     public boolean approveWithdrawal(InternshipApplication app) {
     if (app.getInternshipWithdrawalStatus() == InternshipWithdrawalStatus.PENDING) {
         app.setInternshipWithdrawalStatus(InternshipWithdrawalStatus.APPROVED);
+        dataStore.getInternshipApplicationsList().remove(app);
+        app.getStudent().removeInternship(app);
         return true;
     }
     return false;
@@ -141,10 +146,6 @@ public class CareerCenterStaffController implements AuthController, IReportGener
     }
 
     //LIST GENERATION
-
-
-
-
 
     private ReportGenerator reportGen = new ReportGenerator();
 

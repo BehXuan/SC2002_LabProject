@@ -83,6 +83,11 @@ public class CompanyRepresentative extends User {
         this.incrementInternshipCount();;
     }
 
+    public void removeInternship(Internship internship){
+        this.internships.remove(internship);
+        this.internshipCount -= 1;
+    }
+
     @Override
     public String toString() {
         List<Internship> allInternships = getInternships();

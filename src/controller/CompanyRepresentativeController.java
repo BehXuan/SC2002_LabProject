@@ -110,10 +110,10 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         return true;
     }
 
-    public boolean rejectInternshipApplication(InternshipApplication app) { // do i need to show students they got
-                                                                            // rejected or just delete applicaiton from
-                                                                            // list
-        app.setCompanyAccept(InternshipStatus.REJECTED);
+    public boolean rejectInternshipApplication(InternshipApplication app) {
+        // app.setCompanyAccept(InternshipStatus.REJECTED);
+        dataStore.getInternshipApplicationsList().remove(app);
+        app.getStudent().removeInternship(app);
         return true;
     }
 
@@ -138,6 +138,8 @@ public class CompanyRepresentativeController implements AuthController, IReportG
             return false; // cannot delete approved internships
         }
         internship.setInternshipId(null);
+        getCurrentCompayRepresentative().removeInternship(internship);
+        dataStore.getInternshipList().remove(internship);
         return true;
     }
 
