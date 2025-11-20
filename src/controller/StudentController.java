@@ -34,11 +34,10 @@ public class StudentController implements AuthController, IReportGenerator {
     @Override
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
-        for (Student s : dataStore.getStudentList()) {
-            if (s.getUserId().equals(userName) && s.getPassword().equals(pw)) {
-                setCurrentStudent(s);
-                return true;
-            }
+        Student s = dataStore.findStudent(userName);
+        if (s != null && s.getPassword().equals(pw)) {
+            setCurrentStudent(s);
+            return true;
         }
         return false;
     }
@@ -103,7 +102,7 @@ public class StudentController implements AuthController, IReportGenerator {
         }
 
         InternshipApplication newApplication = new InternshipApplication(
-                dataStore.getInternshipApplicationsList().size() + 1, internship.getCompanyRep(), getCurrentStudent(),
+                getCurrentStudent().getUserId() + "_" + internship.getCompanyRep().getUserId(), internship.getCompanyRep(), getCurrentStudent(),
                 internship);
         getCurrentStudent().applyInternship(newApplication);
         dataStore.getInternshipApplicationsList().add(newApplication);
@@ -127,13 +126,18 @@ public class StudentController implements AuthController, IReportGenerator {
         if (application.getCompanyAccept() != InternshipStatus.APPROVED) {
             return false;
         }
+
+        if (application.getInternship().getNumberOfSlotsLeft() <= 0) {
+            return false; // No slots left
+        }
         // application.setStudentAccept("Accepted");
         getCurrentStudent().setInternshipAccepted(application.getInternship());
         for (InternshipApplication app : getCurrentStudent().getInternshipApplied()) {
-            app.setApplicationId(-1); // mark other applications as void
+            app.setApplicationId(null); // mark other applications as void
         }
         //
-        application.getInternship().setNumberOfSlotsLeft(application.getInternship().getNumberOfSlotsLeft() - 1);
+        // application.getInternship().setNumberOfSlotsLeft(application.getInternship().getNumberOfSlotsLeft() - 1)
+        application.getInternship().addApplicant(getCurrentStudent());
         getCurrentStudent().reset();
         return true;
 

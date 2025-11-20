@@ -10,13 +10,13 @@ public class InternshipApplication {
     private InternshipStatus studentAccept; // e.g., "Pending", "Accepted", "Rejected"
     private InternshipStatus companyAccept; // e.g., "Pending", "Accepted", "Rejected"
     private InternshipWithdrawalStatus studentWithdraw;
-    private int applicationId;
+    private String applicationId;
     
     public InternshipApplication() {
     }
 
-    public InternshipApplication(int applicationId, CompanyRepresentative companyRep, Student student, Internship internship) {
-        // this.applicationId = applicationId;
+    public InternshipApplication(String applicationId, CompanyRepresentative companyRep, Student student, Internship internship) {
+        this.applicationId = applicationId;
         this.companyRep = companyRep;
         this.student = student;
         this.internship = internship;
@@ -49,10 +49,10 @@ public class InternshipApplication {
     public void setStudentAccept(InternshipStatus applicationStatus) {
         this.studentAccept = applicationStatus;
     }
-    public int getApplicationId() {
+    public String getApplicationId() {
         return applicationId;
     }
-    public void setApplicationId(int applicationId) {
+    public void setApplicationId(String applicationId) {
         this.applicationId = applicationId;
     }
     public InternshipStatus getCompanyAccept() {

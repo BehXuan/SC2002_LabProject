@@ -74,7 +74,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         
         int choice = -1;
         while (true) {
-            System.out.println("Choose an option (1-5): ");
+            System.out.println("Choose an option (1-7): ");
             if (sc.hasNextInt()) {
                 choice = sc.nextInt();
                 sc.nextLine(); // Clear the newline
@@ -101,13 +101,13 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                     break;
                 case 3:
                     viewInternships();
-                    System.out.println("Enter the number of the internship you want to apply for:");
+                    System.out.println("Enter the index of the internship you want to apply for:");
                     int internChoice = sc.nextInt();
                     sc.nextLine(); // Clear newline
                     ArrayList<Internship> opportunities = studentController.getInternshipsOpportunities();
                     if (internChoice >= 1 && internChoice <= opportunities.size()) {
                         Internship selectedInternship = opportunities.get(internChoice - 1);
-                        displayInternshipDetails(selectedInternship);
+                        viewInternshipDetails(selectedInternship);
                         applyInternship(selectedInternship);
                     } else {
                         System.out.println("Invalid internship selection.");
@@ -116,7 +116,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                 case 4:
                     viewApplications();
                     ArrayList<InternshipApplication> applications = studentController.getMyApplications();
-                    System.out.println("Enter the number of the application you want to accept:");
+                    System.out.println("Enter the index of the application you want to accept:");
                     int appChoice = sc.nextInt();
                     sc.nextLine(); // Clear newline
                     if (appChoice >= 1 && appChoice <= applications.size()) {
@@ -179,17 +179,17 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
     }
 
-    private void displayInternshipDetails(Internship internship) {
-        System.out.println("\n--- Internship Details ---");
-        System.out.println("Title: " + internship.getTitle());
-        System.out.println("Company: " + internship.getCompanyRep().getCompanyName());
-        System.out.println("Description: " + internship.getDescription());
-        System.out.println("Level: " + internship.getLevel());
-        System.out.println("Preferred Major: " + internship.getMajor());
-        System.out.println("Application Close Date: " + internship.getCloseDate());
-        System.out.println("Available Slots: " + internship.getNumberOfSlotsLeft());
-        System.out.println("---");
-    }
+    // private void displayInternshipDetails(Internship internship) {
+    //     System.out.println("\n--- Internship Details ---");
+    //     System.out.println("Title: " + internship.getTitle());
+    //     System.out.println("Company: " + internship.getCompanyRep().getCompanyName());
+    //     System.out.println("Description: " + internship.getDescription());
+    //     System.out.println("Level: " + internship.getLevel());
+    //     System.out.println("Preferred Major: " + internship.getMajor());
+    //     System.out.println("Application Close Date: " + internship.getCloseDate());
+    //     System.out.println("Available Slots: " + internship.getNumberOfSlotsLeft());
+    //     System.out.println("---");
+    // }
 
     private void applyInternship(Internship internship) {
         System.out.println("Do you want to apply for this internship? (Y/N)");

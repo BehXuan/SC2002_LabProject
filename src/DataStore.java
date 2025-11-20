@@ -230,7 +230,7 @@ public class DataStore {
                 if (isFirstLine) { isFirstLine = false; continue; }
                 String[] data = line.split(",");
                 if (data.length >= 7) {
-                    int appId = Integer.parseInt(data[0].trim());
+                    String appId = data[0].trim();
                     String studentId = data[1].trim();
                     String internshipId = data[2].trim();
                     String repId = data[3].trim();
@@ -348,7 +348,7 @@ public class DataStore {
         return null;
     }
 
-    public InternshipApplication findInternshipApplication(int applicationId) { // might be hard to work with id, cannot ensure id uniqueness
+    public InternshipApplication findInternshipApplication(String applicationId) {
         for (InternshipApplication app : internshipApplicationsList) {
             if (app.getApplicationId() == applicationId) {
                 return app;
