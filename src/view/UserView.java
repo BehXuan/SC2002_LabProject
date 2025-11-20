@@ -23,6 +23,7 @@ public abstract class UserView {
 
         if (controller.updatePassword(oldPw, newPw)) {
             System.out.println("Password updated!");
+            controller.logout();
         } else {
             System.out.println("Incorrect password.");
         }
