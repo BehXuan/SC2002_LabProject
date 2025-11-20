@@ -151,7 +151,7 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 case 1:
                     changePassword();
                     logout();
-                    break;
+                    return;
                 case 2:
                     // View Internship Applications
                     viewApplications();

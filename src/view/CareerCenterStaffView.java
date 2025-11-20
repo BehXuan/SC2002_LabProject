@@ -84,7 +84,7 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
             }
 
             switch (choice) {
-                case 1 -> {changePassword();logout();} // from UserView
+                case 1 -> {changePassword();logout();return;} // from UserView
                 case 2 -> viewPendingCompanyReps();
                 case 3 -> authorizeCompany();
                 case 4 -> rejectCompany();
