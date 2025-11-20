@@ -1,11 +1,11 @@
 ID,Title,Description,Level,Major,OpenDate,CloseDate,Slots,RepID,Status,Visibility,Applicants
-0,Java Developer Intern,Learn Java with real projects,BASIC,Computer Science,2025-11-01,2025-12-01,2,rep001,APPROVED,true,U2310001A
-1,Data Analyst Intern,Analyze data with Python,BASIC,Data Science & AI,2025-11-05,2025-12-05,2,rep001,APPROVED,true,
-2,Web Developer Intern,Build web applications,BASIC,Computer Engineering,2025-11-10,2025-12-10,2,rep001,APPROVED,true,
-3,HR Assistant Intern,Support HR operations,BASIC,Information Engineering & Media,2025-11-15,2025-12-15,1,rep002,APPROVED,true,
-4,Marketing Intern,Social media campaigns,BASIC,Information Engineering & Media,2025-11-20,2025-12-20,2,rep002,APPROVED,true,
-5,Python Developer Intern,Develop AI scripts,BASIC,Data Science & AI,2025-11-22,2025-12-22,2,rep002,APPROVED,true,
-6,Software Engineer Intern,Backend development,BASIC,Computer Science,2025-11-25,2025-12-25,3,rep003,APPROVED,true,
-7,Embedded Systems Intern,Work with hardware,BASIC,Computer Engineering,2025-11-27,2025-12-27,2,rep003,APPROVED,true,
-8,Marketing Data Intern,Analyze marketing data,BASIC,Information Engineering & Media,2025-11-28,2025-12-28,1,rep003,REJECTED,true,
-9,Fullstack Developer Intern,Frontend & Backend projects,BASIC,Computer Science,2025-11-29,2025-12-29,2,rep003,APPROVED,true,
+rep001_0,Java Developer Intern,Learn Java with real projects,BASIC,Computer Science,2025-11-01,2025-12-01,2,rep001,APPROVED,true,U2310001A
+rep001_1,Data Analyst Intern,Analyze data with Python,BASIC,Data Science & AI,2025-11-05,2025-12-05,2,rep001,APPROVED,true,
+rep001_2,Web Developer Intern,Build web applications,BASIC,Computer Engineering,2025-11-10,2025-12-10,2,rep001,APPROVED,true,
+rep002_0,HR Assistant Intern,Support HR operations,BASIC,Information Engineering & Media,2025-11-15,2025-12-15,1,rep002,APPROVED,true,
+rep002_1,Marketing Intern,Social media campaigns,BASIC,Information Engineering & Media,2025-11-20,2025-12-20,2,rep002,APPROVED,true,
+rep002_2,Python Developer Intern,Develop AI scripts,BASIC,Data Science & AI,2025-11-22,2025-12-22,2,rep002,APPROVED,true,
+rep003_0,Software Engineer Intern,Backend development,BASIC,Computer Science,2025-11-25,2025-12-25,3,rep003,APPROVED,true,
+rep003_1,Embedded Systems Intern,Work with hardware,BASIC,Computer Engineering,2025-11-27,2025-12-27,2,rep003,APPROVED,true,
+rep003_2,Marketing Data Intern,Analyze marketing data,BASIC,Information Engineering & Media,2025-11-28,2025-12-28,1,rep003,REJECTED,true,
+rep003_3,Fullstack Developer Intern,Frontend & Backend projects,BASIC,Computer Science,2025-11-29,2025-12-29,2,rep003,APPROVED,true,

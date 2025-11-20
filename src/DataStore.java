@@ -181,7 +181,7 @@ public class DataStore {
             String[] data = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
             if (data.length < 12) continue;
 
-            int id = Integer.parseInt(data[0].trim());
+            String id = data[0].trim();
             String title = data[1].trim();
             String description = data[2].trim();
             if (description.startsWith("\"") && description.endsWith("\"")) {
@@ -232,7 +232,7 @@ public class DataStore {
                 if (data.length >= 7) {
                     int appId = Integer.parseInt(data[0].trim());
                     String studentId = data[1].trim();
-                    int internshipId = Integer.parseInt(data[2].trim());
+                    String internshipId = data[2].trim();
                     String repId = data[3].trim();
                     InternshipStatus companyAccept = InternshipStatus.valueOf(data[4].trim());
                     InternshipStatus studentAccept = InternshipStatus.valueOf(data[5].trim());
@@ -339,7 +339,7 @@ public class DataStore {
         return null;
     }
 
-    public Internship findInternship(int internshipId) { // might be hard to work with id, cannot ensure id uniqueness
+    public Internship findInternship(String internshipId) {
         for (Internship i : internshipList) {
             if (i.getInternshipId() == internshipId) {
                 return i;

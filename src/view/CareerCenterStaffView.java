@@ -150,7 +150,7 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
 
     private void approveInternship() {
         System.out.print("Enter Internship ID to approve: ");
-        int id = sc.nextInt();
+        String id = sc.nextLine();
         sc.nextLine();
         if (staffController.approveInternship(id)) System.out.println("Internship approved.");
         else System.out.println("Internship not found.");
@@ -158,7 +158,7 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
 
     private void rejectInternship() {
         System.out.print("Enter Internship ID to reject: ");
-        int id = sc.nextInt();
+        String id = sc.nextLine();
         sc.nextLine();
         if (staffController.rejectInternship(id)) System.out.println("Internship rejected.");
         else System.out.println("Internship not found.");

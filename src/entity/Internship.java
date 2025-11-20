@@ -7,7 +7,7 @@ import src.enums.InternshipStatus;
 import src.enums.InternshipLevel;
 
 public class Internship {
-    private int internshipId;
+    private String internshipId;
     private String title;
     private String description;
     private InternshipLevel internshipLevel;
@@ -23,7 +23,7 @@ public class Internship {
     public Internship() {
     }
 
-    public Internship(int internshipId, String title, String description, InternshipLevel internshipLevel, String major,
+    public Internship(String internshipId, String title, String description, InternshipLevel internshipLevel, String major,
             LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft,
             CompanyRepresentative companyRep) {
         this.internshipId = internshipId;
@@ -49,8 +49,12 @@ public class Internship {
         this.companyRep = companyRep;
     }
 
-    public int getInternshipId() {
+    public String getInternshipId() {
         return this.internshipId;
+    }
+
+    public void setInternshipId(String internshipId) {
+        this.internshipId = internshipId;
     }
 
     public String getTitle() {

@@ -87,7 +87,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
     return pending;
 }
     //INTERNSHIP APPROVE/ REJECT
-    public boolean approveInternship(int internshipId) {  // id may be a bit hard for uniqueness
+    public boolean approveInternship(String internshipId) {
         Internship internship = dataStore.findInternship(internshipId);
         if (internship != null) {
             internship.setStatus(InternshipStatus.APPROVED);
@@ -96,7 +96,7 @@ public class CareerCenterStaffController implements AuthController, IReportGener
         return false;
     }
 
-    public boolean rejectInternship(int internshipId) {  // if internship rejected, do we still need it in the csv/list/db?
+    public boolean rejectInternship(String internshipId) {
         Internship internship = dataStore.findInternship(internshipId);
         if (internship != null) {
             internship.setStatus(InternshipStatus.REJECTED);
