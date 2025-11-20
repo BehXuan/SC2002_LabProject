@@ -8,8 +8,9 @@ import src.enums.InternshipLevel;
 import src.interfaces.viewApplication;
 import src.interfaces.viewInternship;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class CompanyRepresentativeView extends UserView implements viewInternship, viewApplication {
@@ -23,34 +24,79 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
 
     @Override
     public void start() {
-        System.out.println("1. Login as Company Representative\n2. Register as Company Representative");
-        int choice = Integer.parseInt(sc.nextLine());
-        if (choice == 2) {
-            System.out.print("Enter Username: ");
-            String username = sc.nextLine();
-            System.out.print("Enter Password: ");
-            String password = sc.nextLine();
-            System.out.print("Enter Name: ");
-            String name = sc.nextLine();
-            System.out.print("Enter Email: ");
-            String email = sc.nextLine();
-            System.out.print("Enter Company Name: ");
-            String companyName = sc.nextLine();
-            System.out.print("Enter Department: ");
-            String department = sc.nextLine();
-            System.out.print("Enter Position: ");
-            String position = sc.nextLine();
-            boolean registered = repController.createCompanyRepresentative(username, password, name, email, companyName, department, position);
-            if (registered) {
-                System.out.println("Registration successful! Please wait for Career Staff approval before logging in.");
-            } else {
-                System.out.println("Registration failed. Please try again.");
+        String choice = "";
+        while (true) {
+            System.out.println("1. Login as Company Representative\n2. Register as Company Representative");
+            choice = sc.nextLine().trim();
+            if (choice.equals("1") || choice.equals("2")) {
+                break;
             }
+            System.out.println("Invalid choice. Please enter 1 or 2.");
         }
-        else if (choice != 1) {
-            System.out.println("Invalid choice. Returning to main menu.");
+
+        if (choice.equals("2")) { // create company rep
+            registerCompanyRepresentative();
+        } else if (choice.equals("1")) { // login
+            loginMenu();
         }
-        loginMenu();
+    }
+
+    private void registerCompanyRepresentative() {
+        System.out.println("----- Company Representative Registration -----");
+        System.out.print("Enter Username: ");
+
+        String username = "";
+        while (true) {
+            username = sc.nextLine().trim();
+
+            if (username.isEmpty()) {
+                System.out.print("Username cannot be empty. Please enter a valid Username: ");
+                continue;
+            }
+            break;
+        }
+
+        String password = "";
+        while (true) {
+            System.out.print("Enter Password: ");
+            password = sc.nextLine();
+            if (password.isEmpty()) {
+                System.out.print("Password cannot be empty. Please enter a valid Password: ");
+                continue;
+            }
+
+            System.out.print("Confirm Password: ");
+            String confirmPassword = sc.nextLine();
+            if (!password.equals(confirmPassword)) {
+                System.out.println("Passwords do not match. Please try again.");
+                continue;
+            }
+            break;
+        }
+
+        System.out.print("Enter Name: ");
+        String name = sc.nextLine();
+
+        System.out.print("Enter Email: ");
+        String email = sc.nextLine();
+
+        System.out.print("Enter Company Name: ");
+        String companyName = sc.nextLine();
+
+        System.out.print("Enter Department: ");
+        String department = sc.nextLine();
+
+        System.out.print("Enter Position: ");
+        String position = sc.nextLine();
+
+        boolean success = repController.createCompanyRepresentative(username, password, name, email, companyName,
+                department, position);
+        if (success) {
+            System.out.println("Registration successful! Please wait for admin approval before logging in.");
+        } else {
+            System.out.println("Registration failed. Please try again.");
+        }
+
     }
 
     private void loginMenu() {
@@ -72,11 +118,13 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
             }
 
             if (repController.login(username, password)) {
-                System.out.println("Login successful! Welcome " + repController.getCurrentCompayRepresentative().getName());
+                System.out.println(
+                        "Login successful! Welcome " + repController.getCurrentCompayRepresentative().getName());
                 runMenuLoop();
                 return; // exit login after menu
             } else {
-                System.out.println("Invalid username or password or not approved yet. Try again or enter 0 to go back.");
+                System.out
+                        .println("Invalid username or password or not approved yet. Try again or enter 0 to go back.");
             }
         }
     }
@@ -102,28 +150,12 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                     break;
                 case 2:
                     // View Internship Applications
-                    List<InternshipApplication> applications = repController.getApplications();
-                    if (applications == null || applications.isEmpty()) {
-                        System.out.println("No internship applications found.");
-                    } else {
-                        System.out.println("Internship Applications:");
-                        for (InternshipApplication app : applications) {
-                            System.out.println(app);
-                        }
-                    }
+                    viewApplications();
                     break;
 
                 case 3:
                     // View Internships
-                    List<Internship> internships = repController.getInternships();
-                    if (internships == null || internships.isEmpty()) {
-                        System.out.println("No internships found.");
-                    } else {
-                        System.out.println("Internships:");
-                        for (Internship internship : internships) {
-                            System.out.println(internship);
-                        }
-                    }
+                    viewInternships();
                     break;
                 case 4:
                     // Create Internships
@@ -131,46 +163,103 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                     String title = sc.nextLine();
                     System.out.print("Enter Internship Description: ");
                     String description = sc.nextLine();
-                    System.out.print("Enter Internship Level (Basic, Intermediate, Advanced): ");
-                    InternshipLevel internshipLevel = InternshipLevel.valueOf(sc.nextLine().toUpperCase());
+                    // Internship Level with enum validation
+                    InternshipLevel internshipLevel = null;
+                    while (true) {
+                        System.out.print("Enter Internship Level (Basic, Intermediate, Advanced): ");
+                        String levelInput = sc.nextLine().trim();
+                        try {
+                            internshipLevel = InternshipLevel.valueOf(levelInput.toUpperCase());
+                            break;
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Invalid level. Please enter: Basic, Intermediate, or Advanced.");
+                        }
+                    }
                     System.out.print("Enter Internship Major: ");
                     String major = sc.nextLine();
-                    System.out.print("Enter Open Date (YYYY-MM-DD): ");
-                    String openDateStr = sc.nextLine();
-                    System.out.print("Enter Close Date (YYYY-MM-DD): ");
-                    String closeDateStr = sc.nextLine();
-                    System.out.print("Enter Number of Slots Left: ");
-                    int slots = Integer.parseInt(sc.nextLine());
-                    boolean created = repController.createInternship(0, title, description, internshipLevel, major,
-                            java.time.LocalDate.parse(openDateStr), java.time.LocalDate.parse(closeDateStr), slots);
+
+                    // Open Date with date validation
+                    LocalDate openDate = null;
+                    while (true) {
+                        System.out.print("Enter Open Date (YYYY-MM-DD): ");
+                        String openDateStr = sc.nextLine().trim();
+                        try {
+                            openDate = LocalDate.parse(openDateStr);
+                            break;
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid date format. Please use YYYY-MM-DD format (e.g., 2024-01-15).");
+                        }
+                    }
+
+                    LocalDate closeDate = null;
+                    while (true) {
+                        System.out.print("Enter Close Date (YYYY-MM-DD): ");
+                        String closeDateStr = sc.nextLine().trim();
+                        try {
+                            closeDate = LocalDate.parse(closeDateStr);
+                            // Check if close date is after open date
+                            if (closeDate.isBefore(openDate) || closeDate.isEqual(openDate)) {
+                                System.out
+                                        .println("Close date must be after the open date. Please enter a later date.");
+                                continue;
+                            }
+                            break;
+                        } catch (DateTimeParseException e) {
+                            System.out.println("Invalid date format. Please use YYYY-MM-DD format (e.g., 2024-12-31).");
+                        }
+                    }
+
+                    int slots = 0;
+                    while (true) {
+                        System.out.print("Enter Number of Slots: ");
+                        String slotsStr = sc.nextLine().trim();
+                        try {
+                            slots = Integer.parseInt(slotsStr);
+                            if (slots >= 1) {
+                                break;
+                            } else {
+                                System.out.println("Number of slots must be more then 0. Please try again.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid number. Please enter a valid number bigger than 0.");
+                        }
+                    }
+
+                    boolean created = repController.createInternship(title, description, internshipLevel, major,
+                            openDate, closeDate, slots);
+
                     if (created) {
                         System.out.println("Internship created successfully.");
                     } else {
                         System.out.println("Failed to create internship.");
                     }
                     break;
+
                 case 5:
                     // Approve Internships
-                    List<InternshipApplication> pending_applications = repController.getApplications();
-                    if (pending_applications == null || pending_applications.isEmpty()) {
-                        System.out.println("No internship applications found.");
-                    } else {
-                        System.out.println("Internship Applications:");
-                        
-                        for (int i=0; i<pending_applications.size(); i++) {
-                            InternshipApplication app = pending_applications.get(i);
-                            System.out.println((i + 1) + ". " +
-                                    ", Student: " + app.getStudent().getName() +
-                                    ", Internship: " + app.getInternship().getTitle() +
-                                    ", Status: " + app.getCompanyAccept());
-                        } 
+                    viewApplications();
+                    int indexToApprove = -1;
+                    boolean validInput = false;
+
+                    while (!validInput) {
+                        System.out.print("Enter index to Approve: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToApprove = Integer.parseInt(input);
+                            if (indexToApprove >= 1 && indexToApprove <= repController.getApplications().size()) {
+                                validInput = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + repController.getApplications().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
                     }
 
-                    System.out.print("Enter Application ID to Approve: "); // need to do validation
-                    int appIdToApprove = Integer.parseInt(sc.nextLine());
-                    InternshipApplication appToApprove = repController.getApplications().get(appIdToApprove - 1);  // might have index out of range if user enter invalid id
-                    
-                    if (appToApprove != null) {  // might not be null check -> might throw error. need testing
+                    InternshipApplication appToApprove = repController.getApplications().get(indexToApprove - 1);
+
+                    if (appToApprove != null) {
                         boolean approved = repController.approveInternshipApplication(appToApprove);
                         if (approved) {
                             System.out.println("Internship application approved.");
@@ -183,26 +272,29 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                     break;
 
                 case 6:
-                    // Reject Internships 
-                    List<InternshipApplication> apps = repController.getApplications();
-                    if (apps == null || apps.isEmpty()) {
-                        System.out.println("No internship applications found.");
-                    } else {
-                        System.out.println("Internship Applications:");
-                        
-                        for (int i=0; i<apps.size(); i++) {
-                            InternshipApplication app = apps.get(i);
-                            System.out.println((i + 1) + ". " +
-                                    ", Student: " + app.getStudent().getName() +
-                                    ", Internship: " + app.getInternship().getTitle() +
-                                    ", Status: " + app.getCompanyAccept());
-                        } 
+                    // Reject Internships
+                    viewApplications();
+                    int indexToReject = -1;
+                    validInput = false;
+                    while (!validInput) {
+                        System.out.print("Enter index to Reject: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToReject = Integer.parseInt(input);
+                            if (indexToReject >= 1 && indexToReject <= repController.getApplications().size()) {
+                                validInput = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + repController.getApplications().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
                     }
-                    System.out.print("Enter Application ID to Reject: "); // need to do validation
-                    int appIdToReject = Integer.parseInt(sc.nextLine());
-                    InternshipApplication appToReject = repController.getApplications().get(appIdToReject -1);  // might have index out of range if user enter invalid id\
                     
-                    if (appToReject != null) {  // might not be null check -> might throw error. need testing
+                    InternshipApplication appToReject = repController.getApplications().get(indexToReject - 1); 
+
+                    if (appToReject != null) {
                         boolean approved = repController.rejectInternshipApplication(appToReject);
                         if (approved) {
                             System.out.println("Internship application rejected.");
@@ -213,19 +305,18 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                         System.out.println("Application ID not found.");
                     }
                     break;
-                
+
                 case 7:
                     logout();
                     System.out.println("Logged out. Returning to main menu...");
                     return;
-                
-                
-                    default:
+
+                default:
                     System.out.println("Invalid choice. Please try again.");
             }
         }
     }
-    
+
     @Override
     public void viewApplications() {
         ArrayList<InternshipApplication> applications = repController.getApplications();
@@ -235,8 +326,10 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
 
         System.out.println("Internship Applications:");
-        for (InternshipApplication app : applications) {
-            viewApplicationDetails(app);
+        for (int i = 1; i <= applications.size(); i++) {
+            System.out.print(i + ". ");
+            viewApplicationDetails(applications.get(i-1));
+            
         }
     }
 
@@ -254,9 +347,10 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
 
         System.out.println("Internships:");
-        for (Internship internship : internships) {
-            // Print statement using getters directly as requested
-            viewInternshipDetails(internship);
+
+        for (int i=1; i<=internships.size(); i++) {
+            System.out.print(i + ". ");
+            viewInternshipDetails(internships.get(i-1));
         }
     }
 

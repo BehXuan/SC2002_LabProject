@@ -18,22 +18,22 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     private CompanyRepresentative currentRep;
     private DataStore dataStore;
 
-    public CompanyRepresentativeController() {
-        this.dataStore = DataStore.getInstance();
-    }
-
-    public void setCurrentCompanyRepresentative(CompanyRepresentative c) {
-        this.currentRep = c;
-    }
-
-    public CompanyRepresentative getCurrentCompayRepresentative() {
-        return currentRep;
-    }
+    // init datastore
+    public CompanyRepresentativeController() {this.dataStore = DataStore.getInstance();}
+    
+    // Getter and Setter
+    public void setCurrentCompanyRepresentative(CompanyRepresentative c) {this.currentRep = c;}
+    public CompanyRepresentative getCurrentCompayRepresentative() {return currentRep;}
 
     public boolean createCompanyRepresentative(String userId, String password, String name, String email,
             String companyName, String department, String position) {
         CompanyRepresentative newRep = new CompanyRepresentative(userId, password, name, email, companyName, department,
                 position);
+
+        CompanyRepresentative existingRep = dataStore.findCompanyRep(userId);
+        if (existingRep != null) {
+            return false; // Username already exists
+        }
         dataStore.CompanyRepresentativeAdd(newRep);
         return true;
     }
@@ -41,12 +41,18 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     @Override
     public boolean login(String userName, String pw) {
         // check the userName and pw against dataStore
-        for (CompanyRepresentative c : dataStore.getCompanyRepresentativeList()) {
-            if (c.getUserId().equals(userName) && c.getPassword().equals(pw)
-                    && c.getApproval().equals(CompanyApprovalStatus.APPROVED)) {
-                setCurrentCompanyRepresentative(c);
-                return true;
-            }
+        CompanyRepresentative rep = dataStore.findCompanyRep(userName);
+        if (rep == null) {
+            return false;
+        }
+
+        if (rep.getApproval() != CompanyApprovalStatus.APPROVED) {
+            return false;
+        }
+
+        if (rep.getPassword().equals(pw)) {
+            setCurrentCompanyRepresentative(rep);
+            return true;
         }
         return false;
     }
@@ -58,10 +64,6 @@ public class CompanyRepresentativeController implements AuthController, IReportG
 
     @Override
     public boolean updatePassword(String oldPW, String newPW) {
-        if (getCurrentCompayRepresentative() == null) {
-            return false;
-        }
-
         if (getCurrentCompayRepresentative().getPassword().equals(oldPW)) {
             getCurrentCompayRepresentative().setPassword(newPW);
             return true;
@@ -70,10 +72,6 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     }
 
     public ArrayList<InternshipApplication> getApplications() {
-        if (getCurrentCompayRepresentative() == null) {
-            return null;
-        }
-
         ArrayList<InternshipApplication> applications = new ArrayList<InternshipApplication>();
         for (InternshipApplication app : dataStore.getInternshipApplicationsList()) {
             if (app.getCompanyRep() == getCurrentCompayRepresentative()) {
@@ -84,10 +82,6 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     }
 
     public ArrayList<Internship> getInternships() {
-        if (getCurrentCompayRepresentative() == null) {
-            return null;
-        }
-
         ArrayList<Internship> internships = new ArrayList<Internship>();
         for (Internship internship : dataStore.getInternshipList()) {
             if (internship.getCompanyRep() == getCurrentCompayRepresentative()) {
@@ -97,27 +91,21 @@ public class CompanyRepresentativeController implements AuthController, IReportG
         return internships;
     }
 
-    public boolean createInternship(int internshipId, String title, String description, InternshipLevel internshipLevel,
+    public boolean createInternship(String title, String description, InternshipLevel internshipLevel,
             String major,
             LocalDate openDate, LocalDate closeDate, int numberOfSlotsLeft) {
-        if (getCurrentCompayRepresentative() == null) {
-            return false;
+        if (getCurrentCompayRepresentative().getInternshipCount() == 5) {
+            return false; // limit to 5 internships
         }
-
-        int newId = dataStore.getNextInternshipId();
-
+        String newId = getCurrentCompayRepresentative().getUserId() + "_" + getCurrentCompayRepresentative().getInternshipCount();
         Internship newInternship = new Internship(newId, title, description, internshipLevel, major,
                 openDate, closeDate, numberOfSlotsLeft, getCurrentCompayRepresentative());
-        newInternship.setCompanyRep(getCurrentCompayRepresentative());
         dataStore.addInternship(newInternship);
+        getCurrentCompayRepresentative().addInternship(newInternship);
         return true;
     }
 
     public boolean approveInternshipApplication(InternshipApplication app) {
-        if (getCurrentCompayRepresentative() == null) {
-            return false;
-        }
-
         app.setCompanyAccept(InternshipStatus.APPROVED);
         return true;
     }
@@ -125,10 +113,6 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     public boolean rejectInternshipApplication(InternshipApplication app) { // do i need to show students they got
                                                                             // rejected or just delete applicaiton from
                                                                             // list
-        if (getCurrentCompayRepresentative() == null) {
-            return false;
-        }
-
         app.setCompanyAccept(InternshipStatus.REJECTED);
         return true;
     }
@@ -157,5 +141,4 @@ public class CompanyRepresentativeController implements AuthController, IReportG
                     i.getMajor());
         }
     }
-
 }

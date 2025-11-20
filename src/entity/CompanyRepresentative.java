@@ -62,6 +62,10 @@ public class CompanyRepresentative extends User {
         this.internshipCount = count;
     }
 
+    public void incrementInternshipCount(){
+        this.internshipCount += 1;
+    }
+
     public void setInternships(List<Internship> internships) {
         this.internships = internships;
     }
@@ -72,6 +76,11 @@ public class CompanyRepresentative extends User {
 
     public void setPosition(String position){
         this.position = position;
+    }
+
+    public void addInternship(Internship internship){
+        this.internships.add(internship);
+        this.incrementInternshipCount();;
     }
 
     @Override
