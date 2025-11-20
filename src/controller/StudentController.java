@@ -86,6 +86,10 @@ public class StudentController implements AuthController, IReportGenerator {
         if (internship == null || getCurrentStudent() == null) {
             return false;
         }
+
+        if (getCurrentStudent().getInternshipAccepted() != null){
+            return false; // already have internship
+        }
         if (getCurrentStudent().getInternshipApplied().size() >= 3) {
             return false; // only can apply for 3 internships
         }

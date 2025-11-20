@@ -130,7 +130,8 @@ public class Internship {
     }
 
     public boolean isAvailable() {
-        if (LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate) && numberOfSlotsLeft > 0) {
+        // if (LocalDate.now().isAfter(openDate) && LocalDate.now().isBefore(closeDate) && numberOfSlotsLeft > 0) {
+        if (numberOfSlotsLeft > 0) {
             return true;
         }
 
