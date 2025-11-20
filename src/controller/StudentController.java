@@ -65,7 +65,7 @@ public class StudentController implements AuthController, IReportGenerator {
 
         ArrayList<Internship> visibleInternships = new ArrayList<Internship>();
         for (Internship i : allInternships) {
-            if (i.getVisibility() && i.getStatus() == InternshipStatus.APPROVED && i.isAvailable()) {
+            if (i.getVisibility() && i.getStatus() == InternshipStatus.APPROVED && i.isAvailable()  && i.getMajor() == getCurrentStudent().getMajor()) {
                 visibleInternships.add(i);
             }
         }
