@@ -142,6 +142,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                     break;
                 case 5:
                     viewApplications();
+                    if (studentController.getMyApplications().size() <= 0){break;}
                     int indexToWithdraw = -1;
                     boolean validInput = false;
                     while (!validInput) {
