@@ -20,63 +20,64 @@ public class StudentView extends UserView implements viewInternship, viewApplica
     private StudentController studentController;
     private Scanner sc = new Scanner(System.in);
 
-
     // Constructor chains up to UserView
     public StudentView(StudentController studentController) {
         // Pass the generic controller up to UserView
-        super(studentController); 
+        super(studentController);
         this.studentController = studentController;
     }
-     @Override
+
+    @Override
     public void start() {
         // Start login flow first
-        loginMenu();   
+        loginMenu();
     }
 
     private void loginMenu() {
-    while (true) {
-        System.out.println("----- Student Login -----");
-        System.out.println("Enter 0 at any time to return to the main menu.");
-        System.out.println("Username: ");
-        String username = sc.nextLine();
-        if (username.equals("0")) {
-            System.out.println("Returning to main menu...");
-            return;
-        }
-        System.out.println("Password: ");
-        String password = sc.nextLine();
-        if (password.equals("0")) {
-            System.out.println("Returning to main menu...");
-            return;
-        }
+        while (true) {
+            System.out.println("----- Student Login -----");
+            System.out.println("Enter 0 at any time to return to the main menu.");
+            System.out.println("Username: ");
+            String username = sc.nextLine();
+            if (username.equals("0")) {
+                System.out.println("Returning to main menu...");
+                return;
+            }
+            System.out.println("Password: ");
+            String password = sc.nextLine();
+            if (password.equals("0")) {
+                System.out.println("Returning to main menu...");
+                return;
+            }
 
-        // Authenticate via AuthController
-        LoginResult result = studentController.login(username, password);
+            // Authenticate via AuthController
+            LoginResult result = studentController.login(username, password);
 
-        switch (result) {
-            case SUCCESS:
-                System.out.println("Login successful! Welcome " + studentController.getCurrentStudent().getName());
-                runStudentMenuLoop();  
-                return; // Leave login screen after student menu ends
+            switch (result) {
+                case SUCCESS:
+                    System.out.println("Login successful! Welcome " + studentController.getCurrentStudent().getName());
+                    runStudentMenuLoop();
+                    return; // Leave login screen after student menu ends
 
-            case USER_NOT_FOUND:
-                System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
-                break;
+                case USER_NOT_FOUND:
+                    System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
+                    break;
 
-            case WRONG_PASSWORD:
-                System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
-                break;
-            case USER_NOT_APPROVED:
-                System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
-                break;
-        }
+                case WRONG_PASSWORD:
+                    System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
+                    break;
+                case USER_NOT_APPROVED:
+                    System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
+                    break;
+            }
 
         }
     }
 
     // Helper to display the main student menu options
     public int displayStudentMenu() {
-        System.out.println("\n----- Student Menu (Logged in as: " + studentController.getCurrentStudent().getName() + ") -----");
+        System.out.println(
+                "\n----- Student Menu (Logged in as: " + studentController.getCurrentStudent().getName() + ") -----");
         System.out.println("1. View Available Internship Opportunities");
         System.out.println("2. View My Applications");
         System.out.println("3. Apply for Internship");
@@ -84,8 +85,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         System.out.println("5. Withdraw Application");
         System.out.println("6. Change Password");
         System.out.println("7. Logout");
-       
-        
+
         int choice = -1;
         while (true) {
             System.out.println("Choose an option (1-7): ");
@@ -115,43 +115,47 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                     break;
                 case 3:
                     viewInternships();
-                    System.out.println("Enter the index of the internship you want to apply for:");
-                    int internChoice = sc.nextInt();
-                    sc.nextLine(); // Clear newline
-                    ArrayList<Internship> opportunities = studentController.getInternshipsOpportunities();
-                    if (internChoice >= 1 && internChoice <= opportunities.size()) {
-                        Internship selectedInternship = opportunities.get(internChoice - 1);
-                        viewInternshipDetails(selectedInternship);
-                        applyInternship(selectedInternship);
-                    } else {
-                        System.out.println("Invalid internship selection.");
+                    if (studentController.getInternshipsOpportunities().size() <= 0) {
+                        break;
                     }
-                    break;
-                case 4:
-                    viewApplications();
-                    ArrayList<InternshipApplication> applications = studentController.getMyApplications();
-                    System.out.println("Enter the index of the application you want to accept:");
-                    int appChoice = sc.nextInt();
-                    sc.nextLine(); // Clear newline
-                    if (appChoice >= 1 && appChoice <= applications.size()) {
-                        InternshipApplication selectedApp = applications.get(appChoice - 1);
-                        acceptInternship(selectedApp);
-                    } else {
-                        System.out.println("Invalid application selection.");
-                    }
-                    break;
-                case 5:
-                    viewApplications();
-                    if (studentController.getMyApplications().size() <= 0){break;}
-                    int indexToWithdraw = -1;
-                    boolean validInput = false;
-                    while (!validInput) {
-                        System.out.print("Enter index of Application to Delete: ");
+                    int internChoice = -1;
+                    boolean validInput3 = false;
+                    while (!validInput3) {
+                        System.out.print("Enter the index of the internship you want to apply for: ");
                         String input = sc.nextLine();
                         try {
-                            indexToWithdraw = Integer.parseInt(input);
-                            if (indexToWithdraw >= 1 && indexToWithdraw <= studentController.getMyApplications().size()) {
-                                validInput = true;
+                            internChoice = Integer.parseInt(input);
+                            if (internChoice >= 1
+                                    && internChoice <= studentController.getInternshipsOpportunities().size()) {
+                                validInput3 = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + studentController.getInternshipsOpportunities().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    }
+
+                    Internship selectedInternship = studentController.getInternshipsOpportunities()
+                            .get(internChoice - 1);
+                    viewInternshipDetails(selectedInternship);
+                    applyInternship(selectedInternship);
+                    break;
+                case 4: // accept application
+                    viewApplications();
+                    if (studentController.getMyApplications().size() <= 0) {
+                        break;
+                    }
+                    int indexToApprove = -1;
+                    boolean validInput4 = false;
+                    while (!validInput4) {
+                        System.out.print("Enter the index of the application you want to accept: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToApprove = Integer.parseInt(input);
+                            if (indexToApprove >= 1 && indexToApprove <= studentController.getMyApplications().size()) {
+                                validInput4 = true;
                             } else {
                                 System.out.println("Invalid index. Please enter a number between 1 and "
                                         + studentController.getMyApplications().size() + ".");
@@ -161,11 +165,46 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                         }
                     }
 
-                    InternshipApplication appToWithdraw = studentController.getMyApplications().get(indexToWithdraw - 1);
+                    InternshipApplication appToAccept = studentController.getMyApplications().get(indexToApprove - 1);
+                    if (appToAccept != null) {
+                        acceptInternship(appToAccept);
+                    } else {
+                        System.out.println("Application ID not found.");
+                    }
+                    break;
+
+                case 5:
+                    viewApplications();
+                    if (studentController.getMyApplications().size() <= 0) {
+                        break;
+                    }
+                    int indexToWithdraw = -1;
+                    boolean validInput5 = false;
+                    while (!validInput5) {
+                        System.out.print("Enter index of Application to Delete: ");
+                        String input = sc.nextLine();
+                        try {
+                            indexToWithdraw = Integer.parseInt(input);
+                            if (indexToWithdraw >= 1
+                                    && indexToWithdraw <= studentController.getMyApplications().size()) {
+                                validInput5 = true;
+                            } else {
+                                System.out.println("Invalid index. Please enter a number between 1 and "
+                                        + studentController.getMyApplications().size() + ".");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Invalid input. Please enter a valid number.");
+                        }
+                    }
+
+                    InternshipApplication appToWithdraw = studentController.getMyApplications()
+                            .get(indexToWithdraw - 1);
 
                     if (appToWithdraw != null) {
-                        if (appToWithdraw.getInternshipWithdrawalStatus() == src.enums.InternshipWithdrawalStatus.PENDING) {
-                            System.out.println("You have already requested a withdrawal for this application. Please wait for processing.");
+                        if (appToWithdraw
+                                .getInternshipWithdrawalStatus() == src.enums.InternshipWithdrawalStatus.PENDING) {
+                            System.out.println(
+                                    "You have already requested a withdrawal for this application. Please wait for processing.");
                             break;
                         }
                         boolean withdrawSuccess = studentController.wtihdraw(appToWithdraw);
@@ -180,43 +219,32 @@ public class StudentView extends UserView implements viewInternship, viewApplica
                     break;
                 case 6:
                     // Inherited from UserView
-                    changePassword(); 
+                    changePassword();
                     logout();
-                    return; 
+                    return;
                 case 7:
                     // Inherited from UserController/UserView
-                    logout(); 
+                    logout();
                     System.out.println("Logged out successfully.");
                     return; // Exit the student loop back to the main login prompt
-            
+
                 default:
                     System.out.println("Invalid Choice, please try again!");
             }
         }
     }
 
-    // private void displayInternshipDetails(Internship internship) {
-    //     System.out.println("\n--- Internship Details ---");
-    //     System.out.println("Title: " + internship.getTitle());
-    //     System.out.println("Company: " + internship.getCompanyRep().getCompanyName());
-    //     System.out.println("Description: " + internship.getDescription());
-    //     System.out.println("Level: " + internship.getLevel());
-    //     System.out.println("Preferred Major: " + internship.getMajor());
-    //     System.out.println("Application Close Date: " + internship.getCloseDate());
-    //     System.out.println("Available Slots: " + internship.getNumberOfSlotsLeft());
-    //     System.out.println("---");
-    // }
-
     private void applyInternship(Internship internship) {
         System.out.println("Do you want to apply for this internship? (Y/N)");
         String response = sc.nextLine().toUpperCase();
-        
+
         if (response.equals("Y")) {
             boolean success = studentController.applyForInternship(internship);
             if (success) {
                 System.out.println("Application successful! You can view the status under 'My Applications'.");
             } else {
-                System.out.println("Application failed. Possible reasons: Max applications reached (3), already applied, or not your major.");
+                System.out.println(
+                        "Application failed. Possible reasons: Max applications reached (3), already applied, or not your major.");
             }
         }
     }
@@ -224,9 +252,11 @@ public class StudentView extends UserView implements viewInternship, viewApplica
     private void acceptInternship(InternshipApplication selectedApp) {
         boolean success = studentController.acceptInternshipOffer(selectedApp);
         if (success) {
-            System.out.println("You have successfully accepted the internship offer for " + selectedApp.getInternship().getTitle() + ".");
+            System.out.println("You have successfully accepted the internship offer for "
+                    + selectedApp.getInternship().getTitle() + ".");
         } else {
-            System.out.println("Failed to accept the internship offer. Ensure the application is approved by the company.");
+            System.out.println(
+                    "Failed to accept the internship offer. Ensure the application is approved by the company.");
         }
     }
 
@@ -235,30 +265,33 @@ public class StudentView extends UserView implements viewInternship, viewApplica
 
         System.out.print("Filter by Title (or leave blank): ");
         String title = sc.nextLine();
-        if (!title.isBlank()) criteria.setTitle(title);
+        if (!title.isBlank())
+            criteria.setTitle(title);
 
-        //System.out.print("Filter by Major (or leave blank): ");
+        // System.out.print("Filter by Major (or leave blank): ");
         // String major = sc.nextLine();
         criteria.setMajor(studentController.getCurrentStudent().getMajor());
 
         System.out.print("Filter by Company ID (or leave blank): ");
         String companyId = sc.nextLine();
-        if (!companyId.isBlank()) criteria.setCompanyRepId(companyId);
+        if (!companyId.isBlank())
+            criteria.setCompanyRepId(companyId);
 
         criteria.setStatus(InternshipStatus.APPROVED); // Students only see approved internships
 
         if (studentController.getCurrentStudent().getYearOfStudy() < 3) {
             criteria.setLevel(src.enums.InternshipLevel.BASIC); // Year 1-2 can only see BASIC level
         } else {
-        System.out.print("Filter by Internship Level (BASIC/INTERMEDIATE/ADVANCED or leave blank): ");
-        String level = sc.nextLine();
-        if (!level.isBlank()) {
-            try {
-                criteria.setLevel(src.enums.InternshipLevel.valueOf(level.toUpperCase()));
-            } catch (IllegalArgumentException e) {
-                System.out.println("Invalid Level. Ignoring.");
+            System.out.print("Filter by Internship Level (BASIC/INTERMEDIATE/ADVANCED or leave blank): ");
+            String level = sc.nextLine();
+            if (!level.isBlank()) {
+                try {
+                    criteria.setLevel(src.enums.InternshipLevel.valueOf(level.toUpperCase()));
+                } catch (IllegalArgumentException e) {
+                    System.out.println("Invalid Level. Ignoring.");
+                }
             }
-        }}
+        }
 
         System.out.print("Minimum Slots left (or leave blank): ");
         String minSlots = sc.nextLine();
@@ -298,8 +331,8 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         System.out.println("\n--- My Internship Applications ---");
         for (int i = 1; i <= applications.size(); i++) {
             System.out.print(i + ". ");
-            viewApplicationDetails(applications.get(i-1));
-            
+            viewApplicationDetails(applications.get(i - 1));
+
         }
     }
 
@@ -307,7 +340,7 @@ public class StudentView extends UserView implements viewInternship, viewApplica
     public void viewApplicationDetails(InternshipApplication application) {
         System.out.println(application);
     }
-    
+
     @Override
     public void viewInternshipDetails(Internship internship) {
         System.out.println(internship);
@@ -321,11 +354,11 @@ public class StudentView extends UserView implements viewInternship, viewApplica
             return;
         }
         System.out.println("\n--- Available Internship Opportunities ---");
-        for (int i=1; i<=internships.size(); i++) {
+        for (int i = 1; i <= internships.size(); i++) {
             System.out.print(i + ". ");
-            viewInternshipDetails(internships.get(i-1));
+            viewInternshipDetails(internships.get(i - 1));
         }
-        
+
     }
 
 }

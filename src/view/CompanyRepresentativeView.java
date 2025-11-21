@@ -251,6 +251,9 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 case 5:
                     // Approve Internships
                     viewApplications();
+                    if (repController.getApplications().size() <= 0){
+                        break;
+                    }
                     int indexToApprove = -1;
                     boolean validInput = false;
 
@@ -287,6 +290,9 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 case 6:
                     // Reject Internships
                     viewApplications();
+                    if (repController.getApplications().size() <= 0){
+                        break;
+                    }
                     int indexToReject = -1;
                     validInput = false;
                     while (!validInput) {
@@ -327,6 +333,9 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 case 8:
                     // Delete Internship
                     viewInternships();
+                    if (repController.getInternships().size() <= 0){
+                        break;
+                    }
                     int indexToDelete = -1;
                     validInput = false;
                     while (!validInput) {
@@ -361,6 +370,9 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 case 9:
                     // Edit Internship
                     viewInternships();
+                    if (repController.getInternships().size() <= 0){
+                        break;
+                    }
                     int indexToEdit = -1;
                     validInput = false;
                     while (!validInput) {
@@ -463,6 +475,9 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 case 10:
                     // Toggle Internship Visibility
                     viewInternships();
+                    if (repController.getInternships().size() <= 0){
+                        break;
+                    }
                     int indexToToggle = -1;
                     validInput = false;
                     while (!validInput) {
