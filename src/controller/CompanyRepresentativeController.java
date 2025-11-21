@@ -7,6 +7,7 @@ import java.util.List;
 import src.entity.*;
 import src.enums.CompanyApprovalStatus;
 import src.enums.InternshipStatus;
+import src.enums.LoginResult;
 import src.interfaces.AuthController;
 import src.interfaces.IReportGenerator;
 import src.report.ReportCriteria;
@@ -39,22 +40,23 @@ public class CompanyRepresentativeController implements AuthController, IReportG
     }
 
     @Override
-    public boolean login(String userName, String pw) {
+    public LoginResult login(String userName, String pw) {
         // check the userName and pw against dataStore
         CompanyRepresentative rep = dataStore.findCompanyRep(userName);
         if (rep == null) {
-            return false;
+            return LoginResult.USER_NOT_FOUND;
         }
 
         if (rep.getApproval() != CompanyApprovalStatus.APPROVED) {
-            return false;
+            return LoginResult.USER_NOT_APPROVED;
         }
 
-        if (rep.getPassword().equals(pw)) {
-            setCurrentCompanyRepresentative(rep);
-            return true;
+        if (!rep.getPassword().equals(pw)) {
+            return LoginResult.WRONG_PASSWORD;
         }
-        return false;
+
+        setCurrentCompanyRepresentative(rep);
+        return LoginResult.SUCCESS;
     }
 
     @Override

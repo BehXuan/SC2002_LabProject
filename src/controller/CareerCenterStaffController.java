@@ -22,13 +22,17 @@ public class CareerCenterStaffController implements AuthController, IReportGener
 
 
     @Override
-    public boolean login(String userName, String pw) {
+    public LoginResult login(String userName, String pw) {
         CareerCenterStaff c = dataStore.findCareerCenterStaff(userName);
-        if (c != null && c.getPassword().equals(pw)) {
-            setCurrentStaff(c);
-            return true;
+        if (c == null) {
+        return LoginResult.USER_NOT_FOUND;
         }
-        return false;
+        if (!c.getPassword().equals(pw)) {
+        return LoginResult.WRONG_PASSWORD;
+        }
+
+        setCurrentStaff(c);
+        return LoginResult.SUCCESS;
     }
 
     @Override

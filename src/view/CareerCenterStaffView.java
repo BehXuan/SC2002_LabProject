@@ -5,6 +5,7 @@ import src.controller.CareerCenterStaffController;
 import src.entity.*;
 //import src.enums.*;
 import src.enums.InternshipStatus;
+import src.enums.LoginResult;
 import src.report.ReportCriteria;
 import src.interfaces.*;
 
@@ -44,14 +45,24 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
                 System.out.println("Returning to main menu...");
                 return;
             }
-
-            if (staffController.login(username, password)) {
+            LoginResult result = staffController.login(username, password);
+            switch (result) {
+            case SUCCESS:
                 System.out.println("Login successful! Welcome " + staffController.getCurrentStaff().getName());
-                runMenuLoop();
-                return; // exit login after menu
-            } else {
-                System.out.println("Invalid username or password. Try again or enter 0 to go back.");
-            }
+                runMenuLoop();  
+                return; // Leave login screen after student menu ends
+
+            case USER_NOT_FOUND:
+                System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
+                break;
+
+            case WRONG_PASSWORD:
+                System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
+                break;
+            case USER_NOT_APPROVED:
+                System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
+                break;
+        }
         }
     }
 

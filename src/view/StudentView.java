@@ -6,6 +6,7 @@ import src.entity.Internship;
 import src.entity.InternshipApplication;
 // import src.entity.Student;
 import src.enums.InternshipStatus;
+import src.enums.LoginResult;
 import src.report.ReportCriteria;
 import src.interfaces.viewApplication;
 import src.interfaces.viewInternship;
@@ -50,13 +51,26 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
 
         // Authenticate via AuthController
-        if (studentController.login(username, password)) {
-            System.out.println("Login successful! Welcome " + studentController.getCurrentStudent().getName());
-            runStudentMenuLoop(); // Enter student menu
-            return; // exit login menu after student menu ends
-        } else {
-            System.out.println("Invalid username or password. Try again or enter 0 to go back.");
-            }
+        LoginResult result = studentController.login(username, password);
+
+        switch (result) {
+            case SUCCESS:
+                System.out.println("Login successful! Welcome " + studentController.getCurrentStudent().getName());
+                runStudentMenuLoop();  
+                return; // Leave login screen after student menu ends
+
+            case USER_NOT_FOUND:
+                System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
+                break;
+
+            case WRONG_PASSWORD:
+                System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
+                break;
+            case USER_NOT_APPROVED:
+                System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
+                break;
+        }
+
         }
     }
 

@@ -4,6 +4,7 @@ import src.controller.CompanyRepresentativeController;
 // import src.controller.AuthController;
 import src.entity.*;
 import src.enums.InternshipLevel;
+import src.enums.LoginResult;
 // import src.enums.*;
 import src.interfaces.viewApplication;
 import src.interfaces.viewInternship;
@@ -116,16 +117,24 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
                 System.out.println("Returning to main menu...");
                 return;
             }
+            LoginResult result = repController.login(username, password);
+            switch (result) {
+            case SUCCESS:
+                System.out.println("Login successful! Welcome " + repController.getCurrentCompayRepresentative().getName());
+                runMenuLoop();  
+                return; 
 
-            if (repController.login(username, password)) {
-                System.out.println(
-                        "Login successful! Welcome " + repController.getCurrentCompayRepresentative().getName());
-                runMenuLoop();
-                return; // exit login after menu
-            } else {
-                System.out
-                        .println("Invalid username or password or not approved yet. Try again or enter 0 to go back.");
-            }
+            case USER_NOT_FOUND:
+                System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
+                break;
+
+            case WRONG_PASSWORD:
+                System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
+                break;
+            case USER_NOT_APPROVED:
+                System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
+                break;
+        }
         }
     }
 

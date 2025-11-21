@@ -9,6 +9,7 @@ import src.entity.Internship;
 import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
 import src.enums.InternshipWithdrawalStatus;
+import src.enums.LoginResult;
 import src.interfaces.AuthController;
 import src.interfaces.IReportGenerator;
 import src.report.ReportCriteria;
@@ -32,14 +33,18 @@ public class StudentController implements AuthController, IReportGenerator {
     }
 
     @Override
-    public boolean login(String userName, String pw) {
+    public LoginResult login(String userName, String pw) {
         // check the userName and pw against dataStore
         Student s = dataStore.findStudent(userName);
-        if (s != null && s.getPassword().equals(pw)) {
-            setCurrentStudent(s);
-            return true;
+        if (s == null) {
+        return LoginResult.USER_NOT_FOUND;
         }
-        return false;
+        if (!s.getPassword().equals(pw)) {
+        return LoginResult.WRONG_PASSWORD;
+        }
+
+        setCurrentStudent(s);
+        return LoginResult.SUCCESS;
     }
 
     @Override
