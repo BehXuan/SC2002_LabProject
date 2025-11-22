@@ -6,14 +6,33 @@ import java.util.stream.Collectors;
 import src.entity.Internship;
 import src.DataStore;
 
+/**
+ * Generates internship reports by filtering and sorting based on specified criteria.
+ *
+ * <p>Uses Java streams to apply multiple filters (title, major, level, status,
+ * visibility, company, dates, slots) and sorts results by various fields.
+ */
 public class ReportGenerator {
 
     private DataStore dataStore;
 
+    /**
+     * Constructs the ReportGenerator and acquires the shared `DataStore` instance.
+     */
     public ReportGenerator() {
         this.dataStore = DataStore.getInstance();
     }
 
+    /**
+     * Generates a filtered and sorted report of internships based on the provided criteria.
+     *
+     * <p>Filters are applied for title (substring match), major, level, status,
+     * visibility, company representative, open/close dates, and minimum slots.
+     * Results are sorted according to the specified sort type (defaults to title).
+     *
+     * @param c the `ReportCriteria` specifying filters and sort order
+     * @return a `List<Internship>` matching the criteria and sorted as requested
+     */
     public List<Internship> generateReport(ReportCriteria c) {
         return dataStore.getInternshipList().stream()
 
@@ -60,6 +79,15 @@ public class ReportGenerator {
             .collect(Collectors.toList());
     }
 
+    /**
+     * Provides a comparator for sorting internships based on the specified sort type.
+     *
+     * <p>Supports sorting by title (default), company name, open date, close date,
+     * or remaining slots. Comparisons are case-insensitive for text fields.
+     *
+     * @param c the `ReportCriteria` specifying the desired sort type
+     * @return a `Comparator<Internship>` for the requested sort order
+     */
     private Comparator<Internship> getComparator(ReportCriteria c) {
         if (c.getSortType() == null) return Comparator.comparing(i -> i.getTitle().toLowerCase());
 
