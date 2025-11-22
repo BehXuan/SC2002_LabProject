@@ -19,14 +19,16 @@ import java.time.LocalDate;
 /**
  * Singleton in-memory repository for application data.
  *
- * <p>This class maintains lists of students, company representatives,
+ * <p>
+ * This class maintains lists of students, company representatives,
  * career center staff, internships, and internship applications. On
  * first access, the singleton loads initial data from CSV files found
  * under {@code src/csvFiles}. It also provides convenience methods to
  * find entities by id and to persist the current in-memory state back
  * to CSV files.
  *
- * <p>Usage: call {@link #getInstance()} to obtain the singleton
+ * <p>
+ * Usage: call {@link #getInstance()} to obtain the singleton
  * instance, then use provided getters, finders, adders, and save
  * methods to operate on the data.
  */
@@ -393,17 +395,6 @@ public class DataStore {
     // SETTERS
 
     /**
-     * Adds a default-initialized student to the internal list.
-     * Currently creates an empty {@code Student}; consider providing
-     * a full-argument overload if needed.
-     *
-     * @param name ignored in current implementation
-     */
-    public void studentAdd(String name) {
-        this.studentList.add(new Student());
-    }
-
-    /**
      * Convenience method to add a company representative to the
      * in-memory list.
      *
@@ -411,33 +402,6 @@ public class DataStore {
      */
     public void CompanyRepresentativeAdd(CompanyRepresentative rep) {
         this.companyRepresentativeList.add(rep);
-    }
-
-    /**
-     * Adds a default-initialized career center staff object to the
-     * internal list. Currently creates an empty {@code CareerCenterStaff};
-     * consider providing a full-argument overload if needed.
-     *
-     * @param name ignored in current implementation
-     */
-    public void CareerCenterStaffAdd(String name) {
-        this.careerCenterStaffList.add(new CareerCenterStaff());
-    }
-
-    /**
-     * Adds a default-initialized internship to the internal list.
-     * Currently creates an empty {@code Internship}.
-     */
-    public void InternshipAdd() {
-        this.internshipList.add(new Internship());
-    }
-
-    /**
-     * Adds a default-initialized internship application to the internal
-     * list. Currently creates an empty {@code InternshipApplication}.
-     */
-    public void InternshipApplicationAdd() {
-        this.internshipApplicationsList.add(new InternshipApplication());
     }
 
     /**
@@ -463,7 +427,8 @@ public class DataStore {
      * Find a company representative by id.
      *
      * @param repId id to search for
-     * @return the {@link src.entity.CompanyRepresentative} if found, otherwise {@code null}
+     * @return the {@link src.entity.CompanyRepresentative} if found, otherwise
+     *         {@code null}
      */
     // FINDERS: USED TO FIND WHETHER USERID EXISTs WITHIN RESP DATASTORE
     public CompanyRepresentative findCompanyRep(String repId) {
@@ -509,7 +474,8 @@ public class DataStore {
      * Find an internship application by its application id.
      *
      * @param applicationId application id to search for
-     * @return the {@link src.entity.InternshipApplication} if found, otherwise {@code null}
+     * @return the {@link src.entity.InternshipApplication} if found, otherwise
+     *         {@code null}
      */
     public InternshipApplication findInternshipApplication(String applicationId) {
         for (InternshipApplication app : internshipApplicationsList) {
@@ -524,7 +490,8 @@ public class DataStore {
      * Find a career center staff member by id.
      *
      * @param staffId id to search for
-     * @return the {@link src.entity.CareerCenterStaff} if found, otherwise {@code null}
+     * @return the {@link src.entity.CareerCenterStaff} if found, otherwise
+     *         {@code null}
      */
     public CareerCenterStaff findCareerCenterStaff(String staffId) {
         for (CareerCenterStaff staff : careerCenterStaffList) {
