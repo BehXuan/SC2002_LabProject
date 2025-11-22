@@ -16,22 +16,50 @@ import src.report.ReportCriteria;
 import src.report.ReportGenerator;
 import src.enums.InternshipLevel;
 
+/**
+ * Controller used by students to search internships, manage applications,
+ * and accept/withdraw from offers.
+ *
+ * <p>Responsibilities include account authentication, browsing opportunities,
+ * applying for internships, accepting offers, withdrawing from applications,
+ * and generating reports.
+ */
 public class StudentController implements AuthController, IReportGenerator {
     private Student currentStudent;
     private DataStore dataStore;
 
+    /**
+     * Constructs the controller and acquires the shared `DataStore` instance.
+     */
     public StudentController() {
         this.dataStore = DataStore.getInstance();
     }
 
+    /**
+     * Sets the currently authenticated student for this controller.
+     *
+     * @param s the `Student` to set as current
+     */
     public void setCurrentStudent(Student s) {
         this.currentStudent = s;
     }
 
+    /**
+     * Returns the currently authenticated student.
+     *
+     * @return the current `Student`, or null if none authenticated
+     */
     public Student getCurrentStudent() {
         return currentStudent;
     }
 
+    /**
+     * Attempts to authenticate a student user.
+     *
+     * @param userName student user id
+     * @param pw       plaintext password to verify
+     * @return a `LoginResult` indicating success or the type of failure
+     */
     @Override
     public LoginResult login(String userName, String pw) {
         // check the userName and pw against dataStore
@@ -47,11 +75,21 @@ public class StudentController implements AuthController, IReportGenerator {
         return LoginResult.SUCCESS;
     }
 
+    /**
+     * Logs out the currently authenticated student by clearing the current student reference.
+     */
     @Override
     public void logout() {
         setCurrentStudent(null);
     }
 
+    /**
+     * Updates the password for the currently authenticated student.
+     *
+     * @param oldPW existing password for verification
+     * @param newPW new password to set
+     * @return true if the password was updated, false otherwise
+     */
     @Override
     public boolean updatePassword(String oldPW, String newPW) {
         if (getCurrentStudent() == null) {
@@ -65,6 +103,14 @@ public class StudentController implements AuthController, IReportGenerator {
         return false;
     }
 
+    /**
+     * Returns a list of internship opportunities available to the current student.
+     *
+     * <p>Filtering criteria include visibility, approval status, availability,
+     * major compatibility, and internship level (basic level required for first/second year students).
+     *
+     * @return list of applicable `Internship` objects
+     */
     public ArrayList<Internship> getInternshipsOpportunities() {
         ArrayList<Internship> allInternships = dataStore.getInternshipList();
 
@@ -87,6 +133,16 @@ public class StudentController implements AuthController, IReportGenerator {
         return basicInternships;
     }
 
+    /**
+     * Submits an application for the given internship on behalf of the current student.
+     *
+     * <p>Validation checks include: student not already accepted for another internship,
+     * student has fewer than 3 pending applications, student hasn't already applied to
+     * this internship, and major compatibility.
+     *
+     * @param internship the `Internship` to apply for
+     * @return true if application was created and added, false if any validation fails
+     */
     public boolean applyForInternship(Internship internship) {
         if (internship == null || getCurrentStudent() == null) {
             return false;
@@ -118,10 +174,25 @@ public class StudentController implements AuthController, IReportGenerator {
         return true;
     }
 
+    /**
+     * Returns all pending internship applications submitted by the current student.
+     *
+     * @return list of `InternshipApplication` objects for the current student
+     */
     public ArrayList<InternshipApplication> getMyApplications() {
         return getCurrentStudent().getInternshipApplied();
     }
 
+    /**
+     * Accepts an internship offer by confirming the company's approval and
+     * setting the internship as accepted for the current student.
+     *
+     * <p>This action withdraws all other pending applications and adds the
+     * student to the internship's applicant list.
+     *
+     * @param application the `InternshipApplication` offer to accept
+     * @return true if the offer was accepted, false if validation fails
+     */
     public boolean acceptInternshipOffer(InternshipApplication application) {
         if (application == null || getCurrentStudent() == null) {
             return false;
@@ -154,6 +225,12 @@ public class StudentController implements AuthController, IReportGenerator {
 
     }
 
+    /**
+     * Submits a withdrawal request for the given internship application.
+     *
+     * @param application the `InternshipApplication` for which to request withdrawal
+     * @return true after marking the withdrawal as pending
+     */
     public boolean wtihdraw(InternshipApplication application) {
         application.setInternshipWithdrawalStatus(InternshipWithdrawalStatus.PENDING);
         return true;
@@ -161,12 +238,22 @@ public class StudentController implements AuthController, IReportGenerator {
 
     private ReportGenerator reportGen = new ReportGenerator();
 
+    /**
+     * Generates a report of internships according to the provided criteria.
+     *
+     * @param criteria the `ReportCriteria` used to filter and sort internships
+     * @return list of internships matching the criteria
+     */
     @Override
     public List<Internship> generateReport(ReportCriteria criteria) {
         return reportGen.generateReport(criteria);
     }
 
-    // Helper to print a report // to print all internships?
+    /**
+     * Prints a textual report to standard output for the provided internships.
+     *
+     * @param internships list of internships to print
+     */
     public void printReport(List<Internship> internships) {
         System.out.println("===== Internship Report =====");
         if (internships.isEmpty()) {
