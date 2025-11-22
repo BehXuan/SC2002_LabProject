@@ -6,9 +6,23 @@ import src.controller.*;
 import src.interfaces.AuthController;
 import src.view.*;
 
+/**
+ * Entry point for the internship-management project CLI.
+ *
+ * <p>This class provides a simple text-based main menu which
+ * allows users to choose between Student, Company Representative,
+ * and Career Center Staff workflows. Selected controllers and
+ * views are instantiated and executed. On choosing exit the
+ * application persists in-memory data back to CSV files via
+ * {@link src.DataStore#saveAll()}.
+ */
 public class ProjectApp {
-    /** 
-     * @param args[]
+    /**
+     * Main program to run the project CLI. Displays the main menu,
+     * routes to the appropriate controller/view based on user
+     * selection, and persists data when the user exits.
+     *
+     * @param args command-line arguments (unused)
      */
     public static void main(String args[]) {
         System.out.println("This is the main program");
@@ -31,7 +45,7 @@ public class ProjectApp {
 
             choice = sc.nextLine();
 
-            if (choice.equals("0")) {
+            if (choice.equals("0")) {  // exit
                 System.out.println("Saving Data");
                 dataStore.saveAll();
                 System.out.println("Exiting system... Goodbye!");
