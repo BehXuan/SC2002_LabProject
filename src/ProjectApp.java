@@ -2,27 +2,25 @@ package src;
 
 import java.util.Scanner;
 
-// import src.entity.*;
 import src.controller.*;
 import src.interfaces.AuthController;
 import src.view.*;
-// import src.*;
 
 public class ProjectApp {
+    /** 
+     * @param args[]
+     */
     public static void main(String args[]) {
         System.out.println("This is the main program");
 
         DataStore dataStore = DataStore.getInstance();
         System.out.println("DataStore instance obtained in ProjectApp.");
-        // System.out.println(dataStore.getStudentList());
-        // System.out.println(dataStore.getCareerCenterStaffList());
-        // System.out.println(dataStore.getCompanyRepresentativeList());
 
-        //Take inputs
+        // take inputs
         Scanner sc = new Scanner(System.in);
         String choice;
 
-        do {  // while true not good coding practice
+        do {
             System.out.println("========== MAIN MENU ==========");
             System.out.println("Select user type:");
             System.out.println("1. Student");
@@ -32,7 +30,6 @@ public class ProjectApp {
             System.out.print("Enter choice: ");
 
             choice = sc.nextLine();
-            // sc.nextLine();
 
             if (choice.equals("0")) {
                 System.out.println("Saving Data");
@@ -46,7 +43,7 @@ public class ProjectApp {
                 case "1":
                     controller = new StudentController();
                     break;
-                case "2": 
+                case "2":
                     controller = new CompanyRepresentativeController();
                     break;
                 case "3":
@@ -55,9 +52,10 @@ public class ProjectApp {
                 default:
                     System.out.println("Invalid option.\n");
                     controller = null;
-            };
+            }
 
-            if (controller == null) continue;
+            if (controller == null)
+                continue;
 
             // Route to correct view
             if (controller instanceof StudentController) {
@@ -65,14 +63,14 @@ public class ProjectApp {
                 new StudentView(ctrl).start();
             } else if (controller instanceof CompanyRepresentativeController) {
                 CompanyRepresentativeController ctrl = (CompanyRepresentativeController) controller;
-                new CompanyRepresentativeView(ctrl).start();}
-             else if (controller instanceof CareerCenterStaffController) {
+                new CompanyRepresentativeView(ctrl).start();
+            } else if (controller instanceof CareerCenterStaffController) {
                 CareerCenterStaffController ctrl = (CareerCenterStaffController) controller;
                 new CareerCenterStaffView(ctrl).start();
             }
 
             System.out.println("\nReturning to main menu...\n");
-        } while(choice != "0");
+        } while (choice != "0");
 
         sc.close();
     }
