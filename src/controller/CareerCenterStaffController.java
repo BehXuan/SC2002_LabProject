@@ -3,11 +3,20 @@ package src.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.enums.*;
-import src.interfaces.*;
-import src.report.*;
+import src.enums.LoginResult;
+import src.enums.CompanyApprovalStatus;
+import src.enums.InternshipStatus;
+import src.enums.InternshipWithdrawalStatus;
+import src.interfaces.AuthController;
+import src.interfaces.IReportGenerator;
+import src.report.ReportGenerator;
+import src.report.ReportCriteria;
 import src.DataStore;
-import src.entity.*;
+import src.entity.CareerCenterStaff;
+import src.entity.CompanyRepresentative;
+import src.entity.Internship;
+import src.entity.InternshipApplication;
+import src.entity.Student;
 
 /**
  * Controller used by career center staff to perform administrative actions.

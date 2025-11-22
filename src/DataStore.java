@@ -6,8 +6,10 @@ import src.entity.CompanyRepresentative;
 import src.entity.Internship;
 import src.entity.InternshipApplication;
 import java.util.ArrayList;
-
-import src.enums.*;
+import src.enums.CompanyApprovalStatus;
+import src.enums.InternshipLevel;
+import src.enums.InternshipStatus;
+import src.enums.InternshipWithdrawalStatus;
 
 import java.io.BufferedReader;
 import java.io.FileReader;

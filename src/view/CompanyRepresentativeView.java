@@ -1,11 +1,10 @@
 package src.view;
 
 import src.controller.CompanyRepresentativeController;
-// import src.controller.AuthController;
-import src.entity.*;
+import src.entity.Internship;
+import src.entity.InternshipApplication;
 import src.enums.InternshipLevel;
 import src.enums.LoginResult;
-// import src.enums.*;
 import src.interfaces.viewApplication;
 import src.interfaces.viewInternship;
 

@@ -1,10 +1,8 @@
 package src.view;
 
 import src.controller.StudentController;
-// import src.controller.AuthController; // Inherit basic view functionality
 import src.entity.Internship;
 import src.entity.InternshipApplication;
-// import src.entity.Student;
 import src.enums.InternshipStatus;
 import src.enums.LoginResult;
 import src.report.ReportCriteria;

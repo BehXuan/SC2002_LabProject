@@ -2,9 +2,13 @@ package src;
 
 import java.util.Scanner;
 
-import src.controller.*;
+import src.controller.StudentController;
+import src.controller.CompanyRepresentativeController;
+import src.controller.CareerCenterStaffController;
 import src.interfaces.AuthController;
-import src.view.*;
+import src.view.StudentView;
+import src.view.CompanyRepresentativeView;
+import src.view.CareerCenterStaffView;
 
 /**
  * Entry point for the internship-management project CLI.

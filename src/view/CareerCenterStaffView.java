@@ -1,14 +1,14 @@
 package src.view;
 
 import src.controller.CareerCenterStaffController;
-//import src.controller.AuthController;
-import src.entity.*;
-//import src.enums.*;
+import src.entity.CompanyRepresentative;
+import src.entity.Internship;
+import src.entity.Student;
+import src.entity.InternshipApplication;
 import src.enums.InternshipStatus;
 import src.enums.LoginResult;
 import src.report.ReportCriteria;
-import src.interfaces.*;
-
+import src.interfaces.viewInternship;
 
 import java.util.List;
 import java.util.Scanner;
@@ -16,24 +16,29 @@ import java.util.Scanner;
 /**
  * View layer for Career Center Staff user interface.
  * <p>
- * Provides a menu-driven interface for career center administrators to manage company representatives,
- * internship approvals, application withdrawals, and generate reports. Extends {@link UserView} to
- * inherit authentication functionality and implements {@link viewInternship} for internship viewing
+ * Provides a menu-driven interface for career center administrators to manage
+ * company representatives,
+ * internship approvals, application withdrawals, and generate reports. Extends
+ * {@link UserView} to
+ * inherit authentication functionality and implements {@link viewInternship}
+ * for internship viewing
  * capabilities.
  * </p>
  */
-public class CareerCenterStaffView extends UserView implements viewInternship{
+public class CareerCenterStaffView extends UserView implements viewInternship {
     private CareerCenterStaffController staffController;
     private Scanner sc = new Scanner(System.in);
 
     /**
      * Constructs a {@code CareerCenterStaffView} with the given controller.
      * <p>
-     * Initializes the view with a reference to the {@link CareerCenterStaffController} for
+     * Initializes the view with a reference to the
+     * {@link CareerCenterStaffController} for
      * delegating business logic operations.
      * </p>
      *
-     * @param staffController the {@code CareerCenterStaffController} to handle staff operations
+     * @param staffController the {@code CareerCenterStaffController} to handle
+     *                        staff operations
      */
     public CareerCenterStaffView(CareerCenterStaffController staffController) {
         super(staffController); // AuthController
@@ -51,14 +56,16 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
     /**
      * Displays and handles the login menu for career center staff.
      * <p>
-     * Prompts the user to enter username and password, validates credentials using the controller,
-     * and transitions to the main staff menu upon successful authentication. Handles login result
+     * Prompts the user to enter username and password, validates credentials using
+     * the controller,
+     * and transitions to the main staff menu upon successful authentication.
+     * Handles login result
      * enums to provide appropriate feedback messages.
      * </p>
      */
     private void loginMenu() {
-        
-        while(true){
+
+        while (true) {
             System.out.println("----- Career Center Staff Login -----");
             System.out.println("Enter 0 at any time to return to main menu.");
             System.out.print("Username: ");
@@ -76,30 +83,32 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
             }
             LoginResult result = staffController.login(username, password);
             switch (result) {
-            case SUCCESS:
-                System.out.println("Login successful! Welcome " + staffController.getCurrentStaff().getName());
-                runMenuLoop();  
-                return; // Leave login screen after student menu ends
+                case SUCCESS:
+                    System.out.println("Login successful! Welcome " + staffController.getCurrentStaff().getName());
+                    runMenuLoop();
+                    return; // Leave login screen after student menu ends
 
-            case USER_NOT_FOUND:
-                System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
-                break;
+                case USER_NOT_FOUND:
+                    System.out.println("Error: Username does not exist. Try again or enter 0 to go back.");
+                    break;
 
-            case WRONG_PASSWORD:
-                System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
-                break;
-            case USER_NOT_APPROVED:
-                System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
-                break;
-        }
+                case WRONG_PASSWORD:
+                    System.out.println("Error: Incorrect password. Try again or enter 0 to go back.");
+                    break;
+                case USER_NOT_APPROVED:
+                    System.out.println("Error: User has not been approved. Try again or enter 0 to go back.");
+                    break;
+            }
         }
     }
 
     /**
      * Runs the main menu loop for authenticated career center staff.
      * <p>
-     * Displays a menu with 12 options including password change, company authorization,
-     * internship approval, withdrawal approval, and report generation. Delegates to specific
+     * Displays a menu with 12 options including password change, company
+     * authorization,
+     * internship approval, withdrawal approval, and report generation. Delegates to
+     * specific
      * handler methods based on user selection.
      * </p>
      */
@@ -132,7 +141,11 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
             }
 
             switch (choice) {
-                case 1 -> {changePassword();logout();return;} // from UserView
+                case 1 -> {
+                    changePassword();
+                    logout();
+                    return;
+                } // from UserView
                 case 2 -> viewPendingCompanyReps();
                 case 3 -> authorizeCompany();
                 case 4 -> rejectCompany();
@@ -156,53 +169,64 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
     /**
      * Displays all pending company representatives awaiting authorization.
      * <p>
-     * Retrieves the list of pending companies from the controller and displays their user ID,
+     * Retrieves the list of pending companies from the controller and displays
+     * their user ID,
      * name, and company name. Shows a message if no pending companies exist.
      * </p>
      */
     private void viewPendingCompanyReps() {
         List<CompanyRepresentative> pending = staffController.getPendingCompanies();
         System.out.println("\n===== Pending Company Representatives =====");
-        if (pending.isEmpty()) System.out.println("No pending companies.");
+        if (pending.isEmpty())
+            System.out.println("No pending companies.");
         else
             for (CompanyRepresentative c : pending) {
-                System.out.println("ID: " + c.getUserId() + ", Name: " + c.getName() + ", Company: " + c.getCompanyName());
+                System.out.println(
+                        "ID: " + c.getUserId() + ", Name: " + c.getName() + ", Company: " + c.getCompanyName());
             }
     }
 
     /**
      * Prompts the user to authorize a company representative by ID.
      * <p>
-     * Requests the company representative ID and delegates authorization to the controller.
+     * Requests the company representative ID and delegates authorization to the
+     * controller.
      * Displays success or failure message based on the operation result.
      * </p>
      */
     private void authorizeCompany() {
         System.out.print("Enter Company Rep ID to authorize: ");
         String id = sc.nextLine();
-        if (staffController.authoriseCompany(id)) System.out.println("Company authorized.");
-        else System.out.println("Company not found.");
+        if (staffController.authoriseCompany(id))
+            System.out.println("Company authorized.");
+        else
+            System.out.println("Company not found.");
     }
 
     /**
      * Prompts the user to reject a company representative by ID.
      * <p>
-     * Requests the company representative ID and delegates rejection to the controller.
+     * Requests the company representative ID and delegates rejection to the
+     * controller.
      * Displays success or failure message based on the operation result.
      * </p>
      */
     private void rejectCompany() {
         System.out.print("Enter Company Rep ID to reject: ");
         String id = sc.nextLine();
-        if (staffController.rejectCompany(id)) System.out.println("Company rejected.");
-        else System.out.println("Company not found.");
+        if (staffController.rejectCompany(id))
+            System.out.println("Company rejected.");
+        else
+            System.out.println("Company not found.");
     }
 
     /**
      * Displays all pending internships awaiting approval.
      * <p>
-     * Retrieves the list of pending internships from the controller and displays their
-     * details using {@link #viewInternshipDetails(Internship)}. Shows a message if no
+     * Retrieves the list of pending internships from the controller and displays
+     * their
+     * details using {@link #viewInternshipDetails(Internship)}. Shows a message if
+     * no
      * pending internships exist.
      * </p>
      */
@@ -210,10 +234,11 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
     public void viewInternships() { // view pending internship
         List<Internship> pending = staffController.getPendingInternships();
         System.out.println("\n===== Pending Internships =====");
-        if (pending.isEmpty()) System.out.println("No pending internships.");
+        if (pending.isEmpty())
+            System.out.println("No pending internships.");
         else
             for (Internship i : pending) {
-                viewInternshipDetails(i);          
+                viewInternshipDetails(i);
             }
     }
 
@@ -238,8 +263,10 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
         System.out.print("Enter Internship ID to approve: ");
         String id = sc.nextLine();
         sc.nextLine();
-        if (staffController.approveInternship(id)) System.out.println("Internship approved.");
-        else System.out.println("Internship not found.");
+        if (staffController.approveInternship(id))
+            System.out.println("Internship approved.");
+        else
+            System.out.println("Internship not found.");
     }
 
     /**
@@ -253,37 +280,42 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
         System.out.print("Enter Internship ID to reject: ");
         String id = sc.nextLine();
         sc.nextLine();
-        if (staffController.rejectInternship(id)) System.out.println("Internship rejected.");
-        else System.out.println("Internship not found.");
+        if (staffController.rejectInternship(id))
+            System.out.println("Internship rejected.");
+        else
+            System.out.println("Internship not found.");
     }
 
     /**
      * Displays all pending application withdrawals for review.
      * <p>
-     * Retrieves the list of pending withdrawals from the controller and displays each
-     * application with the associated student and internship information. Shows a message
+     * Retrieves the list of pending withdrawals from the controller and displays
+     * each
+     * application with the associated student and internship information. Shows a
+     * message
      * if no pending withdrawals exist.
      * </p>
      *
-     * @return a list of {@link InternshipApplication} objects with pending withdrawals
+     * @return a list of {@link InternshipApplication} objects with pending
+     *         withdrawals
      */
     private List<InternshipApplication> viewPendingWithdrawals() {
-    List<InternshipApplication> pending = staffController.getPendingWithdrawals();
+        List<InternshipApplication> pending = staffController.getPendingWithdrawals();
 
-    System.out.println("\n===== Pending Withdrawals =====");
-    if (pending.isEmpty()) {
-        System.out.println("No pending withdrawals.");
+        System.out.println("\n===== Pending Withdrawals =====");
+        if (pending.isEmpty()) {
+            System.out.println("No pending withdrawals.");
+            return pending;
+        }
+        for (int i = 0; i < pending.size(); i++) {
+            InternshipApplication app = pending.get(i);
+            Student s = app.getStudent();
+            System.out.println((i + 1) + ". Student ID: " + s.getUserId() + ", Name: " + s.getName() +
+                    ", Internship: " + app.getInternship().getTitle());
+        }
+
         return pending;
     }
-    for (int i = 0; i < pending.size(); i++) {
-        InternshipApplication app = pending.get(i);
-        Student s = app.getStudent();
-        System.out.println((i + 1) + ". Student ID: " + s.getUserId() + ", Name: " + s.getName() +
-                           ", Internship: " + app.getInternship().getTitle());
-    }
-
-    return pending;
-}
 
     /**
      * Prompts the user to approve a pending withdrawal request.
@@ -293,31 +325,34 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
      * </p>
      */
     private void approveWithdrawal() {
-    List<InternshipApplication> pending = viewPendingWithdrawals();
-    if (pending.isEmpty()) return;
+        List<InternshipApplication> pending = viewPendingWithdrawals();
+        if (pending.isEmpty())
+            return;
 
-    System.out.print("Enter the number of the withdrawal to approve, or 0 to cancel: ");
-    int choice = -1;
-    while (true) {
-        if (sc.hasNextInt()) {
-            choice = sc.nextInt();
-            sc.nextLine();
-            if (choice >= 0 && choice <= pending.size()) break;
-        } else {
-            sc.nextLine();
+        System.out.print("Enter the number of the withdrawal to approve, or 0 to cancel: ");
+        int choice = -1;
+        while (true) {
+            if (sc.hasNextInt()) {
+                choice = sc.nextInt();
+                sc.nextLine();
+                if (choice >= 0 && choice <= pending.size())
+                    break;
+            } else {
+                sc.nextLine();
+            }
+            System.out.print("Invalid input. Try again: ");
         }
-        System.out.print("Invalid input. Try again: ");
-    }
 
-    if (choice == 0) return;
+        if (choice == 0)
+            return;
 
-    InternshipApplication selectedApp = pending.get(choice - 1);
-    if (staffController.approveWithdrawal(selectedApp)) {
-        System.out.println("Withdrawal approved.");
-    } else {
-        System.out.println("Failed to approve withdrawal.");
+        InternshipApplication selectedApp = pending.get(choice - 1);
+        if (staffController.approveWithdrawal(selectedApp)) {
+            System.out.println("Withdrawal approved.");
+        } else {
+            System.out.println("Failed to approve withdrawal.");
+        }
     }
-}
 
     /**
      * Prompts the user to reject a pending withdrawal request.
@@ -327,37 +362,42 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
      * </p>
      */
     private void rejectWithdrawal() {
-    List<InternshipApplication> pending = viewPendingWithdrawals();
-    if (pending.isEmpty()) return;
+        List<InternshipApplication> pending = viewPendingWithdrawals();
+        if (pending.isEmpty())
+            return;
 
-    System.out.print("Enter the number of the withdrawal to reject, or 0 to cancel: ");
-    int choice = -1;
-    while (true) {
-        if (sc.hasNextInt()) {
-            choice = sc.nextInt();
-            sc.nextLine();
-            if (choice >= 0 && choice <= pending.size()) break;
-        } else {
-            sc.nextLine();
+        System.out.print("Enter the number of the withdrawal to reject, or 0 to cancel: ");
+        int choice = -1;
+        while (true) {
+            if (sc.hasNextInt()) {
+                choice = sc.nextInt();
+                sc.nextLine();
+                if (choice >= 0 && choice <= pending.size())
+                    break;
+            } else {
+                sc.nextLine();
+            }
+            System.out.print("Invalid input. Try again: ");
         }
-        System.out.print("Invalid input. Try again: ");
-    }
 
-    if (choice == 0) return;
+        if (choice == 0)
+            return;
 
-    InternshipApplication selectedApp = pending.get(choice - 1);
-    if (staffController.rejectWithdrawal(selectedApp)) {
-        System.out.println("Withdrawal rejected.");
-    } else {
-        System.out.println("Failed to reject withdrawal.");
+        InternshipApplication selectedApp = pending.get(choice - 1);
+        if (staffController.rejectWithdrawal(selectedApp)) {
+            System.out.println("Withdrawal rejected.");
+        } else {
+            System.out.println("Failed to reject withdrawal.");
+        }
     }
-}
 
     /**
      * Generates a filtered and sorted report of internships.
      * <p>
-     * Prompts the user to specify filter criteria (title, major, company ID, status, level,
-     * minimum slots) and sort type. Creates a {@link ReportCriteria} object with the specified
+     * Prompts the user to specify filter criteria (title, major, company ID,
+     * status, level,
+     * minimum slots) and sort type. Creates a {@link ReportCriteria} object with
+     * the specified
      * filters and delegates report generation and printing to the controller.
      * </p>
      */
@@ -366,15 +406,18 @@ public class CareerCenterStaffView extends UserView implements viewInternship{
 
         System.out.print("Filter by Title (or leave blank): ");
         String title = sc.nextLine();
-        if (!title.isBlank()) criteria.setTitle(title);
+        if (!title.isBlank())
+            criteria.setTitle(title);
 
         System.out.print("Filter by Major (or leave blank): ");
         String major = sc.nextLine();
-        if (!major.isBlank()) criteria.setMajor(major);
+        if (!major.isBlank())
+            criteria.setMajor(major);
 
         System.out.print("Filter by Company ID (or leave blank): ");
         String companyId = sc.nextLine();
-        if (!companyId.isBlank()) criteria.setCompanyRepId(companyId);
+        if (!companyId.isBlank())
+            criteria.setCompanyRepId(companyId);
 
         System.out.print("Filter by Internship Status (PENDING/APPROVED/REJECTED or leave blank): ");
         String status = sc.nextLine();

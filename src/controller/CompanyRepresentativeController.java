@@ -4,7 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.entity.*;
+import src.entity.CompanyRepresentative;
+import src.entity.InternshipApplication;
+import src.entity.Internship;
 import src.enums.CompanyApprovalStatus;
 import src.enums.InternshipStatus;
 import src.enums.LoginResult;
