@@ -15,24 +15,52 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/**
+ * View layer for Student user interface.
+ * <p>
+ * Provides a menu-driven interface for students to browse internship opportunities, submit
+ * applications, manage their applications, and generate filtered internship reports.
+ * Extends {@link UserView} for authentication and implements {@link viewInternship} and
+ * {@link viewApplication} for viewing internships and applications.
+ * </p>
+ */
 public class StudentView extends UserView implements viewInternship, viewApplication {
     // The controller is casted to StudentController for student-specific methods
     private StudentController studentController;
     private Scanner sc = new Scanner(System.in);
 
-    // Constructor chains up to UserView
+    /**
+     * Constructs a {@code StudentView} with the given controller.
+     * <p>
+     * Initializes the view with a reference to the {@link StudentController} for
+     * delegating business logic operations.
+     * </p>
+     *
+     * @param studentController the {@code StudentController} to handle student operations
+     */
     public StudentView(StudentController studentController) {
         // Pass the generic controller up to UserView
         super(studentController);
         this.studentController = studentController;
     }
 
+    /**
+     * Starts the student view by displaying the login menu.
+     */
     @Override
     public void start() {
         // Start login flow first
         loginMenu();
     }
 
+    /**
+     * Displays and handles the student login menu.
+     * <p>
+     * Prompts the user to enter username and password, validates credentials using the controller,
+     * and transitions to the main student menu upon successful authentication. Handles various
+     * login result enums to provide appropriate feedback messages.
+     * </p>
+     */
     private void loginMenu() {
         while (true) {
             System.out.println("----- Student Login -----");
@@ -74,7 +102,15 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
     }
 
-    // Helper to display the main student menu options
+    /**
+     * Displays the main student menu and retrieves the user's choice.
+     * <p>
+     * Presents 7 menu options including internship browsing, application management,
+     * password change, and logout. Validates input and ensures a valid choice is returned.
+     * </p>
+     *
+     * @return an integer (1-7) representing the user's menu selection
+     */
     public int displayStudentMenu() {
         System.out.println(
                 "\n----- Student Menu (Logged in as: " + studentController.getCurrentStudent().getName() + ") -----");
@@ -103,6 +139,13 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         return choice;
     }
 
+    /**
+     * Runs the main menu loop for authenticated students.
+     * <p>
+     * Displays a menu with 7 options including viewing internships, managing applications,
+     * changing password, and logging out. Routes each selection to appropriate handler methods.
+     * </p>
+     */
     public void runStudentMenuLoop() {
         while (true) {
             int choice = displayStudentMenu();
@@ -234,6 +277,15 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
     }
 
+    /**
+     * Prompts the student to confirm and submit an internship application.
+     * <p>
+     * Displays the selected internship details and requests confirmation from the student.
+     * If confirmed, delegates the application to the controller and displays the outcome.
+     * </p>
+     *
+     * @param internship the {@link Internship} to apply for
+     */
     private void applyInternship(Internship internship) {
         System.out.println("Do you want to apply for this internship? (Y/N)");
         String response = sc.nextLine().toUpperCase();
@@ -249,6 +301,15 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
     }
 
+    /**
+     * Prompts the student to accept an internship offer.
+     * <p>
+     * Delegates the acceptance to the controller and displays whether the operation
+     * was successful or if any preconditions were not met (e.g., application not approved).
+     * </p>
+     *
+     * @param selectedApp the {@link InternshipApplication} offer to accept
+     */
     private void acceptInternship(InternshipApplication selectedApp) {
         boolean success = studentController.acceptInternshipOffer(selectedApp);
         if (success) {
@@ -260,6 +321,15 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
     }
 
+    /**
+     * Generates a filtered and sorted report of internships matching student criteria.
+     * <p>
+     * Prompts the student to specify filter criteria including title, company ID, and internship level
+     * (if applicable based on year of study), as well as minimum available slots. Automatically filters
+     * by the student's major and to only approved internships. Delegates report generation and printing
+     * to the controller.
+     * </p>
+     */
     private void generateReport() {
         ReportCriteria criteria = new ReportCriteria();
 
@@ -320,6 +390,14 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         studentController.printReport(report);
     }
 
+    /**
+     * Displays all internship applications submitted by the current student.
+     * <p>
+     * Retrieves the student's applications from the controller and displays each one
+     * using {@link #viewApplicationDetails(InternshipApplication)}. Shows a message if
+     * no applications exist.
+     * </p>
+     */
     @Override
     public void viewApplications() {
         ArrayList<InternshipApplication> applications = studentController.getMyApplications();
@@ -336,16 +414,34 @@ public class StudentView extends UserView implements viewInternship, viewApplica
         }
     }
 
+    /**
+     * Displays detailed information for a single internship application.
+     *
+     * @param application the {@link InternshipApplication} to display
+     */
     @Override
     public void viewApplicationDetails(InternshipApplication application) {
         System.out.println(application);
     }
 
+    /**
+     * Displays detailed information for a single internship.
+     *
+     * @param internship the {@link Internship} to display
+     */
     @Override
     public void viewInternshipDetails(Internship internship) {
         System.out.println(internship);
     }
 
+    /**
+     * Displays all available internship opportunities for the current student.
+     * <p>
+     * Retrieves the student's available internship opportunities from the controller and
+     * displays each one using {@link #viewInternshipDetails(Internship)}. Shows a message
+     * if no internships are available.
+     * </p>
+     */
     @Override
     public void viewInternships() {
         ArrayList<Internship> internships = studentController.getInternshipsOpportunities();

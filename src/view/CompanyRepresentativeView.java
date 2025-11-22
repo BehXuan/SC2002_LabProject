@@ -14,15 +14,41 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * View layer for Company Representative user interface.
+ * <p>
+ * Provides a menu-driven interface for company representatives to register accounts,
+ * authenticate, manage internship postings (create, edit, delete, toggle visibility),
+ * review and approve/reject student applications, and generate reports.
+ * Extends {@link UserView} for authentication and implements {@link viewInternship} and
+ * {@link viewApplication} for viewing internships and applications.
+ * </p>
+ */
 public class CompanyRepresentativeView extends UserView implements viewInternship, viewApplication {
     private CompanyRepresentativeController repController;
     private Scanner sc = new Scanner(System.in);
 
+    /**
+     * Constructs a {@code CompanyRepresentativeView} with the given controller.
+     * <p>
+     * Initializes the view with a reference to the {@link CompanyRepresentativeController} for
+     * delegating business logic operations.
+     * </p>
+     *
+     * @param repController the {@code CompanyRepresentativeController} to handle company rep operations
+     */
     public CompanyRepresentativeView(CompanyRepresentativeController repController) {
         super(repController); // AuthController
         this.repController = repController;
     }
 
+    /**
+     * Starts the company representative view by displaying the startup menu.
+     * <p>
+     * Presents options to login or register as a company representative. Routes to
+     * appropriate handler based on user selection.
+     * </p>
+     */
     @Override
     public void start() {
         String choice = "";
@@ -42,6 +68,14 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
     }
 
+    /**
+     * Handles the registration flow for new company representatives.
+     * <p>
+     * Prompts for username, password, name, email, company name, department, and position.
+     * Validates inputs and delegates account creation to the controller. Displays success
+     * or failure message with information about admin approval requirements.
+     * </p>
+     */
     private void registerCompanyRepresentative() {
         System.out.println("----- Company Representative Registration -----");
         System.out.print("Enter Username: ");
@@ -100,6 +134,14 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
 
     }
 
+    /**
+     * Displays and handles the company representative login menu.
+     * <p>
+     * Prompts for username and password, validates credentials using the controller,
+     * and transitions to the main menu upon successful authentication. Handles login result
+     * enums to provide appropriate feedback messages.
+     * </p>
+     */
     private void loginMenu() {
         while (true) {
             System.out.println("----- Company Representative Login -----");
@@ -138,6 +180,14 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
     }
 
+    /**
+     * Runs the main menu loop for authenticated company representatives.
+     * <p>
+     * Displays a menu with 10 options including password change, application review,
+     * internship management (create, edit, delete, toggle visibility), and report generation.
+     * Delegates each selection to appropriate handler methods.
+     * </p>
+     */
     private void runMenuLoop() {
         int choice;
         while (true) {
@@ -514,6 +564,13 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
     }
 
+    /**
+     * Displays all internship applications assigned to this company representative.
+     * <p>
+     * Retrieves applications from the controller and displays each one with its index,
+     * showing application details. Shows a message if no applications exist.
+     * </p>
+     */
     @Override
     public void viewApplications() {
         ArrayList<InternshipApplication> applications = repController.getApplications();
@@ -530,11 +587,23 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
     }
 
+    /**
+     * Displays detailed information for a single internship application.
+     *
+     * @param application the {@link InternshipApplication} to display
+     */
     @Override
     public void viewApplicationDetails(InternshipApplication application) {
         System.out.println(application);
     }
 
+    /**
+     * Displays all internships created by this company representative.
+     * <p>
+     * Retrieves internships from the controller and displays each one with its index.
+     * Shows a message if no internships exist.
+     * </p>
+     */
     @Override
     public void viewInternships() {
         ArrayList<Internship> internships = repController.getInternships();
@@ -551,6 +620,11 @@ public class CompanyRepresentativeView extends UserView implements viewInternshi
         }
     }
 
+    /**
+     * Displays detailed information for a single internship.
+     *
+     * @param internship the {@link Internship} to display
+     */
     @Override
     public void viewInternshipDetails(Internship internship) {
         System.out.println(internship);
