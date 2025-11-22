@@ -2,3 +2,4 @@ ID,Name,CompanyName,Department,Position,Email,Status,Password
 rep001,Alice Tan,Alice Tech,IT,Manager,alice@alice.com,APPROVED,alice@alice.com
 rep002,Bob Lim,Bob Solutions,HR,HR Head,bob@bob.com,APPROVED,bob@bob.com
 rep003,Charlie Ong,Charlie Co,Marketing,Director,charlie@charlie.com,APPROVED,charlie@charlie.com
+tspoon,tspoon,tspoon company,hr,hr,tspoon@tspoon.con,APPROVED,password

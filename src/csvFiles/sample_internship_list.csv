@@ -11,3 +11,8 @@ rep003_0,Software Engineer Intern,Backend development,BASIC,Computer Science,202
 rep003_1,Embedded Systems Intern,Work with hardware,BASIC,Computer Engineering,2025-11-27,2025-12-27,2,rep003,APPROVED,true,
 rep003_2,Marketing Data Intern,Analyze marketing data,BASIC,Information Engineering & Media,2025-11-28,2025-12-28,1,rep003,REJECTED,true,
 rep003_3,Fullstack Developer Intern,Frontend & Backend projects,BASIC,Computer Science,2025-11-29,2025-12-29,2,rep003,APPROVED,true,
+tspoon_0,tspoon_intern,work as an intern,BASIC,Computer Science,2025-11-20,2025-12-31,3,tspoon,APPROVED,true,
+tspoon_1,tspoon_comp_eng,i need a comp eng guy,BASIC,Computer Engineering,2025-11-20,2025-12-31,3,tspoon,APPROVED,true,
+tspoon_2,tspoon_comp_eng_2,i need another comp eng guy,INTERMEDIATE,Computer Engineering,2015-11-01,2015-12-31,2,tspoon,APPROVED,true,
+tspoon_3,tspoon_3,i need a comp eng guy again,ADVANCED,Computer Engineering,2025-11-01,2025-12-31,1,tspoon,APPROVED,true,
+tspoon_4,tspoon_comp_eng_again,idk how many people i need,INTERMEDIATE,Computer Engineering,2024-01-01,2026-12-31,1,tspoon,APPROVED,true,
