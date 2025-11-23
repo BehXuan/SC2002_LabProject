@@ -260,9 +260,12 @@ public class StudentController implements AuthController, IReportGenerator {
             System.out.println("No internships found for the given criteria.");
             return;
         }
-
-        for (Internship i : internships) {
-            System.out.println(i);
+        for (int i = 1; i<=internships.size();i++){
+            System.out.print(i+". ");
+            System.out.println(internships.get(i-1));
         }
+        // for (Internship i : internships) {
+        //     System.out.println(i);
+        // }
     }
 }
